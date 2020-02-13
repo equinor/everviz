@@ -13,13 +13,11 @@ setup(
     test_suite="tests",
     use_scm_version={"write_to": "everviz/version.py"},
     tests_require=[
-        "pytest==4.6.4; python_version<='2.7'",
-        "pytest; python_version>='3.5'",
-        'black; python_version>="3.6"',
+        "pytest",
+        'black',
     ],
     classifiers=[
         "Programming language :: Python",
-        "Programming language :: Python :: 2.7",
         "Programming language :: Python :: 3.6",
         "Programming language :: Python :: 3.7",
     ],
