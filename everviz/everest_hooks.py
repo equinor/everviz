@@ -1,7 +1,5 @@
-import functools
 import yaml
 import subprocess
-import os
 import shutil
 
 # Mock the hookimpl decorator
@@ -30,12 +28,17 @@ def visualize_data(api):
 
 def write_webviz_config(config, file_path):
     with open(file_path, "w") as fh:
-        yaml.dump(config, fh)
+        yaml.dump(config, fh, default_flow_style=False)
     print("Webviz config file created: {}".format(file_path))
 
 
 def webviz_config():
     return {
         "title": "Everest Optimization Report",
-        "pages": [{"title": "Front page"}, {"content": ["content text"]}],
+        "pages": [
+            {
+                "title": "",
+                "content": [],
+            },
+        ],
     }
