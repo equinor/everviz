@@ -1,12 +1,20 @@
 language: python
 
+addons:
+  chrome: stable
+
 python:
     - '3.6'
     - '3.7'
+
+before_install:
+    - wget https://chromedriver.storage.googleapis.com/$(wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE -q -O -)/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - export PATH=$PATH:$PWD
 
 install:
     - pip install .
     - pip install -r test_requirements.txt
 
 script:
-    - pytest
+    - pytest --headless
