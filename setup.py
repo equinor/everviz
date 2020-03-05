@@ -27,5 +27,10 @@ setup(
         "Programming language :: Python :: 3.6",
         "Programming language :: Python :: 3.7",
     ],
-    entry_points={"webviz_config_plugins": ["Crossplot = everviz.plugins:Crossplot",]},
+    entry_points={
+        "webviz_config_plugins": [
+            "Crossplot = everviz.plugins:Crossplot",
+            "CrossplotIndexed = everviz.plugins:CrossplotIndexed",
+        ]
+    },
 )

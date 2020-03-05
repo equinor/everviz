@@ -35,10 +35,5 @@ def write_webviz_config(config, file_path):
 def webviz_config():
     return {
         "title": "Everest Optimization Report",
-        "pages": [
-            {
-                "title": "",
-                "content": [],
-            },
-        ],
+        "pages": [{"title": "", "content": [],},],
     }
