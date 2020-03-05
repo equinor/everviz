@@ -15,6 +15,8 @@ from everviz.plugins.crossplot.callback.crossplot_callback import (
 from everviz.data.load_csv.get_data import get_data
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
+from everviz.plugins.crossplot.set_up_assets import set_up_assets
+
 
 class Crossplot(WebvizPluginABC):
     def __init__(self, app, data_path, title="Crossplot"):
@@ -30,11 +32,13 @@ class Crossplot(WebvizPluginABC):
 
         self.data_path = data_path
         self.set_callbacks(app)
-        stylesheet_path = pkg_resources.resource_filename(
-            __name__, os.path.join("assets", "axis_customization.css")
-        )
 
-        WEBVIZ_ASSETS.add(stylesheet_path)
+        ASSETS_DIR = pkg_resources.resource_filename("everviz", os.path.join("assets"))
+
+        WEBVIZ_ASSETS.add(os.path.join(ASSETS_DIR, "axis_customization.css"))
+        # We do this because webwiz currently doesn't give a way to serve
+        # css when running in non portable mode.
+        set_up_assets(app, ASSETS_DIR)
 
     def add_webvizstore(self):
         return [(get_data, [{"data_path": self.data_path}])]
