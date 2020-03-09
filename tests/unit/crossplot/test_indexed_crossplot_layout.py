@@ -23,6 +23,9 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
         "set_callbacks",
         mocker.Mock(),
     )
+    monkeypatch.setattr(
+        everviz.plugins.crossplot.crossplot_indexed, "set_up_assets", mocker.Mock(),
+    )
     plugin = CrossplotIndexed(mocker.Mock(), "data_path")
     layout = plugin.layout
     app.layout = layout
