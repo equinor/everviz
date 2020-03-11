@@ -31,6 +31,7 @@ setup(
         "webviz_config_plugins": [
             "Crossplot = everviz.plugins:Crossplot",
             "CrossplotIndexed = everviz.plugins:CrossplotIndexed",
-        ]
+        ],
+        "everest": ["everviz = everviz.everest_hooks",],
     },
 )
