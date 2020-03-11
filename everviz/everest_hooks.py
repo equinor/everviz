@@ -23,7 +23,7 @@ def visualize_data(api):
 
     # The entry point of webviz is to call it from command line, and so we do.
     if shutil.which("webviz"):
-        subprocess.call("webviz build {} --theme equinor".format(fname))
+        subprocess.call(["webviz", "build", fname, "--theme", "equinor"])
 
 
 def write_webviz_config(config, file_path):
