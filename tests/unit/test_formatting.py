@@ -1,5 +1,4 @@
 import sys
-import os
 
 import pytest
 
@@ -12,18 +11,16 @@ except ImportError:
 
 
 @pytest.mark.skipif(sys.version_info < (3, 6), reason="requires Python3")
-def test_code_style():
-
-    root = str(Path(__file__).parent.parent.parent)
+def test_code_style(capsys):
 
     runner = CliRunner()
     resp = runner.invoke(
         black.main,
         [
             "--check",
-            os.path.join(root, "tests"),
-            os.path.join(root, "everviz"),
-            os.path.join(root, "setup.py"),
+            "tests",
+            "everviz",
+            "setup.py",
             "--exclude",
             "everviz/version.py",  # File written by setuptools_scm
         ],
