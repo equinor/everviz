@@ -1,6 +1,8 @@
-import yaml
 import subprocess
 import shutil
+import os
+from everviz.config import write_webviz_config, webviz_config
+
 
 # Mock the hookimpl decorator
 # Allow everviz to be installed and have tests run without installing everest
@@ -18,22 +20,16 @@ except ImportError:
 def visualize_data(api):
     config = webviz_config()
 
-    fname = "everviz_webviz_config.yml"
-    write_webviz_config(config, fname)
+    file_name = "everviz_webviz_config.yml"
+    everviz_folder = os.path.join(api.output_folder(), "everviz")
+    file_path = os.path.join(everviz_folder, file_name)
+
+    write_webviz_config(config, file_path)
 
     # The entry point of webviz is to call it from command line, and so we do.
     if shutil.which("webviz"):
-        subprocess.call(["webviz", "build", fname, "--theme", "equinor"])
-
-
-def write_webviz_config(config, file_path):
-    with open(file_path, "w") as fh:
-        yaml.dump(config, fh, default_flow_style=False)
-    print("Webviz config file created: {}".format(file_path))
-
-
-def webviz_config():
-    return {
-        "title": "Everest Optimization Report",
-        "pages": [{"title": "", "content": [],},],
-    }
+        subprocess.call(
+            ["webviz", "build", file_name, "--theme", "equinor"], cwd=everviz_folder
+        )
+    else:
+        raise SystemExit("Failed to find webviz")
