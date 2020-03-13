@@ -1,5 +1,6 @@
 import os
 import yaml
+from everviz.log import get_logger
 
 
 def _create_folders(file_path):
@@ -16,7 +17,8 @@ def webviz_config():
 
 
 def write_webviz_config(config, file_path):
+    logger = get_logger()
     _create_folders(file_path)
     with open(file_path, "w") as fh:
         yaml.dump(config, fh, default_flow_style=False)
-    print("Webviz config file created: {}".format(file_path))
+    logger.info("Webviz config file created: {}".format(file_path))
