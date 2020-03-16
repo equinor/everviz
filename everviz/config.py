@@ -55,15 +55,20 @@ def _control_data_initial_vs_best(api):
 
 def webviz_config(api):
     sources = _set_up_data_sources(api)
+    export_csv = os.path.join(api.output_folder(), "config_minimal.csv")
     return {
         "title": "Everest Optimization Report",
         "pages": [
-            {"title": "Everest", "content": [],},
+            {
+                "title": "Everest",
+                "content": [{"Crossplot": {"data_path": export_csv,}}],
+            },
             {
                 "title": "Controls",
                 "content": [
                     {
                         "TablePlotter": {
+                            "lock": True,
                             "csv_file": sources.controls_per_batch,
                             "filter_cols": ["control"],
                             "plot_options": {"x": "batch", "y": "value",},
@@ -71,6 +76,7 @@ def webviz_config(api):
                     },
                     {
                         "TablePlotter": {
+                            "lock": True,
                             "csv_file": sources.controls_initial_vs_best,
                             "filter_cols": ["batch"],
                             "plot_options": {"x": "control", "y": "value",},
