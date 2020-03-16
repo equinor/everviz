@@ -24,7 +24,7 @@ def visualize_data(api):
     file_path = os.path.join(everviz_folder, file_name)
     logger = setup_logger(everviz_folder)
 
-    config = webviz_config()
+    config = webviz_config(api)
     write_webviz_config(config, file_path)
 
     # The entry point of webviz is to call it from command line, and so we do.
