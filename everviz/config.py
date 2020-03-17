@@ -71,15 +71,24 @@ def webviz_config(api):
                             "lock": True,
                             "csv_file": sources.controls_per_batch,
                             "filter_cols": ["control"],
-                            "plot_options": {"x": "batch", "y": "value",},
+                            "plot_options": {
+                                "x": "batch",
+                                "y": "value",
+                                "type": "line",
+                                "color": "control",
+                            },
                         }
                     },
                     {
                         "TablePlotter": {
                             "lock": True,
                             "csv_file": sources.controls_initial_vs_best,
-                            "filter_cols": ["batch"],
-                            "plot_options": {"x": "control", "y": "value",},
+                            "plot_options": {
+                                "x": "control",
+                                "y": "value",
+                                "type": "scatter",
+                                "color": "batch",
+                            },
                         }
                     },
                 ],
