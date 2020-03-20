@@ -20,7 +20,7 @@ except ImportError:
 @hookimpl
 def visualize_data(api):
     file_name = "everviz_webviz_config.yml"
-    everviz_folder = os.path.join(api.output_folder(), "everviz")
+    everviz_folder = os.path.join(api.output_folder, "everviz")
     file_path = os.path.join(everviz_folder, file_name)
     logger = setup_logger(everviz_folder)
 

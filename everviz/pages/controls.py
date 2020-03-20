@@ -25,7 +25,7 @@ def _control_data_initial_vs_best(api):
 
 
 def _set_up_data_sources(api):
-    everest_folder = api.output_folder()
+    everest_folder = api.output_folder
     everviz_path = os.path.join(everest_folder, "everviz")
 
     logger.info("Generating controls per batch source data file")
