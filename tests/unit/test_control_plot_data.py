@@ -58,7 +58,7 @@ expected = [
 @pytest.fixture
 def mocked_api(mocker):
     api_mock = mocker.Mock()
-    api_mock.output_folder.return_value = "everest_output"
+    api_mock.output_folder = "everest_output"
     api_mock.control_values = controls[0]
     api_mock.single_objective_values = objectives[0]
     return api_mock
