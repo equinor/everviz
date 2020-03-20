@@ -1,21 +1,54 @@
-from pandas import DataFrame
+import os
+import pandas as pd
+from collections import namedtuple
+from everviz.log import get_logger
 
 
-def control_data_per_batch(api):
-    return DataFrame(api.control_values)
+DataSources = namedtuple("DataSource", "controls_per_batch, controls_initial_vs_best")
+
+logger = get_logger()
 
 
-def control_data_initial_vs_best(api):
-    objectives_df = DataFrame(api.objective_values)
+def _control_data_per_batch(api):
+    return pd.DataFrame(api.control_values)
+
+
+def _control_data_initial_vs_best(api):
+    objectives_df = pd.DataFrame(api.single_objective_values)
     best_batch = objectives_df.batch[objectives_df.value.idxmax()]
-    data = DataFrame(api.control_values)
+    data = pd.DataFrame(api.control_values)
 
     # Keep only controls associated with initial and best batches
     data = data[(data.batch == 0) | (data.batch == best_batch)]
-    return data.replace({"batch": 0}, "initial").replace({"batch": best_batch}, "best")
+    data = data.replace({"batch": 0}, "initial").replace({"batch": best_batch}, "best")
+    return data
 
 
-def page_layout(controls_per_batch, controls_initial_vs_best):
+def _set_up_data_sources(api):
+    everest_folder = api.output_folder()
+    everviz_path = os.path.join(everest_folder, "everviz")
+
+    logger.info("Generating controls per batch source data file")
+    controls_per_batch = os.path.join(everviz_path, "controls_per_batch.csv")
+    data = _control_data_per_batch(api)
+    data.to_csv(controls_per_batch, index=False)
+    logger.info("File created: {}".format(controls_per_batch))
+
+    logger.info("Generating initial vs best controls source data file")
+    controls_initial_vs_best = os.path.join(
+        everviz_path, "controls_initial_vs_best.csv"
+    )
+    data = _control_data_initial_vs_best(api)
+    data.to_csv(controls_initial_vs_best, index=False)
+
+    return DataSources(
+        controls_per_batch=controls_per_batch,
+        controls_initial_vs_best=controls_initial_vs_best,
+    )
+
+
+def page_layout(api):
+    sources = _set_up_data_sources(api)
     return {
         "title": "Controls",
         "content": [
@@ -23,7 +56,7 @@ def page_layout(controls_per_batch, controls_initial_vs_best):
             {
                 "TablePlotter": {
                     "lock": True,
-                    "csv_file": controls_per_batch,
+                    "csv_file": sources.controls_per_batch,
                     "filter_cols": ["control"],
                     "plot_options": {
                         "x": "batch",
@@ -37,7 +70,7 @@ def page_layout(controls_per_batch, controls_initial_vs_best):
             {
                 "TablePlotter": {
                     "lock": True,
-                    "csv_file": controls_initial_vs_best,
+                    "csv_file": sources.controls_initial_vs_best,
                     "plot_options": {
                         "x": "control",
                         "y": "value",
