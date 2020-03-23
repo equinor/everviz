@@ -12,6 +12,7 @@ import pandas as pd
 import everviz
 from everviz.plugins import Crossplot
 from PIL import Image
+from everviz.pages import crossplot
 
 
 @pytest.mark.parametrize(
@@ -77,9 +78,7 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
     monkeypatch.setattr(
         everviz.plugins.crossplot.crossplot.Crossplot, "set_callbacks", mocker.Mock()
     )
-    monkeypatch.setattr(
-        everviz.plugins.crossplot.crossplot, "set_up_assets", mocker.Mock(),
-    )
+
     plugin = Crossplot(mocker.Mock(), "data_path")
     layout = plugin.layout
     app.layout = layout
@@ -111,3 +110,22 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
     )
 
     assert_equal_images(reference_image, snapshot, threshold=0.5)
+
+
+def test_webviz_page_layout(mocker):
+    api_mock = mocker.Mock()
+    api_mock.everest_csv = "everest_export.csv"
+    result = crossplot.page_layout(api_mock)
+
+    expected_page_layout = {
+        "title": "Cross plots",
+        "content": [
+            {"Crossplot": {"data_path": "everest_export.csv",},},
+            {"CrossplotIndexed": {"data_path": "everest_export.csv",}},
+        ],
+    }
+    assert expected_page_layout == result
+    api_mock.everest_csv = None
+    result = crossplot.page_layout(api_mock)
+    expected_page_layout = ""
+    assert expected_page_layout == result
