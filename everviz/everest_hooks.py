@@ -1,6 +1,7 @@
 import subprocess
 import shutil
 import os
+from everviz.util import get_everviz_folder, DEFAULT_CONFIG
 from everviz.config import write_webviz_config, webviz_config
 from everviz.log import setup_logger
 
@@ -19,13 +20,13 @@ except ImportError:
 
 @hookimpl
 def visualize_data(api):
-    file_name = "everviz_webviz_config.yml"
-    everviz_folder = os.path.join(api.output_folder, "everviz")
-    file_path = os.path.join(everviz_folder, file_name)
+    file_name = DEFAULT_CONFIG
+    everviz_folder = get_everviz_folder(api)
     logger = setup_logger(everviz_folder)
 
     config = webviz_config(api)
-    write_webviz_config(config, file_path)
+    config_file_path = os.path.join(everviz_folder, file_name)
+    write_webviz_config(config, config_file_path)
 
     # The entry point of webviz is to call it from command line, and so we do.
     if shutil.which("webviz"):
