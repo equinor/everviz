@@ -2,7 +2,7 @@ import os
 import yaml
 
 from everviz.log import get_logger
-from everviz.pages import controls
+from everviz.pages import controls, crossplot
 
 
 logger = get_logger()
@@ -19,7 +19,11 @@ def webviz_config(api):
     create_everviz_folder(api.output_folder())
     return {
         "title": "Everest Optimization Report",
-        "pages": [{"title": "Everest", "content": [],}, controls.page_layout(api),],
+        "pages": [
+            {"title": "Everest", "content": [],},
+            controls.page_layout(api),
+            crossplot.page_layout(api),
+        ],
     }
 
 
