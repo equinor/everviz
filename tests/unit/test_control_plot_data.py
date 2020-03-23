@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from everviz.config import create_everviz_folder
+from everviz.util import get_everviz_folder
 from everviz.pages.controls import (
     _control_data_per_batch,
     _control_data_initial_vs_best,
@@ -106,7 +106,7 @@ def test_set_up_data_sources(tmpdir, mocked_api):
         for field in expected._fields:
             assert not os.path.exists(getattr(expected, field))
 
-        create_everviz_folder("everest_output")
+        get_everviz_folder(mocked_api)
         result = _set_up_data_sources(mocked_api)
         assert expected == result
 
