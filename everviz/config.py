@@ -1,5 +1,6 @@
 import yaml
 
+from everviz.pages import controls, objectives
 from everviz.log import get_logger
 from everviz.pages import controls, configuration, crossplot, summary_values
 
@@ -16,6 +17,7 @@ def webviz_config(api):
             summary_values.page_layout(api),
             crossplot.page_layout(api),
             configuration.page_layout(api),
+            objectives.page_layout(api),
         ],
     }
 
