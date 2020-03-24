@@ -1,0 +1,7 @@
+pages:
+
+  - title: Front page
+    content:
+      - Lineplot:
+          data_path: /Users/oyvindeide/projects/work/everest/everviz/example_data.csv
+
