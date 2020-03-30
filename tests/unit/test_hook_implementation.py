@@ -7,7 +7,15 @@ def test_everest_hooks_registered():
     hook_manager = pytest.importorskip("everest.plugins.hook_manager")
 
     pm = hook_manager.EverestPluginManager()
-    pm.register(everest_hooks)
+    try:
+        pm.register(everest_hooks)
+    except ValueError as err:
+        if not str(err).startswith("Plugin already registered"):
+            raise err
 
-    last_registered = pm.hook.visualize_data.get_hookimpls()[-1]
-    assert last_registered.plugin_name == "everviz.everest_hooks"
+    assert any(
+        [
+            hook.plugin_name.startswith("everviz")
+            for hook in pm.hook.visualize_data.get_hookimpls()
+        ]
+    )
