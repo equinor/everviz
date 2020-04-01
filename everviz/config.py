@@ -9,16 +9,21 @@ logger = get_logger()
 
 
 def webviz_config(api):
+    pages = [
+        {"title": "Everest", "content": [],},
+        controls.page_layout(api),
+        summary_values.page_layout(api),
+        crossplot.page_layout(api),
+        objectives.page_layout(api),
+        configuration.page_layout(api),
+    ]
+
+    # Remove possible empty pages
+    pages = list(filter(None, pages))
+
     return {
         "title": "Everest Optimization Report",
-        "pages": [
-            {"title": "Everest", "content": [],},
-            controls.page_layout(api),
-            summary_values.page_layout(api),
-            crossplot.page_layout(api),
-            configuration.page_layout(api),
-            objectives.page_layout(api),
-        ],
+        "pages": pages,
     }
 
 

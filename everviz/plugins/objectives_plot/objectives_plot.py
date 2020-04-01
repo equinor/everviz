@@ -16,7 +16,12 @@ from everviz.data.load_csv.get_data import get_data
 
 class ObjectivesPlot(WebvizPluginABC):
     def __init__(
-        self, app, data_path, x_title, y_title, title="Objective function values"
+        self,
+        app,
+        data_path,
+        x_title="batch",
+        y_title="value",
+        title="Objective function values",
     ):
         super().__init__()
         self.title = title

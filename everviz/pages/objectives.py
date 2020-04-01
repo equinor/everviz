@@ -27,7 +27,7 @@ def _calc_mean(df):
 
 
 def _set_up_data_sources(api):
-    everest_folder = api.output_folder()
+    everest_folder = api.output_folder
     everviz_path = os.path.join(everest_folder, "everviz")
 
     objective_values = os.path.join(everviz_path, "objective_values.csv")
@@ -45,6 +45,6 @@ def page_layout(api):
         "title": "Objectives",
         "content": [
             "## Objective function values",
-            {"Lineplot": {"data_path": sources.objective_values,},},
+            {"ObjectivesPlot": {"data_path": sources.objective_values,},},
         ],
     }

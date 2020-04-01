@@ -60,6 +60,9 @@ def _set_up_data_sources(api, keys=None):
     # Make a table which statistics over the simulations.
     summary_values = api.summary_values(keys=keys)
 
+    if summary_values.empty:
+        return None
+
     logger.info("Generating summary values plot")
     summary_values_file = os.path.join(everviz_path, "summary_values.csv")
     data = _summary_values(summary_values)
@@ -71,12 +74,25 @@ def _set_up_data_sources(api, keys=None):
 
 def page_layout(api):
     sources = _set_up_data_sources(api)
-    return {
-        "title": "Summary Values",
-        "content": [
-            "## Summary values as a function of date",
-            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "date",},},
-            "## Summary values as a function of batch",
-            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "batch",},},
-        ],
-    }
+    if sources is None:
+        return ""
+    else:
+        return {
+            "title": "Summary Values",
+            "content": [
+                "## Summary values as a function of date",
+                {
+                    "SummaryPlot": {
+                        "csv_file": sources.summary_values,
+                        "xaxis": "date",
+                    },
+                },
+                "## Summary values as a function of batch",
+                {
+                    "SummaryPlot": {
+                        "csv_file": sources.summary_values,
+                        "xaxis": "batch",
+                    },
+                },
+            ],
+        }
