@@ -3,11 +3,15 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
-from everviz.pages.summary_values import _summary_values
+from everviz.pages.summary_values import (
+    page_layout,
+    _summary_values,
+    _summary_statistics,
+)
 
-test_data = {
-    "simulation": [0, 1, 2, 3, 4, 5],
-    "batch": [0, 1, 2, 0, 1, 2],
+__TEST_DATA = {
+    "simulation": range(12),
+    "batch": [0] * 6 + [1] * 6,
     "date": [
         datetime(2000, 1, 1),
         datetime(2000, 2, 1),
@@ -15,41 +19,81 @@ test_data = {
         datetime(2000, 1, 1),
         datetime(2000, 2, 1),
         datetime(2000, 3, 1),
+        datetime(2000, 1, 1),
+        datetime(2000, 2, 1),
+        datetime(2000, 3, 1),
+        datetime(2000, 1, 1),
+        datetime(2000, 2, 1),
+        datetime(2000, 3, 1),
     ],
-    "key1": [1, 2, 3, 4, 5, 6],
-    "key2": [10, 20, 30, 40, 50, 60],
+    "key1": range(1, 13),
+    "key2": range(10, 130, 10),
 }
 
 
-def test_summary_values():
-    summary_values = _summary_values(pd.DataFrame(test_data))
+def test_empty_summary_values(mocker):
+    """Test for the case of missing summary values."""
+    mock_api = mocker.Mock()
+    mock_api.output_folder = "dummy"
+    mock_api.summary_values.return_value = pd.DataFrame()
+    layout = page_layout(mock_api)
+    assert layout == {}
 
-    assert list(summary_values.columns) == [
-        "Summary Key",
-        "Batch",
-        "Date",
-        "Mean",
+
+def test_summary_values_data_frame():
+    """Test for the correct layout and size of the summary values data frame."""
+    summary_values = _summary_values(pd.DataFrame(__TEST_DATA))
+
+    assert list(
+        summary_values.columns == ["summary_key", "batch", "date", "key1", "key2"]
+    )
+    assert len(summary_values) == len(__TEST_DATA["simulation"])
+    assert set(summary_values["batch"]) == set(__TEST_DATA["batch"])
+    assert set(summary_values["date"]) == {
+        pd.Timestamp(date) for date in __TEST_DATA["date"]
+    }
+
+
+def test_summary_statistics_data_frame():
+    """Test for the correct layout and size of the summary statistics data frame"""
+    summary_statistics = _summary_statistics(pd.DataFrame(__TEST_DATA))
+
+    assert list(summary_statistics.columns) == [
+        "summary_key",
+        "batch",
+        "date",
+        "mean",
         "P10",
         "P90",
     ]
-    assert len(summary_values) == len(test_data["simulation"])
-    assert set(summary_values["Summary Key"]) == set(["key1", "key2"])
-    assert set(summary_values["Batch"]) == set(test_data["batch"])
-    assert set(summary_values["Date"]) == {
-        pd.Timestamp(date) for date in test_data["date"]
+    assert len(summary_statistics) == 2 * 3 * 2  # #batches * #dates * #keys
+    assert set(summary_statistics["summary_key"]) == set(["key1", "key2"])
+    assert set(summary_statistics["batch"]) == set(__TEST_DATA["batch"])
+    assert set(summary_statistics["date"]) == {
+        pd.Timestamp(date) for date in __TEST_DATA["date"]
     }
+
+
+def test_summary_statistics_content():
+    """Test for the correct content of the summary statistics data frame."""
+    summary_statistics = _summary_statistics(pd.DataFrame(__TEST_DATA))
 
     mean = []
     p10 = []
     p90 = []
     for key in ["key1", "key2"]:
-        for batch in [0, 1, 2]:
-            simulations = [i for i, b in enumerate(test_data["batch"]) if b == batch]
-            data = np.array(test_data[key])[simulations]
-            mean.append(np.mean(data))
-            p10.append(np.quantile(data, q=0.1))
-            p90.append(np.quantile(data, q=0.9))
+        zipped = list(zip(__TEST_DATA["batch"], __TEST_DATA["date"], __TEST_DATA[key]))
+        for batch in [0, 1]:
+            for date in [
+                datetime(2000, 1, 1),
+                datetime(2000, 2, 1),
+                datetime(2000, 3, 1),
+            ]:
+                values = [v for b, d, v in zipped if batch == b and date == d]
+                mean.append(np.mean(values))
+                p10.append(np.quantile(values, q=0.1))
+                p90.append(np.quantile(values, q=0.9))
 
-    assert summary_values["Mean"].to_list() == mean
-    assert summary_values["P10"].to_list() == p10
-    assert summary_values["P90"].to_list() == p90
+    assert summary_statistics["mean"].to_list() == mean
+    assert summary_statistics["P10"].to_list() == p10
+    assert summary_statistics["P90"].to_list() == p90

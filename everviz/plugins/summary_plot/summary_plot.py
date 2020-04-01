@@ -16,56 +16,76 @@ from everviz.data.load_csv.get_data import get_data
 
 
 class SummaryPlot(WebvizPluginABC):
-    def __init__(self, app, csv_file, xaxis="date"):
+    def __init__(self, app, values_file, statistics_file, xaxis="date"):
         super().__init__()
         self.xaxis = xaxis
         self.graph_id = f"graph-{uuid4()}"
         self.key_dropdown_id = f"dropdown-{uuid4()}"
         self.xaxis_dropdown_id = f"dropdown-{uuid4()}"
-        self.csv_file = csv_file
+        self.radio_id = f"radio-{uuid4()}"
+        self.values_file = values_file
+        self.statistics_file = statistics_file
         self.set_callbacks(app)
 
         ASSETS_DIR = pkg_resources.resource_filename("everviz", "assets")
         WEBVIZ_ASSETS.add(Path(ASSETS_DIR) / "axis_customization.css")
 
     def add_webvizstore(self):
-        return [(get_data, [{"csv_file": self.csv_file}])]
+        return [
+            (get_data, [{"values_file": self.values_file}]),
+            (get_data, [{"statistics_file": self.statistics_file}]),
+        ]
 
     @property
     def layout(self):
-        data = get_data(self.csv_file)
+        radio_options = ["Statistics", "Data"]
+        data = get_data(self.statistics_file)
         key_dropdown_options = [
-            {"label": i, "value": i} for i in list(data["Summary Key"].unique())
+            {"label": i, "value": i} for i in list(data["summary_key"].unique())
         ]
         xaxis_dropdown_options = [
             {"label": i, "value": i}
-            for i in list(data["Batch" if self.xaxis == "date" else "Date"].unique())
+            for i in list(data["batch" if self.xaxis == "date" else "date"].unique())
         ]
         xaxis_dropdown_title = (
             "Batches to plot" if self.xaxis == "date" else "Dates to plot"
         )
+
+        # Keywords dropdown.
+        keyword_elements = [
+            html.Label("Keywords to plot:"),
+            dcc.Dropdown(
+                id=self.key_dropdown_id, options=key_dropdown_options, multi=True,
+            ),
+        ]
+
+        # X-axis dropdown.
+        xaxis_elements = [
+            html.Label(xaxis_dropdown_title, style={"margin-top": 24}),
+            dcc.Dropdown(
+                id=self.xaxis_dropdown_id,
+                options=xaxis_dropdown_options,
+                multi=True,
+                value=[xaxis_dropdown_options[0]["value"]],
+            ),
+        ]
+
+        # Radio for switching between data and statistics.
+        radio_elements = [
+            dcc.RadioItems(
+                id=self.radio_id,
+                options=[{"label": i, "value": i} for i in radio_options],
+                value=radio_options[0],
+                labelStyle={"display": "inline-block"},
+                style={"margin-top": 20},
+            ),
+        ]
         return html.Div(
             [
                 html.Div(
                     [
                         html.Div(
-                            [
-                                html.Label("Keywords to plot:"),
-                                dcc.Dropdown(
-                                    id=self.key_dropdown_id,
-                                    options=key_dropdown_options,
-                                    multi=True,
-                                ),
-                                html.Label(
-                                    xaxis_dropdown_title, style={"margin-top": 24}
-                                ),
-                                dcc.Dropdown(
-                                    id=self.xaxis_dropdown_id,
-                                    options=xaxis_dropdown_options,
-                                    multi=True,
-                                    value=[xaxis_dropdown_options[0]["value"]],
-                                ),
-                            ],
+                            keyword_elements + xaxis_elements + radio_elements,
                             style={
                                 "width": "29%",
                                 "display": "inline-block",
@@ -87,9 +107,10 @@ class SummaryPlot(WebvizPluginABC):
             [
                 Input(self.key_dropdown_id, "value"),
                 Input(self.xaxis_dropdown_id, "value"),
+                Input(self.radio_id, "value"),
             ],
         )
-        def update_graph(key_list, line_list):
+        def update_graph(key_list, line_list, radio_value):
             # The key_list arguments is the list of keys to plot. The line_list
             # argument is a list of batches, or a list of dates to plot for
             # those keys.
@@ -97,19 +118,26 @@ class SummaryPlot(WebvizPluginABC):
                 return {}
 
             # Get the data, setting its index.
-            data = get_data(self.csv_file).set_index(["Summary Key", "Batch", "Date"])
+            if radio_value == "Statistics":
+                data = get_data(self.statistics_file).set_index(
+                    ["summary_key", "batch", "date"]
+                )
+            else:
+                data = get_data(self.values_file).set_index(["batch", "date"])
 
             # Put the the standard colors in a deque that we will rotate.
             colors = deque(DEFAULT_PLOTLY_COLORS)
 
-            # Choose between dates or batches on the xaxis.
-            line_key = "Batch" if self.xaxis == "date" else "Date"
-            xaxis_key = "Date" if self.xaxis == "date" else "Batch"
+            # Choose between dates or batches for different lines.
+            line_key = "batch" if self.xaxis == "date" else "date"
 
             traces = []
             for key in key_list:
-                # Select all rows belonging to the current key.
-                key_data = data.xs(key, level="Summary Key", drop_level=True)
+                # Select all data belonging to the current key.
+                if radio_value == "Statistics":
+                    key_data = data.xs(key, level="summary_key", drop_level=True)
+                else:
+                    key_data = data[key]
 
                 for line in line_list:
                     # Select all rows belonging the current batch or date.
@@ -123,39 +151,57 @@ class SummaryPlot(WebvizPluginABC):
                         name += f", {line_key}:{line}"
 
                     # Make the traces, with mean, P10 and P90, shading in between.
-                    traces.extend(
-                        [
+                    if radio_value == "Statistics":
+                        traces.extend(
+                            [
+                                go.Scatter(
+                                    y=line_data["P90"],
+                                    x=line_data[self.xaxis],
+                                    mode="lines",
+                                    marker={"size": 10},
+                                    line={"color": colors[0]},
+                                    name=name + "(P90)",
+                                    showlegend=False,
+                                ),
+                                go.Scatter(
+                                    y=line_data["P10"],
+                                    x=line_data[self.xaxis],
+                                    mode="lines",
+                                    line={"color": colors[0]},
+                                    marker={"size": 10},
+                                    fill="tonexty",
+                                    name=name + "(P10)",
+                                    showlegend=False,
+                                ),
+                                go.Scatter(
+                                    y=line_data["mean"],
+                                    x=line_data[self.xaxis],
+                                    mode="lines",
+                                    marker={"size": 10},
+                                    line={"color": colors[0]},
+                                    name=name,
+                                    showlegend=True,
+                                ),
+                            ]
+                        )
+                    else:
+                        traces.append(
                             go.Scatter(
-                                y=line_data["P90"],
-                                x=line_data[xaxis_key],
-                                mode="lines",
+                                y=line_data[key],
+                                x=line_data[self.xaxis],
+                                mode="markers",
                                 marker={"size": 10},
-                                line={"color": colors[0]},
-                                name=name + "(P90)",
-                                showlegend=False,
-                            ),
-                            go.Scatter(
-                                y=line_data["P10"],
-                                x=line_data[xaxis_key],
-                                mode="lines",
-                                line={"color": colors[0]},
-                                marker={"size": 10},
-                                fill="tonexty",
-                                name=name + "(P10)",
-                                showlegend=False,
-                            ),
-                            go.Scatter(
-                                y=line_data["Mean"],
-                                x=line_data[xaxis_key],
-                                mode="lines",
-                                marker={"size": 10},
-                                line={"color": colors[0]},
                                 name=name,
                                 showlegend=True,
-                            ),
-                        ]
-                    )
+                            )
+                        )
 
                     # Cycle trough the default colors.
                     colors.rotate(-1)
-            return {"data": traces}
+            return {
+                "data": traces,
+                "layout": dict(
+                    xaxis={"title": self.xaxis.capitalize()},
+                    yaxis={"title": "Summary Key Value"},
+                ),
+            }
