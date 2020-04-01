@@ -46,7 +46,7 @@ def test_p10_p90(header_1, header_2):
 
 def test_set_up_sources(mocker, monkeypatch, tmpdir):
     mock_api = mocker.Mock()
-    mock_api.output_folder.return_value = tmpdir
+    mock_api.output_folder = tmpdir
     os.mkdir(os.path.join(tmpdir, "everviz"))
     monkeypatch.setattr(
         everviz.pages.objectives,
