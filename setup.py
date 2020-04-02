@@ -7,8 +7,9 @@ setup(
     name="everviz",
     packages=find_packages(exclude=["tests", "test-data"]),
     package_data={"everviz": ["assets/axis_customization.css"]},
-    description="",
-    author="Equinor ASA",
+    description="Visualization for Everest",
+    author="Software Innovation Bergen, Equinor ASA",
+    license="AGPL-3.0",
     url="https://github.com/equinor/everviz",
     setup_requires=["pytest-runner", "setuptools_scm"],
     install_requires=[

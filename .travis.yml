@@ -18,3 +18,14 @@ install:
 
 script:
     - pytest --headless
+
+deploy:
+  - provider: pypi
+    user: statoil-travis
+    distributions: bdist_wheel sdist
+    skip_existing: true
+    password:
+      secure: EZoku49ziwmLd9dvRJlS31b5aiTkCR76uqtNeN4c3TNyCfRgrUwfQIwaUXzsEtGCi6oVdzfPXyq9GFtTBDVhSjCt9IoyVxVBSRwO0Pbg9Xk8K8RsRqFiq0jUDqM1UyyPUW3w0216gGBF4oV/0IIFOXC/lBgt8NUB3zWNvXWOv7gan63B6+BnbdqIoG6O05BAoCEbroEdbmKfb6cWU3rkxiFCNvR/F4leBcFbu61FzPYeczOhXzPxrhuG8CjckoI4btD63eFtZDZe+7YQIFSIYJgpn9WwxSbQQrx9aAl+ESPwq5a8HDM7q+0aRtAy1vmrgjshYE/vHq4eFCgVxunFMFnCZo80Xle2GY7pwUWInI2IkCK30wPsG6jqhcloo63n6GInD6LofBK8AOvbwP2uYLyC5pTwqWkl4PF+oRJU3E9sOXhXjJn7lVgWUbbto++lXWA0VNouCeJm8bVy2HPulhTaDLVW71l5QUaO5ZwrqwH++jMpaOb+xJTnqsGf7W4BNMIgmXbX/2egfQDNCqDy7VPjUxuCqbZ0Sm9X95isaa9y56eB1xUd6cAWP9vscD6YpzQkvkwtdLcDYv4GGxiqJbUDr4LTlQUZ3H3Qp2ywP5Pw3mpmdXV6O9L5C2upZmZyuSK7A5oqbGRvsM0/XQcvMnMS7zV3qihhKO1a+MrJV0o=
+    on:
+      tags: true
+      branch: master
