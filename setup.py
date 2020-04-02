@@ -24,9 +24,9 @@ setup(
     test_suite="tests",
     use_scm_version={"write_to": "everviz/version.py"},
     classifiers=[
-        "Programming language :: Python",
-        "Programming language :: Python :: 3.6",
-        "Programming language :: Python :: 3.7",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
     entry_points={
         "webviz_config_plugins": [
