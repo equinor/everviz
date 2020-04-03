@@ -111,6 +111,8 @@ class Crossplot(WebvizPluginABC):
             axis_options_x_id,
             axis_options_y_id,
         ):
+            if None in [xaxis_column_name, yaxis_column_name]:
+                return {}
             df = get_data(self.data_path)
             x_data = df[xaxis_column_name]
             y_data = df[yaxis_column_name]

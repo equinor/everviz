@@ -133,7 +133,10 @@ class CrossplotIndexed(WebvizPluginABC):
             Output(self.dropdown_y_id, "value"), [Input(self.dropdown_y_id, "options")],
         )
         def set_y_val_dropdown(available_options):
-            return available_options[0]["value"]
+            try:
+                return available_options[0]["value"]
+            except IndexError:
+                return None
 
         @app.callback(
             Output(self.graph_id, "figure"),
@@ -158,6 +161,9 @@ class CrossplotIndexed(WebvizPluginABC):
             xaxis_opt,
             yaxis_opt,
         ):
+            if None in [xaxis_name, yaxis_name]:
+                return {}
+
             if isinstance(realization_nr, int):
                 realization_nr = [realization_nr]
 

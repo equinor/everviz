@@ -1,4 +1,5 @@
 import pytest
+import dash
 from PIL import ImageFilter, ImageChops
 
 
@@ -26,3 +27,10 @@ def assert_equal_images():
         )
 
     return func
+
+
+@pytest.fixture()
+def app():
+    app = dash.Dash(__name__)
+    app.config.suppress_callback_exceptions = True
+    yield app
