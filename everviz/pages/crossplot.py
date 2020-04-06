@@ -8,5 +8,4 @@ def page_layout(api):
                 {"CrossplotIndexed": {"data_path": everest_export,}},
             ],
         }
-    else:
-        return ""
+    return ""

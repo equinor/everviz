@@ -1,8 +1,10 @@
 import os
-import pandas
-import numpy
 from collections import namedtuple
 from functools import partial
+
+import pandas
+import numpy
+
 from everviz.log import get_logger
 
 
@@ -76,23 +78,12 @@ def page_layout(api):
     sources = _set_up_data_sources(api)
     if sources is None:
         return ""
-    else:
-        return {
-            "title": "Summary Values",
-            "content": [
-                "## Summary values as a function of date",
-                {
-                    "SummaryPlot": {
-                        "csv_file": sources.summary_values,
-                        "xaxis": "date",
-                    },
-                },
-                "## Summary values as a function of batch",
-                {
-                    "SummaryPlot": {
-                        "csv_file": sources.summary_values,
-                        "xaxis": "batch",
-                    },
-                },
-            ],
-        }
+    return {
+        "title": "Summary Values",
+        "content": [
+            "## Summary values as a function of date",
+            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "date",},},
+            "## Summary values as a function of batch",
+            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "batch",},},
+        ],
+    }

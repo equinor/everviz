@@ -1,18 +1,20 @@
 import os
 import time
+
 import dash
+import pytest
+import dash_html_components as html
+import pandas as pd
+from PIL import Image
+
+import everviz
+from everviz.plugins import Crossplot
+from everviz.pages import crossplot
 from everviz.plugins.crossplot.layout.crossplot_layout import (
     get_sidebar_layout,
     _get_dropdown,
     _get_radio,
 )
-import pytest
-import dash_html_components as html
-import pandas as pd
-import everviz
-from everviz.plugins import Crossplot
-from PIL import Image
-from everviz.pages import crossplot
 
 
 @pytest.mark.parametrize(

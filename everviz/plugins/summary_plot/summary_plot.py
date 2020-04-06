@@ -1,7 +1,7 @@
 from pathlib import Path
-import pkg_resources
 from uuid import uuid4
 from collections import deque
+import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
@@ -11,8 +11,8 @@ import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 from webviz_config import WebvizPluginABC
-from everviz.data.load_csv.get_data import get_data
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
+from everviz.data.load_csv.get_data import get_data
 
 
 class SummaryPlot(WebvizPluginABC):

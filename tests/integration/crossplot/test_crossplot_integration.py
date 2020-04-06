@@ -1,11 +1,9 @@
 import pandas as pd
 import everviz
-import pytest
 from everviz.plugins.crossplot.crossplot import Crossplot
 
 
 def test_crossplot_callback(app, dash_duo, monkeypatch, mocker, caplog):
-
     mock_data = pd.DataFrame(data=[[1, 2, 3]], columns=["a", "b", "c"])
     monkeypatch.setattr(
         everviz.plugins.crossplot.crossplot,

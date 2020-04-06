@@ -13,11 +13,10 @@ before_install:
     - export PATH=$PATH:$PWD
 
 install:
-    - pip install .
-    - pip install -r test_requirements.txt
+    - pip install tox
 
 script:
-    - pytest --headless
+    - tox -e $(echo py$TRAVIS_PYTHON_VERSION | tr -d .)
 
 deploy:
   - provider: pypi

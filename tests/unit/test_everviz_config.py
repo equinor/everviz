@@ -1,7 +1,6 @@
 import os
 import everviz
 from everviz.config import write_webviz_config, webviz_config
-from everviz.pages import controls, crossplot, configuration, objectives, summary_values
 from everviz.util import DEFAULT_CONFIG
 
 

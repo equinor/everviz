@@ -1,6 +1,5 @@
 import pandas as pd
 import everviz
-import pytest
 from everviz.plugins.crossplot.crossplot_indexed import CrossplotIndexed
 
 

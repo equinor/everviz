@@ -2,17 +2,16 @@ import os
 import time
 import dash
 import pytest
-import everviz
 
 import pandas as pd
-
 from PIL import Image
+import everviz
 from everviz.plugins import CrossplotIndexed
 
 
 def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_images):
     app = dash.Dash(__name__)
-    mock_data = pd.DataFrame(data=[[1, 2, 3]], columns=["a", "b", "c"])
+    mock_data = pd.DataFrame(data=[[1, 2, 3], [1, 2, 3]], columns=["a", "b", "c"])
     monkeypatch.setattr(
         everviz.plugins.crossplot.crossplot_indexed,
         "get_data",
