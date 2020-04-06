@@ -1,10 +1,10 @@
 import os
-import pkg_resources
 from pathlib import Path
+from uuid import uuid4
+
+import pkg_resources
 import dash_html_components as html
 import dash_core_components as dcc
-
-from uuid import uuid4
 from dash.dependencies import Output, Input
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS

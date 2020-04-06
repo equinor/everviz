@@ -1,8 +1,8 @@
-import everviz
-import operator
 import os
 import pandas as pd
 import pytest
+
+import everviz
 
 from everviz.pages.objectives import _calc_p10_p90, _set_up_data_sources, _calc_mean
 

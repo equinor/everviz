@@ -1,7 +1,6 @@
 import os
-import pandas as pd
 from collections import namedtuple
-
+import pandas as pd
 
 DataSources = namedtuple("DataSource", "objective_values")
 

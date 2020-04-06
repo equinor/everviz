@@ -31,6 +31,6 @@ def assert_equal_images():
 
 @pytest.fixture()
 def app():
-    app = dash.Dash(__name__)
-    app.config.suppress_callback_exceptions = True
-    yield app
+    dash_app = dash.Dash(__name__)
+    dash_app.config.suppress_callback_exceptions = True
+    yield dash_app

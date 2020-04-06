@@ -1,12 +1,13 @@
 import os
-import pkg_resources
 from pathlib import Path
+from uuid import uuid4
+import pkg_resources
 import dash_html_components as html
 import dash_core_components as dcc
 
-from uuid import uuid4
 from dash.dependencies import Input, Output
 from webviz_config import WebvizPluginABC
+from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
 from everviz.plugins.crossplot.layout.crossplot_layout import get_sidebar_layout
 from everviz.plugins.crossplot.callback.crossplot_callback import (
@@ -14,7 +15,6 @@ from everviz.plugins.crossplot.callback.crossplot_callback import (
     get_graph_line,
 )
 from everviz.data.load_csv.get_data import get_data
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
 
 class Crossplot(WebvizPluginABC):

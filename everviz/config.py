@@ -1,8 +1,7 @@
 import yaml
 
-from everviz.pages import controls, objectives
 from everviz.log import get_logger
-from everviz.pages import controls, configuration, crossplot, summary_values
+from everviz.pages import controls, configuration, crossplot, summary_values, objectives
 
 
 logger = get_logger()

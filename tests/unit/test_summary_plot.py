@@ -1,8 +1,8 @@
-import pytest
-import pandas
-import numpy
 from datetime import datetime
-from pathlib import Path
+
+import pandas as pd
+import numpy as np
+
 from everviz.pages.summary_values import _summary_values
 
 test_data = {
@@ -21,8 +21,8 @@ test_data = {
 }
 
 
-def test_summary_values(request, mocker):
-    summary_values = _summary_values(pandas.DataFrame(test_data))
+def test_summary_values():
+    summary_values = _summary_values(pd.DataFrame(test_data))
 
     assert list(summary_values.columns) == [
         "Summary Key",
@@ -35,9 +35,9 @@ def test_summary_values(request, mocker):
     assert len(summary_values) == len(test_data["simulation"])
     assert set(summary_values["Summary Key"]) == set(["key1", "key2"])
     assert set(summary_values["Batch"]) == set(test_data["batch"])
-    assert set(summary_values["Date"]) == set(
-        [pandas.Timestamp(date) for date in test_data["date"]]
-    )
+    assert set(summary_values["Date"]) == {
+        pd.Timestamp(date) for date in test_data["date"]
+    }
 
     mean = []
     p10 = []
@@ -45,10 +45,10 @@ def test_summary_values(request, mocker):
     for key in ["key1", "key2"]:
         for batch in [0, 1, 2]:
             simulations = [i for i, b in enumerate(test_data["batch"]) if b == batch]
-            data = numpy.array(test_data[key])[simulations]
-            mean.append(numpy.mean(data))
-            p10.append(numpy.quantile(data, q=0.1))
-            p90.append(numpy.quantile(data, q=0.9))
+            data = np.array(test_data[key])[simulations]
+            mean.append(np.mean(data))
+            p10.append(np.quantile(data, q=0.1))
+            p90.append(np.quantile(data, q=0.9))
 
     assert summary_values["Mean"].to_list() == mean
     assert summary_values["P10"].to_list() == p10

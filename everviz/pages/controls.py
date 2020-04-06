@@ -1,6 +1,6 @@
 import os
-import pandas as pd
 from collections import namedtuple
+import pandas as pd
 from everviz.log import get_logger
 
 

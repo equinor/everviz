@@ -1,17 +1,8 @@
-import sys
-
-import pytest
-
-try:
-    from pathlib import Path
-    import black
-    from click.testing import CliRunner
-except ImportError:
-    pass
+import black
+from click.testing import CliRunner
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6), reason="requires Python3")
-def test_code_style(capsys):
+def test_code_style():
 
     runner = CliRunner()
     resp = runner.invoke(
