@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-
+from os import path
 from setuptools import setup, find_packages
 
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
+    long_description = f.read()
 
 setup(
     name="everviz",
     packages=find_packages(exclude=["tests", "test-data"]),
     package_data={"everviz": ["assets/axis_customization.css"]},
     description="Visualization for Everest",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Software Innovation Bergen, Equinor ASA",
     license="AGPL-3.0",
     url="https://github.com/equinor/everviz",
