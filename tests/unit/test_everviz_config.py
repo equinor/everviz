@@ -1,6 +1,10 @@
 import os
 import everviz
-from everviz.config import write_webviz_config, webviz_config
+from everviz.config import (
+    write_webviz_config,
+    webviz_config,
+    setup_default_everviz_config,
+)
 from everviz.util import DEFAULT_CONFIG
 
 
@@ -43,3 +47,23 @@ def test_webviz_config(mocker, monkeypatch):
     config = webviz_config(mocker.Mock())
 
     assert expected_config == config
+
+
+def test_setup_default_everviz_config(mocker, monkeypatch, tmpdir):
+    monkeypatch.setattr(
+        everviz.config,
+        "webviz_config",
+        mocker.Mock(
+            return_value={"title": "Everest Optimization Report", "pages": [],}
+        ),
+    )
+
+    api_mock = mocker.Mock()
+    api_mock.output_folder = "everest_output"
+    expected_result = os.path.join(api_mock.output_folder, "everviz", DEFAULT_CONFIG)
+
+    with tmpdir.as_cwd():
+        assert not os.path.exists(expected_result)
+        result = setup_default_everviz_config(api_mock)
+        assert os.path.exists(expected_result)
+        assert expected_result == result
