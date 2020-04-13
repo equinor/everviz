@@ -39,6 +39,7 @@ setup(
             "CrossplotIndexed = everviz.plugins:CrossplotIndexed",
             "SummaryPlot = everviz.plugins:SummaryPlot",
             "ObjectivesPlot = everviz.plugins:ObjectivesPlot",
+            "ConfigEditor = everviz.plugins:ConfigEditor",
         ],
         "everest": ["everviz = everviz.everest_hooks",],
     },

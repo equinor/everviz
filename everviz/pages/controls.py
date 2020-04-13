@@ -32,7 +32,7 @@ def _set_up_data_sources(api):
     controls_per_batch = os.path.join(everviz_path, "controls_per_batch.csv")
     data = _control_data_per_batch(api)
     data.to_csv(controls_per_batch, index=False)
-    logger.info("File created: {}".format(controls_per_batch))
+    logger.info(f"File created: {controls_per_batch}")
 
     logger.info("Generating initial vs best controls source data file")
     controls_initial_vs_best = os.path.join(
