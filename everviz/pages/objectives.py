@@ -1,41 +1,91 @@
 import os
 from collections import namedtuple
+from functools import partial
 import pandas as pd
+import numpy as np
 
-DataSources = namedtuple("DataSource", "objective_values")
+from everviz.log import get_logger
+
+DataSources = namedtuple(
+    "DataSource", ["objective_values", "objective_statistics", "total_objective_values"]
+)
+
+logger = get_logger()
 
 
-def _objective_values(api):
+def _objective_values_from_api(api):
     return pd.DataFrame(api.objective_values)
 
 
-def _calc_p10_p90(df):
-    percentiles = [("P10", 0.1), ("P90", 0.9)]
-    for batch in df["batch"].unique():
-        for label, quantile in percentiles:
-            df.loc[df["batch"] == batch, label] = df[df["batch"] == batch][
-                "value"
-            ].quantile(quantile)
-    return df
+def _total_objective_values_from_api(api):
+    return pd.DataFrame(api.single_objective_values)
 
 
-def _calc_mean(df):
-    for batch in df["batch"].unique():
-        df.loc[df["batch"] == batch, "Mean"] = df[df["batch"] == batch]["value"].mean()
-    return df
+def _objective_values(data):
+    # Sort by the index columns.
+    data = data.drop(columns=["realization"])
+    sorted_values = (
+        data.set_index(["function", "batch", "simulation"]).sort_index().reset_index()
+    )
+    return sorted_values
+
+
+def _total_objective_values(data):
+    # Sort by the index columns.
+    sorted_values = data.set_index("batch").sort_index().reset_index()
+    return sorted_values
+
+
+def _objective_statistics(data):
+    # Aggregate the values over the simulations, using pivot_table, keeping the
+    # batch and function as the multi-index, calculating statistics of the
+    # values over the simulations.
+    statistics = pd.pivot_table(
+        data,
+        values="value",
+        index=["function", "batch"],
+        aggfunc=[np.mean, partial(np.quantile, q=0.1), partial(np.quantile, q=0.9),],
+    )
+    statistics.columns = ["Mean", "P10", "P90"]
+
+    # Sort the multi index, and reset them to columns.
+    sorted_statistics = statistics.sort_index().reset_index()
+
+    return sorted_statistics
 
 
 def _set_up_data_sources(api):
     everest_folder = api.output_folder
     everviz_path = os.path.join(everest_folder, "everviz")
 
-    objective_values = os.path.join(everviz_path, "objective_values.csv")
-    data = _objective_values(api)
-    data = _calc_p10_p90(data)
-    data = _calc_mean(data)
-    data.to_csv(objective_values, index=False)
+    logger.info("Generating objective values plot")
+    data = _objective_values_from_api(api)
 
-    return DataSources(objective_values=objective_values,)
+    objective_values_file = os.path.join(everviz_path, "objective_values.csv")
+    values = _objective_values(data)
+    values.to_csv(objective_values_file, index=False)
+    logger.info(f"File created: {objective_values_file}")
+
+    objective_statistics_file = os.path.join(everviz_path, "objective_statistics.csv")
+    statistics = _objective_statistics(data)
+    statistics.to_csv(objective_statistics_file, index=False)
+    logger.info(f"File created: {objective_statistics_file}")
+
+    logger.info("Generating total objective values plot")
+    data = _total_objective_values_from_api(api)
+
+    total_objective_values_file = os.path.join(
+        everviz_path, "total_objective_values.csv"
+    )
+    values = _total_objective_values(data)
+    values.to_csv(total_objective_values_file, index=False)
+    logger.info(f"File created: {total_objective_values_file}")
+
+    return DataSources(
+        objective_values=objective_values_file,
+        objective_statistics=objective_statistics_file,
+        total_objective_values=total_objective_values_file,
+    )
 
 
 def page_layout(api):
@@ -44,6 +94,19 @@ def page_layout(api):
         "title": "Objectives",
         "content": [
             "## Objective function values",
-            {"ObjectivesPlot": {"data_path": sources.objective_values,},},
+            {
+                "ObjectivesPlot": {
+                    "values_file": sources.objective_values,
+                    "statistics_file": sources.objective_statistics,
+                },
+            },
+            "## Minimizer objective function values",
+            {
+                "TablePlotter": {
+                    "lock": True,
+                    "csv_file": sources.total_objective_values,
+                    "plot_options": {"x": "batch", "y": "value", "type": "line",},
+                },
+            },
         ],
     }
