@@ -47,7 +47,7 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     # Test data plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
 
-    # Clear the axes dropdowns, which should not cause an error.\
+    # Clear the axes dropdowns, which should not cause an error.
     #
     # NOTE: if you try to do this before the previous click action on a radio
     # button, you get an error, because the the dropdown stays open and overlaps
