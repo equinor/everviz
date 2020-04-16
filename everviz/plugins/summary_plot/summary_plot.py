@@ -1,6 +1,6 @@
 from pathlib import Path
 from uuid import uuid4
-from collections import deque
+from itertools import cycle
 import pkg_resources
 
 import dash_html_components as html
@@ -18,13 +18,16 @@ from everviz.data.load_csv.get_data import get_data
 class SummaryPlot(WebvizPluginABC):
     def __init__(self, app, values_file, statistics_file, xaxis="date"):
         super().__init__()
-        self.xaxis = xaxis
+
         self.graph_id = f"graph-{uuid4()}"
         self.key_dropdown_id = f"dropdown-{uuid4()}"
         self.xaxis_dropdown_id = f"dropdown-{uuid4()}"
         self.radio_id = f"radio-{uuid4()}"
+
         self.values_file = values_file
         self.statistics_file = statistics_file
+        self.xaxis = xaxis
+
         self.set_callbacks(app)
 
         ASSETS_DIR = pkg_resources.resource_filename("everviz", "assets")
@@ -125,14 +128,14 @@ class SummaryPlot(WebvizPluginABC):
             else:
                 data = get_data(self.values_file).set_index(["batch", "date"])
 
-            # Put the the standard colors in a deque that we will rotate.
-            colors = deque(DEFAULT_PLOTLY_COLORS)
+            # Make a cycle iterator over the plotly colors.
+            colors = cycle(DEFAULT_PLOTLY_COLORS)
 
             # Choose between dates or batches for different lines.
             line_key = "batch" if self.xaxis == "date" else "date"
 
             traces = []
-            for key in key_list:
+            for color, key in zip(colors, key_list):
                 # Select all data belonging to the current key.
                 if radio_value == "Statistics":
                     key_data = data.xs(key, level="summary_key", drop_level=True)
@@ -146,7 +149,7 @@ class SummaryPlot(WebvizPluginABC):
                     ).reset_index()
 
                     # Set the name of the plotted line.
-                    name = f"{key}"
+                    name = key
                     if len(line_list) > 1:
                         name += f", {line_key}:{line}"
 
@@ -159,7 +162,7 @@ class SummaryPlot(WebvizPluginABC):
                                     x=line_data[self.xaxis],
                                     mode="lines",
                                     marker={"size": 10},
-                                    line={"color": colors[0]},
+                                    line={"color": color},
                                     name=name + "(P90)",
                                     showlegend=False,
                                 ),
@@ -167,7 +170,7 @@ class SummaryPlot(WebvizPluginABC):
                                     y=line_data["P10"],
                                     x=line_data[self.xaxis],
                                     mode="lines",
-                                    line={"color": colors[0]},
+                                    line={"color": color},
                                     marker={"size": 10},
                                     fill="tonexty",
                                     name=name + "(P10)",
@@ -178,7 +181,7 @@ class SummaryPlot(WebvizPluginABC):
                                     x=line_data[self.xaxis],
                                     mode="lines",
                                     marker={"size": 10},
-                                    line={"color": colors[0]},
+                                    line={"color": color},
                                     name=name,
                                     showlegend=True,
                                 ),
@@ -196,8 +199,6 @@ class SummaryPlot(WebvizPluginABC):
                             )
                         )
 
-                    # Cycle trough the default colors.
-                    colors.rotate(-1)
             return {
                 "data": traces,
                 "layout": dict(
