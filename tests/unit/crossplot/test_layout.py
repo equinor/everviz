@@ -117,8 +117,8 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
 def test_webviz_page_layout(mocker):
     api_mock = mocker.Mock()
     api_mock.everest_csv = "everest_export.csv"
+    api_mock.control_names = ["x-0", "x-1"]
     result = crossplot.page_layout(api_mock)
-
     expected_page_layout = {
         "title": "Cross plots",
         "content": [
@@ -127,6 +127,24 @@ def test_webviz_page_layout(mocker):
         ],
     }
     assert expected_page_layout == result
+
+
+def test_webviz_page_layout_no_crossplot(mocker):
+    api_mock = mocker.Mock()
+    api_mock.everest_csv = "everest_export.csv"
+    api_mock.control_names = ["x", "y"]
+    result = crossplot.page_layout(api_mock)
+    expected_page_layout = {
+        "title": "Cross plots",
+        "content": [{"Crossplot": {"data_path": "everest_export.csv",},},],
+    }
+    assert expected_page_layout == result
+
+
+def test_webviz_page_layout_nothing(mocker):
+    api_mock = mocker.Mock()
+    api_mock.control_names = ["x-0", "x-1"]
+    result = crossplot.page_layout(api_mock)
     api_mock.everest_csv = None
     result = crossplot.page_layout(api_mock)
     expected_page_layout = ""
