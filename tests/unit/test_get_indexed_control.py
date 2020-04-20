@@ -1,6 +1,6 @@
 import pytest
 
-from everviz.plugins.crossplot._get_indexed_control import _identify_indexed_controls
+from everviz.util import identify_indexed_controls
 
 
 @pytest.mark.parametrize(
@@ -13,5 +13,5 @@ from everviz.plugins.crossplot._get_indexed_control import _identify_indexed_con
     ],
 )
 def test_get_indexed_controls(test_input, expected):
-    result = _identify_indexed_controls(test_input)
+    result = identify_indexed_controls(test_input)
     assert result == expected

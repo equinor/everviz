@@ -13,7 +13,7 @@ from everviz.plugins.crossplot.callback.crossplot_callback import (
     get_graph_line,
     crossplot_update_graph,
 )
-from everviz.plugins.crossplot._get_indexed_control import _identify_indexed_controls
+from everviz.util import identify_indexed_controls
 from everviz.plugins.crossplot.callback.crossplot_indexed_dropdown import (
     dropdown_callback,
 )
@@ -47,7 +47,7 @@ class CrossplotIndexed(WebvizPluginABC):
     @property
     def layout(self):
         df = get_data(self.data_path)
-        dropdown_options = list(_identify_indexed_controls(df.columns.unique()).keys())
+        dropdown_options = list(identify_indexed_controls(df.columns.unique()).keys())
         realizations = df.index.values
         axis_type = [(i, i) for i in ["Linear", "Log"]]
         axis_options = ["Normal", "Cumulative"]
@@ -126,7 +126,7 @@ class CrossplotIndexed(WebvizPluginABC):
         )
         def update_dropwdown_y(selected_control):
             df = get_data(self.data_path)
-            indexed_controls = _identify_indexed_controls(df.columns.unique())
+            indexed_controls = identify_indexed_controls(df.columns.unique())
             return dropdown_callback(selected_control, indexed_controls)
 
         @app.callback(
