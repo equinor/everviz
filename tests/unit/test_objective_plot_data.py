@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import numpy as np
-import pytest
 
 import everviz
 
@@ -81,29 +80,6 @@ def test_objective_statistics_content():
     assert objective_statistics["Mean"].to_list() == mean
     assert objective_statistics["P10"].to_list() == p10
     assert objective_statistics["P90"].to_list() == p90
-
-
-def test_insert_p10_p90():
-    df = pd.DataFrame(OBJECTIVES)
-    result = _objective_statistics(df)
-    for header in ["P10", "P90"]:
-        assert header in result
-
-
-def test_mean():
-    df = pd.DataFrame(OBJECTIVES)
-    result = _objective_statistics(df)
-    assert all(result["Mean"].values == [200.0, 300.0, 400.0, 600.0])
-
-
-@pytest.mark.parametrize(
-    "header_1, header_2", [("P10", "P90")],
-)
-def test_p10_p90(header_1, header_2):
-    df = pd.DataFrame(OBJECTIVES)
-    result = _objective_statistics(df)
-    for val_1, val_2 in zip(result[header_1], result[header_2]):
-        assert val_1 < val_2
 
 
 def test_set_up_sources(mocker, monkeypatch, tmpdir):

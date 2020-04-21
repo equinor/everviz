@@ -100,7 +100,7 @@ def page_layout(api):
                     "statistics_file": sources.objective_statistics,
                 },
             },
-            "## Minimizer objective function values",
+            "## Weighted objective function",
             {
                 "TablePlotter": {
                     "lock": True,
