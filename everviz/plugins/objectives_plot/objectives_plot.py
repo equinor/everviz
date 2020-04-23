@@ -57,7 +57,7 @@ class ObjectivesPlot(WebvizPluginABC):
             dcc.RadioItems(
                 id=self.radio_id,
                 options=[{"label": i, "value": i} for i in radio_options],
-                value=radio_options[0],
+                value=radio_options[1],
                 labelStyle={"display": "inline-block"},
                 style={"margin-top": 20},
             )
