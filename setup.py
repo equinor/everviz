@@ -16,7 +16,7 @@ setup(
     author="Software Innovation Bergen, Equinor ASA",
     license="AGPL-3.0",
     url="https://github.com/equinor/everviz",
-    setup_requires=["pytest-runner", "setuptools_scm"],
+    setup_requires=["setuptools_scm"],
     install_requires=[
         "pyyaml",
         "pandas",
