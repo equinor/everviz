@@ -18,6 +18,12 @@ from everviz.data.load_csv.get_data import get_data
 
 
 class Crossplot(WebvizPluginABC):
+    """
+    The Crossplot class implements a plugin for Webviz, which can plot any
+    column from a CSV file against any other column. This is used by Everviz for
+    plotting columns from CSV file exported by Everest .
+    """
+
     def __init__(self, app, data_path, title="Crossplot"):
         super().__init__()
         self.title = title
