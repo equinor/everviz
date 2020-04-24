@@ -122,7 +122,9 @@ def test_webviz_page_layout(mocker):
     expected_page_layout = {
         "title": "Cross plots",
         "content": [
+            crossplot._crossplot_doc,
             {"Crossplot": {"data_path": "everest_export.csv",},},
+            crossplot._crossplot_indexed_doc,
             {"CrossplotIndexed": {"data_path": "everest_export.csv",}},
         ],
     }
@@ -136,7 +138,10 @@ def test_webviz_page_layout_no_crossplot(mocker):
     result = crossplot.page_layout(api_mock)
     expected_page_layout = {
         "title": "Cross plots",
-        "content": [{"Crossplot": {"data_path": "everest_export.csv",},},],
+        "content": [
+            crossplot._crossplot_doc,
+            {"Crossplot": {"data_path": "everest_export.csv",},},
+        ],
     }
     assert expected_page_layout == result
 
