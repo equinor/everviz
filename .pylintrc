@@ -69,7 +69,6 @@ disable=bad-continuation,
       too-many-instance-attributes,
       redefined-outer-name,
       missing-function-docstring,
-      missing-class-docstring,
       duplicate-code
 
 # Enable the message, report, category or checker with the given id(s). You can

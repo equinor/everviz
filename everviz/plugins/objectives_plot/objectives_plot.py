@@ -16,6 +16,17 @@ from everviz.data.load_csv.get_data import get_data
 
 
 class ObjectivesPlot(WebvizPluginABC):
+    """
+    The ObjectivesPlot class implements a plugin for Webviz, for plotting the
+    objective values generated during an Everest optimization.
+
+    Generally there are multiple realizations for the objective function values
+    at each batch. Additionally, there may be multiple objective functions that
+    are optimized simultaneously. These can be plotted either all individually
+    in the plot, or they are summarized by plotting the mean value together with
+    a P10-P90 range.
+    """
+
     def __init__(self, app, values_file, statistics_file):
         super().__init__()
 

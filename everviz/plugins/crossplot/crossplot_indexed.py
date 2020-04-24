@@ -21,6 +21,12 @@ from everviz.plugins.crossplot.layout.crossplot_layout import get_sidebar_layout
 
 
 class CrossplotIndexed(WebvizPluginABC):
+    """
+    The CrossplotIndexed class implements a plugin for Webviz, which can plot
+    any indexed control from the data exported by Everest against any other
+    indexed control.
+    """
+
     def __init__(self, app, data_path, title="Indexed Crossplot"):
         super().__init__()
         self.title = title
