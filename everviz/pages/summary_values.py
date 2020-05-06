@@ -76,12 +76,12 @@ def _set_up_data_sources(api, keys=None):
     summary_values_file = os.path.join(everviz_path, "summary_values.csv")
     values = _summary_values(summary_values)
     values.to_csv(summary_values_file, index=False)
-    logger.info(f"File created: {summary_values_file}")
+    logger.info(f"File created: {summary_values_file}")  # pylint: disable=W1203
 
     summary_statistics_file = os.path.join(everviz_path, "summary_statistics.csv")
     statistics = _summary_statistics(summary_values)
     statistics.to_csv(summary_statistics_file, index=False)
-    logger.info(f"File created: {summary_statistics_file}")
+    logger.info(f"File created: {summary_statistics_file}")  # pylint: disable=W1203
 
     return DataSources(
         summary_values=summary_values_file, summary_statistics=summary_statistics_file,
