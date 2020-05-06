@@ -64,12 +64,12 @@ def _set_up_data_sources(api):
     objective_values_file = os.path.join(everviz_path, "objective_values.csv")
     values = _objective_values(data)
     values.to_csv(objective_values_file, index=False)
-    logger.info(f"File created: {objective_values_file}")
+    logger.info(f"File created: {objective_values_file}")  # pylint: disable=W1203
 
     objective_statistics_file = os.path.join(everviz_path, "objective_statistics.csv")
     statistics = _objective_statistics(data)
     statistics.to_csv(objective_statistics_file, index=False)
-    logger.info(f"File created: {objective_statistics_file}")
+    logger.info(f"File created: {objective_statistics_file}")  # pylint: disable=W1203
 
     logger.info("Generating total objective values plot")
     data = _total_objective_values_from_api(api)
@@ -79,7 +79,7 @@ def _set_up_data_sources(api):
     )
     values = _total_objective_values(data)
     values.to_csv(total_objective_values_file, index=False)
-    logger.info(f"File created: {total_objective_values_file}")
+    logger.info(f"File created: {total_objective_values_file}")  # pylint: disable=W1203
 
     return DataSources(
         objective_values=objective_values_file,
