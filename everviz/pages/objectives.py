@@ -18,7 +18,11 @@ def _objective_values_from_api(api):
 
 
 def _total_objective_values_from_api(api):
-    return pd.DataFrame(api.single_objective_values)
+    single_objectives = api.single_objective_values
+    accepted_batches = api.accepted_batches
+    for objective in single_objectives:
+        objective.update({"accepted": objective["batch"] in accepted_batches})
+    return pd.DataFrame(single_objectives)
 
 
 def _objective_values(data):
@@ -100,13 +104,7 @@ def page_layout(api):
                     "statistics_file": sources.objective_statistics,
                 },
             },
-            "## Weighted objective function",
-            {
-                "TablePlotter": {
-                    "lock": True,
-                    "csv_file": sources.total_objective_values,
-                    "plot_options": {"x": "batch", "y": "value", "type": "line",},
-                },
-            },
+            "## Objective function",
+            {"SingleObjectivesPlot": {"csv_file": sources.total_objective_values,},},
         ],
     }
