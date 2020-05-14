@@ -92,6 +92,13 @@ def _set_up_data_sources(api):
     )
 
 
+def _single_objective_title(api):
+    nr_function = len(api.objective_function_names)
+    if nr_function > 1:
+        return "Weighted objective function"
+    return "Objective function"
+
+
 def page_layout(api):
     sources = _set_up_data_sources(api)
     return {
@@ -104,7 +111,7 @@ def page_layout(api):
                     "statistics_file": sources.objective_statistics,
                 },
             },
-            "## Objective function",
+            f"## {_single_objective_title(api)}",
             {"SingleObjectivesPlot": {"csv_file": sources.total_objective_values,},},
         ],
     }
