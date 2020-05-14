@@ -1,7 +1,10 @@
 import pandas as pd
 
 import pytest
-from everviz.pages.objectives import _total_objective_values_from_api
+from everviz.pages.objectives import (
+    _total_objective_values_from_api,
+    _single_objective_title,
+)
 
 TEST_DATA = [
     {"batch": 0, "value": 100, "accepted": True},
@@ -31,3 +34,15 @@ def test_total_objective_values_from_api(api_mock):
     result = _total_objective_values_from_api(api_mock)
     expected = pd.DataFrame(TEST_DATA)
     assert expected.equals(result)
+
+
+def test_single_objective_title(api_mock):
+    api_mock.objective_function_names = ["npv"]
+    result = _single_objective_title(api_mock)
+    expected = "Objective function"
+    assert result == expected
+
+    api_mock.objective_function_names = ["npv", "rf"]
+    result = _single_objective_title(api_mock)
+    expected = "Weighted objective function"
+    assert result == expected
