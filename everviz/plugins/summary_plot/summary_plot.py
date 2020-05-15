@@ -5,7 +5,7 @@ import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 
 import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
@@ -116,6 +116,27 @@ class SummaryPlot(WebvizPluginABC):
         )
 
     def set_callbacks(self, app):
+        @app.callback(
+            self.plugin_data_output,
+            [self.plugin_data_requested],
+            [State(self.radio_id, "value")],
+        )
+        def user_download_data(data_requested, radio_value):
+            if data_requested:
+                if radio_value == "Statistics":
+                    data = get_data(self.statistics_file).set_index(
+                        ["summary_key", "batch", "date"]
+                    )
+                    file_path = self.statistics_file
+                else:
+                    data = get_data(self.values_file).set_index(["batch", "date"])
+                    file_path = self.values_file
+
+                return WebvizPluginABC.plugin_data_compress(
+                    [{"filename": Path(file_path).name, "content": data.to_csv(),}]
+                )
+            return ""
+
         @app.callback(
             Output(self.graph_id, "figure"),
             [

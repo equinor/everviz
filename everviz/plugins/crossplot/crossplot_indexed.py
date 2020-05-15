@@ -144,6 +144,19 @@ class CrossplotIndexed(WebvizPluginABC):
             except IndexError:
                 return None
 
+        @app.callback(self.plugin_data_output, [self.plugin_data_requested])
+        def user_download_data(data_requested):
+            if data_requested:
+                return WebvizPluginABC.plugin_data_compress(
+                    [
+                        {
+                            "filename": Path(self.data_path).name,
+                            "content": get_data(self.data_path).to_csv(),
+                        }
+                    ]
+                )
+            return ""
+
         @app.callback(
             Output(self.graph_id, "figure"),
             [
