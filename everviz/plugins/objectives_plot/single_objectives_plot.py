@@ -46,6 +46,19 @@ class SingleObjectivesPlot(WebvizPluginABC):
         )
 
     def set_callbacks(self, app):
+        @app.callback(self.plugin_data_output, [self.plugin_data_requested])
+        def user_download_data(data_requested):
+            if data_requested:
+                return WebvizPluginABC.plugin_data_compress(
+                    [
+                        {
+                            "filename": Path(self.csv_file).name,
+                            "content": get_data(self.csv_file).to_csv(),
+                        }
+                    ]
+                )
+            return ""
+
         @app.callback(
             Output(self.graph_id, "figure"), [Input(self.div_id, "children")],
         )

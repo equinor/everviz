@@ -9,7 +9,7 @@ import dash_core_components as dcc
 import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
@@ -96,6 +96,28 @@ class ObjectivesPlot(WebvizPluginABC):
         )
 
     def set_callbacks(self, app):
+        @app.callback(
+            self.plugin_data_output,
+            [self.plugin_data_requested],
+            [State(self.radio_id, "value")],
+        )
+        def user_download_data(data_requested, radio_value):
+            if data_requested:
+                file_path = (
+                    self.statistics_file
+                    if radio_value == "Statistics"
+                    else self.values_file
+                )
+                return WebvizPluginABC.plugin_data_compress(
+                    [
+                        {
+                            "filename": Path(file_path).name,
+                            "content": get_data(file_path).to_csv(),
+                        }
+                    ]
+                )
+            return ""
+
         @app.callback(
             Output(self.graph_id, "figure"),
             [Input(self.function_dropdown_id, "value"), Input(self.radio_id, "value"),],
