@@ -40,6 +40,7 @@ setup(
             "SummaryPlot = everviz.plugins:SummaryPlot",
             "ObjectivesPlot = everviz.plugins:ObjectivesPlot",
             "SingleObjectivesPlot = everviz.plugins:SingleObjectivesPlot",
+            "ControlsPlot = everviz.plugins:ControlsPlot",
             "ConfigEditor = everviz.plugins:ConfigEditor",
         ],
         "everest": ["everviz = everviz.everest_hooks",],

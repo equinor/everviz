@@ -53,19 +53,7 @@ def page_layout(api):
         "title": "Controls",
         "content": [
             "## Control value per batch",
-            {
-                "TablePlotter": {
-                    "lock": True,
-                    "csv_file": sources.controls_per_batch,
-                    "filter_cols": ["control"],
-                    "plot_options": {
-                        "x": "batch",
-                        "y": "value",
-                        "type": "line",
-                        "color": "control",
-                    },
-                }
-            },
+            {"ControlsPlot": {"csv_file": sources.controls_per_batch}},
             "## Initial controls versus best controls",
             {
                 "TablePlotter": {
