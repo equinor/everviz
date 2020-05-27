@@ -1,15 +1,26 @@
+import os
 import pytest
 import dash
 from PIL import ImageFilter, ImageChops
 
 
 @pytest.fixture()
-def assert_equal_images():
+def assert_equal_images(tmpdir):
     def func(image_1, image_2, threshold=0.1):
         """
         In this function we check if two images are almost identical
          by blurring and calculating MSE between the images.
         """
+        filename1 = (
+            os.path.join(tmpdir, image_1.filename)
+            if not os.path.isabs(image_1.filename)
+            else image_1.filename
+        )
+        filename2 = (
+            os.path.join(tmpdir, image_2.filename)
+            if not os.path.isabs(image_2.filename)
+            else image_2.filename
+        )
 
         image_1, image_2 = [image.convert("L") for image in [image_1, image_2]]
         image_1, image_2 = [
@@ -22,8 +33,10 @@ def assert_equal_images():
 
         error = diff / (image_1.size[0] * image_1.size[1])
 
-        assert error < threshold, "Bounding box: {}".format(
-            ImageChops.subtract(image_1, image_2).getbbox()
+        assert (
+            error < threshold
+        ), "Bounding box: {}\nImage 1 path: {}\nImage 2 path: {}\n".format(
+            ImageChops.subtract(image_1, image_2).getbbox(), filename1, filename2
         )
 
     return func

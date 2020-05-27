@@ -40,7 +40,15 @@ class SingleObjectivesPlot(WebvizPluginABC):
     @property
     def layout(self):
         return html.Div(
-            [dcc.Graph(id=self.graph_id)],
+            [
+                dcc.Graph(
+                    id=self.graph_id,
+                    config={
+                        "modeBarButtonsToRemove": ["toImage"],
+                        "displaylogo": False,
+                    },
+                )
+            ],
             id=self.div_id,
             style={"width": "69%", "display": "inline-block"},
         )
