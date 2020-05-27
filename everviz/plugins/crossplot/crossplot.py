@@ -89,7 +89,7 @@ class Crossplot(WebvizPluginABC):
                             },
                         ),
                         html.Div(
-                            [dcc.Graph(id=self.graph_id)],
+                            [dcc.Graph(id=self.graph_id, config={"modeBarButtonsToRemove":["toImage"]})],
                             style={"width": "69%", "display": "inline-block"},
                         ),
                     ]
