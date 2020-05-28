@@ -31,6 +31,9 @@ def test_webviz_config(mocker, monkeypatch):
         everviz.pages.objectives, "page_layout", mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
+        everviz.pages.deltaplot, "page_layout", mocker.Mock(return_value=""),
+    )
+    monkeypatch.setattr(
         everviz.pages.summary_values,
         "page_layout",
         mocker.Mock(return_value={"title": "Summary", "content": []}),
