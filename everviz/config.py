@@ -3,7 +3,14 @@ import yaml
 
 from everviz.log import get_logger
 from everviz.util import get_everviz_folder, DEFAULT_CONFIG
-from everviz.pages import controls, configuration, crossplot, summary_values, objectives
+from everviz.pages import (
+    controls,
+    configuration,
+    crossplot,
+    summary_values,
+    objectives,
+    deltaplot,
+)
 
 logger = get_logger()
 
@@ -15,6 +22,7 @@ def webviz_config(api):
         summary_values.page_layout(api),
         crossplot.page_layout(api),
         controls.page_layout(api),
+        deltaplot.page_layout(api),
         configuration.page_layout(api),
     ]
 
