@@ -88,7 +88,6 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
 
     _REFERENCE_IMAGES = {
         (1024, 768): "crossplot_layout_headless.png",
-        (1016, 635): "crossplot_layout.png",
     }
 
     dash_duo.driver.set_window_size(1024, 768)
