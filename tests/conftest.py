@@ -24,7 +24,7 @@ def assert_equal_images(tmpdir):
 
         image_1, image_2 = [image.convert("L") for image in [image_1, image_2]]
         image_1, image_2 = [
-            image.filter(ImageFilter.GaussianBlur(radius=4))
+            image.filter(ImageFilter.GaussianBlur(radius=5))
             for image in [image_1, image_2]
         ]
 
