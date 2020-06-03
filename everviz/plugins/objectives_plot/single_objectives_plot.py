@@ -95,6 +95,6 @@ class SingleObjectivesPlot(WebvizPluginABC):
                 "data": traces,
                 "layout": dict(
                     xaxis={"title": "Batch"},
-                    yaxis={"title": "Objection function value"},
+                    yaxis={"title": "Objective function value"},
                 ),
             }
