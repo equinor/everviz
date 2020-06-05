@@ -22,6 +22,7 @@ _OBJECTIVES = [
 ]
 
 _SUMMARY = {
+    "realization": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
     "simulation": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
     "batch": [0] * 6 + [2] * 6,
     "date": 4
@@ -92,7 +93,7 @@ def test_delta_plot_layout_with_empty_summary(mocker, tmpdir):
     mock_api.objective_values = _OBJECTIVES
     mock_api.single_objective_values = _SINGLE_OBJECTIVES
     mock_api.summary_values.return_value = pandas.DataFrame(
-        {"simulation": [], "date": [], "batch": []}
+        {"realization": [], "simulation": [], "date": [], "batch": []}
     )
     mock_api.output_folder = tmpdir
 

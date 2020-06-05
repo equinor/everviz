@@ -6,6 +6,7 @@ from everviz.pages.summary_values import _summary_values, _summary_statistics
 
 def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     test_data = {
+        "realization": range(12),
         "simulation": range(12),
         "batch": [0] * 6 + [1] * 6,
         "date": [

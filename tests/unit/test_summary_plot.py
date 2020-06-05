@@ -10,6 +10,7 @@ from everviz.pages.summary_values import (
 )
 
 __TEST_DATA = {
+    "realization": range(12),
     "simulation": range(12),
     "batch": [0] * 6 + [1] * 6,
     "date": [

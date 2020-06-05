@@ -12,14 +12,14 @@ from everviz.pages.objectives import (
 )
 
 OBJECTIVES = [
-    {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 0},
+    {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
     {"batch": 0, "realization": 1, "function": "f1", "value": 200, "simulation": 1},
     {"batch": 2, "realization": 2, "function": "f0", "value": 200, "simulation": 2},
-    {"batch": 2, "realization": 2, "function": "f1", "value": 400, "simulation": 3},
-    {"batch": 0, "realization": 3, "function": "f0", "value": 300, "simulation": 4},
-    {"batch": 0, "realization": 3, "function": "f1", "value": 600, "simulation": 5},
-    {"batch": 2, "realization": 4, "function": "f0", "value": 400, "simulation": 6},
-    {"batch": 2, "realization": 4, "function": "f1", "value": 800, "simulation": 7},
+    {"batch": 2, "realization": 2, "function": "f1", "value": 400, "simulation": 2},
+    {"batch": 0, "realization": 1, "function": "f0", "value": 300, "simulation": 1},
+    {"batch": 0, "realization": 1, "function": "f1", "value": 600, "simulation": 1},
+    {"batch": 2, "realization": 2, "function": "f0", "value": 400, "simulation": 2},
+    {"batch": 2, "realization": 2, "function": "f1", "value": 800, "simulation": 2},
 ]
 
 
@@ -31,13 +31,13 @@ def test_objective_values_data_frame():
         "batch",
         "function",
         "value",
-        "simulation",
+        "realization",
     }
     assert len(objective_values) == len(OBJECTIVES)
     assert set(objective_values["batch"]) == {obj["batch"] for obj in OBJECTIVES}
     assert set(objective_values["function"]) == {obj["function"] for obj in OBJECTIVES}
-    assert set(objective_values["simulation"]) == {
-        obj["simulation"] for obj in OBJECTIVES
+    assert set(objective_values["realization"]) == {
+        obj["realization"] for obj in OBJECTIVES
     }
 
 
