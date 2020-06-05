@@ -48,8 +48,12 @@ def _set_up_data_sources(api):
     logger.info("Generating summary delta plot source data file")
     summary_csv_path = os.path.join(everviz_path, "summary_delta_values.csv")
     data = _get_summary_delta_values(api, best_batch)
-    data.to_csv(summary_csv_path, index=False)
-    logger.info(f"File created: {summary_csv_path}")  # pylint: disable=W1203
+    if not data.empty:
+        data.to_csv(summary_csv_path, index=False)
+        logger.info(f"File created: {summary_csv_path}")  # pylint: disable=W1203
+    else:
+        logger.info("No summary data, not creating summary_delta_values.csv")
+        summary_csv_path = None
 
     return DataSources(
         objective_delta_values=objective_csv_path, summary_delta_values=summary_csv_path
@@ -58,6 +62,7 @@ def _set_up_data_sources(api):
 
 def page_layout(api):
     sources = _set_up_data_sources(api)
+    has_summary = sources.summary_delta_values is not None
     return {
         "title": "Objectives Delta Values",
         "content": [
@@ -68,12 +73,18 @@ def page_layout(api):
                     "pre_select": "all",
                 }
             },
-            "## Summary keys: Difference between best and initial batch",
-            {
-                "DeltaPlot": {
-                    "csv_file": sources.summary_delta_values,
-                    "pre_select": "none",
+        ]
+        + (
+            [
+                "## Summary keys: Difference between best and initial batch",
+                {
+                    "DeltaPlot": {
+                        "csv_file": sources.summary_delta_values,
+                        "pre_select": "none",
+                    },
                 },
-            },
-        ],
+            ]
+            if has_summary
+            else ["## Summary keys: No data"]
+        ),
     }

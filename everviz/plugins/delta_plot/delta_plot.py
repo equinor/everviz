@@ -72,7 +72,9 @@ class DeltaPlot(WebvizPluginABC):
             date_dropdown_options = [
                 {"label": i, "value": i} for i in data["date"].unique()
             ]
-            date_dropdown_value = [date_dropdown_options[-1]["label"]]
+            date_dropdown_value = (
+                [date_dropdown_options[-1]["label"]] if date_dropdown_options else None
+            )
             dropdown_elements.extend(
                 [
                     html.Label("Dates to plot:"),
