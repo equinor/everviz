@@ -7,6 +7,7 @@ from everviz.pages.deltaplot import (
     _get_objective_delta_values,
     _get_summary_delta_values,
     _set_up_data_sources,
+    page_layout,
 )
 
 _OBJECTIVES = [
@@ -84,3 +85,23 @@ def test_set_up_sources(mocker, tmpdir):
         data_source.summary_delta_values
         == tmpdir / "everviz" / "summary_delta_values.csv"
     )
+
+
+def test_delta_plot_layout_with_empty_summary(mocker, tmpdir):
+    mock_api = mocker.Mock()
+    mock_api.objective_values = _OBJECTIVES
+    mock_api.single_objective_values = _SINGLE_OBJECTIVES
+    mock_api.summary_values.return_value = pandas.DataFrame(
+        {"simulation": [], "date": [], "batch": []}
+    )
+    mock_api.output_folder = tmpdir
+
+    os.mkdir(os.path.join(tmpdir, "everviz"))
+    layout = page_layout(mock_api)
+
+    assert "content" in layout
+    content = layout["content"]
+    assert len(content) == 3
+    assert "Objective functions" in content[0]
+    assert "DeltaPlot" in content[1]
+    assert "Summary keys: No data" in content[2]
