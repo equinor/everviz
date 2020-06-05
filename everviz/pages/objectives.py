@@ -27,9 +27,9 @@ def _total_objective_values_from_api(api):
 
 def _objective_values(data):
     # Sort by the index columns.
-    data = data.drop(columns=["realization"])
+    data = data.drop(columns=["simulation"])
     sorted_values = (
-        data.set_index(["function", "batch", "simulation"]).sort_index().reset_index()
+        data.set_index(["function", "batch", "realization"]).sort_index().reset_index()
     )
     return sorted_values
 
@@ -41,9 +41,9 @@ def _total_objective_values(data):
 
 
 def _objective_statistics(data):
-    # Aggregate the values over the simulations, using pivot_table, keeping the
+    # Aggregate the values over the realizations, using pivot_table, keeping the
     # batch and function as the multi-index, calculating statistics of the
-    # values over the simulations.
+    # values over the realizations.
     statistics = pd.pivot_table(
         data,
         values="value",

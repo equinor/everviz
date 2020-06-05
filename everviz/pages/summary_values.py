@@ -12,18 +12,23 @@ DataSources = namedtuple("DataSource", ["summary_values", "summary_statistics"])
 
 logger = get_logger()
 
-_SUMMARY_INDEX_COLUMNS = ["batch", "date", "simulation"]
+_SUMMARY_INDEX_COLUMNS = ["batch", "date", "realization"]
 
 
 def _summary_values(summary_values):
     # Sort by the index columns.
     sorted_values = (
-        summary_values.set_index(_SUMMARY_INDEX_COLUMNS).sort_index().reset_index()
+        summary_values.drop(columns="simulation")
+        .set_index(_SUMMARY_INDEX_COLUMNS)
+        .sort_index()
+        .reset_index()
     )
     return sorted_values
 
 
 def _summary_statistics(summary_values):
+    summary_values = summary_values.drop(columns="simulation")
+
     # Find the key names.
     value_vars = [
         column
@@ -40,9 +45,9 @@ def _summary_statistics(summary_values):
         value_name="value",
     )
 
-    # Aggregate the values over the simulations, using pivot_table, keeping the
+    # Aggregate the values over the realizations, using pivot_table, keeping the
     # key, batch and date as the multi-index, calculating statistics of the
-    # values over the simulations.
+    # values over the realizations.
     summary_statistics = pandas.pivot_table(
         reshaped_summary_values,
         values="value",
@@ -65,7 +70,7 @@ def _set_up_data_sources(api, keys=None):
     everest_folder = api.output_folder
     everviz_path = os.path.join(everest_folder, "everviz")
 
-    # Make a table which statistics over the simulations.
+    # Make a table which statistics over the realizations.
     summary_values = api.summary_values(keys=keys)
 
     if summary_values.empty:
