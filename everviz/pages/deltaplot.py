@@ -21,10 +21,11 @@ def _get_objective_delta_values(api, best_batch):
 
 
 def _get_summary_delta_values(api, best_batch):
-    data = (
-        api.summary_values()
-        .rename(columns={"simulation": "realization"})
-        .set_index(["realization", "date"])
+    data = api.summary_values()
+    if "realization" in data.columns:
+        data = data.drop(columns="realization")
+    data = data.rename(columns={"simulation": "realization"}).set_index(
+        ["realization", "date"]
     )
     initial = data[(data.batch == 0)].drop(columns=["batch"])
     best = data[data.batch == best_batch].drop(columns=["batch"])
