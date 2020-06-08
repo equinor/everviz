@@ -15,14 +15,78 @@ from everviz.pages.objectives import (
 from everviz.plugins.objectives_plot.util import calculate_statistics, parse_range
 
 OBJECTIVES = [
-    {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
-    {"batch": 0, "realization": 1, "function": "f1", "value": 200, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f0", "value": 200, "simulation": 2},
-    {"batch": 2, "realization": 2, "function": "f1", "value": 400, "simulation": 2},
-    {"batch": 0, "realization": 1, "function": "f0", "value": 300, "simulation": 1},
-    {"batch": 0, "realization": 1, "function": "f1", "value": 600, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f0", "value": 400, "simulation": 2},
-    {"batch": 2, "realization": 2, "function": "f1", "value": 800, "simulation": 2},
+    {
+        "batch": 0,
+        "realization": 1,
+        "function": "f0",
+        "value": 100,
+        "simulation": 1,
+        "weight": 0.75,
+        "norm": 1,
+    },
+    {
+        "batch": 0,
+        "realization": 1,
+        "function": "f1",
+        "value": 200,
+        "simulation": 1,
+        "weight": 0.25,
+        "norm": 1.5,
+    },
+    {
+        "batch": 2,
+        "realization": 2,
+        "function": "f0",
+        "value": 200,
+        "simulation": 2,
+        "weight": 0.75,
+        "norm": 1,
+    },
+    {
+        "batch": 2,
+        "realization": 2,
+        "function": "f1",
+        "value": 400,
+        "simulation": 2,
+        "weight": 0.25,
+        "norm": 1.5,
+    },
+    {
+        "batch": 0,
+        "realization": 1,
+        "function": "f0",
+        "value": 300,
+        "simulation": 1,
+        "weight": 0.75,
+        "norm": 1,
+    },
+    {
+        "batch": 0,
+        "realization": 1,
+        "function": "f1",
+        "value": 600,
+        "simulation": 1,
+        "weight": 0.25,
+        "norm": 1.5,
+    },
+    {
+        "batch": 2,
+        "realization": 2,
+        "function": "f0",
+        "value": 400,
+        "simulation": 2,
+        "weight": 0.75,
+        "norm": 1,
+    },
+    {
+        "batch": 2,
+        "realization": 2,
+        "function": "f1",
+        "value": 800,
+        "simulation": 2,
+        "weight": 0.25,
+        "norm": 1.5,
+    },
 ]
 
 
@@ -35,6 +99,8 @@ def test_objective_values_data_frame():
         "function",
         "value",
         "realization",
+        "weight",
+        "norm",
     }
     assert len(objective_values) == len(OBJECTIVES)
     assert set(objective_values["batch"]) == {obj["batch"] for obj in OBJECTIVES}
@@ -42,6 +108,8 @@ def test_objective_values_data_frame():
     assert set(objective_values["realization"]) == {
         obj["realization"] for obj in OBJECTIVES
     }
+    assert set(objective_values["weight"]) == {obj["weight"] for obj in OBJECTIVES}
+    assert set(objective_values["norm"]) == {obj["norm"] for obj in OBJECTIVES}
 
 
 def test_objective_statistics_data_frame():
@@ -134,7 +202,7 @@ def test_set_up_sources(mocker, monkeypatch, tmpdir):
 
 def test_total_objective_values_data_frame():
     total_data = pd.DataFrame(OBJECTIVES).drop(
-        columns=["realization", "function", "simulation"]
+        columns=["realization", "function", "simulation", "weight", "norm"]
     )
     total_objective_values = _total_objective_values(total_data)
 
