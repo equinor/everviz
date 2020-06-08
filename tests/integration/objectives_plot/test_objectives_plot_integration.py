@@ -6,14 +6,78 @@ from everviz.plugins.objectives_plot.util import calculate_statistics
 
 def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     test_data = [
-        {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
-        {"batch": 0, "realization": 1, "function": "f1", "value": 200, "simulation": 1},
-        {"batch": 2, "realization": 1, "function": "f0", "value": 300, "simulation": 1},
-        {"batch": 2, "realization": 1, "function": "f1", "value": 400, "simulation": 1},
-        {"batch": 0, "realization": 2, "function": "f0", "value": 500, "simulation": 2},
-        {"batch": 0, "realization": 2, "function": "f1", "value": 600, "simulation": 2},
-        {"batch": 2, "realization": 2, "function": "f0", "value": 700, "simulation": 2},
-        {"batch": 2, "realization": 2, "function": "f1", "value": 800, "simulation": 2},
+        {
+            "batch": 0,
+            "realization": 1,
+            "function": "f0",
+            "value": 100,
+            "simulation": 1,
+            "weight": 0.75,
+            "norm": 1.5,
+        },
+        {
+            "batch": 0,
+            "realization": 1,
+            "function": "f1",
+            "value": 200,
+            "simulation": 1,
+            "weight": 0.25,
+            "norm": 1,
+        },
+        {
+            "batch": 2,
+            "realization": 1,
+            "function": "f0",
+            "value": 300,
+            "simulation": 1,
+            "weight": 0.75,
+            "norm": 1.5,
+        },
+        {
+            "batch": 2,
+            "realization": 1,
+            "function": "f1",
+            "value": 400,
+            "simulation": 1,
+            "weight": 0.25,
+            "norm": 1,
+        },
+        {
+            "batch": 0,
+            "realization": 2,
+            "function": "f0",
+            "value": 500,
+            "simulation": 2,
+            "weight": 0.75,
+            "norm": 1.5,
+        },
+        {
+            "batch": 0,
+            "realization": 2,
+            "function": "f1",
+            "value": 600,
+            "simulation": 2,
+            "weight": 0.25,
+            "norm": 1,
+        },
+        {
+            "batch": 2,
+            "realization": 2,
+            "function": "f0",
+            "value": 700,
+            "simulation": 2,
+            "weight": 0.75,
+            "norm": 1.5,
+        },
+        {
+            "batch": 2,
+            "realization": 2,
+            "function": "f1",
+            "value": 800,
+            "simulation": 2,
+            "weight": 0.25,
+            "norm": 1,
+        },
     ]
 
     def mock_get_data(data_type):
@@ -35,8 +99,22 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 1)).click()
     dash_duo.select_dcc_dropdown("#{}".format(plugin.function_dropdown_id), "f1")
 
-    # Test data plot.
+    # Test values plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
+
+    # Test normalized values
+    dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 3)).click()
+
+    # Test normalized + weighted values
+    dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 4)).click()
+
+    # Test plot mode
+    dash_duo.find_element(
+        "#{} label:nth-child({})".format(plugin.radio_id_mode, 1)
+    ).click()
+    dash_duo.find_element(
+        "#{} label:nth-child({})".format(plugin.radio_id_mode, 2)
+    ).click()
 
     # Test filtering realizations.
     dash_duo.find_element(

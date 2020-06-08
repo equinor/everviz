@@ -34,6 +34,7 @@ class ObjectivesPlot(WebvizPluginABC):
 
         self.graph_id = f"graph-{uuid4()}"
         self.radio_id = f"dropdown-{uuid4()}"
+        self.radio_id_mode = f"dropdown-{uuid4()}"
         self.function_dropdown_id = f"dropdown-{uuid4()}"
         self.realization_filter_check_id = f"check-{uuid4()}"
         self.realization_filter_input_id = f"input-{uuid4()}"
@@ -65,7 +66,7 @@ class ObjectivesPlot(WebvizPluginABC):
             ),
         ]
 
-        radio_options = ["Statistics", "Data"]
+        radio_options = ["Statistics", "Values", "Normalized", "Weighted + Normalized"]
         radio_elements = [
             dcc.RadioItems(
                 id=self.radio_id,
@@ -73,7 +74,17 @@ class ObjectivesPlot(WebvizPluginABC):
                 value=radio_options[1],
                 labelStyle={"display": "inline-block"},
                 style={"margin-top": 20},
-            )
+            ),
+            html.Label("Style:"),
+            dcc.RadioItems(
+                id=self.radio_id_mode,
+                options=[
+                    {"label": "line", "value": "lines"},
+                    {"label": "scatter", "value": "markers"},
+                ],
+                value="lines",
+                labelStyle={"display": "inline-block"},
+            ),
         ]
 
         realization_elements = [
@@ -166,14 +177,15 @@ class ObjectivesPlot(WebvizPluginABC):
             [
                 Input(self.function_dropdown_id, "value"),
                 Input(self.radio_id, "value"),
+                Input(self.radio_id_mode, "value"),
                 Input(self.realization_filter_check_id, "value"),
                 Input(self.realization_filter_input_id, "value"),
             ],
         )
         def update_graph(
-            func_list, radio_value, realizations_check, realizations_input
+            func_list, radio_value, plot_mode, realizations_check, realizations_input
         ):
-            # # The key_list arguments is the list of functions to plot.
+            # The key_list arguments is the list of functions to plot.
             if func_list is None:
                 return {}
 
@@ -206,7 +218,7 @@ class ObjectivesPlot(WebvizPluginABC):
                             go.Scatter(
                                 y=func_data["P90"],
                                 x=func_data["batch"],
-                                mode="lines",
+                                mode=plot_mode,
                                 marker={"size": 10},
                                 line={"color": color},
                                 name=key + "(P90)",
@@ -215,7 +227,7 @@ class ObjectivesPlot(WebvizPluginABC):
                             go.Scatter(
                                 y=func_data["P10"],
                                 x=func_data["batch"],
-                                mode="lines",
+                                mode=plot_mode,
                                 line={"color": color},
                                 marker={"size": 10},
                                 fill="tonexty",
@@ -225,7 +237,7 @@ class ObjectivesPlot(WebvizPluginABC):
                             go.Scatter(
                                 y=func_data["Mean"],
                                 x=func_data["batch"],
-                                mode="lines",
+                                mode=plot_mode,
                                 marker={"size": 10},
                                 line={"color": color},
                                 name=key,
@@ -234,11 +246,17 @@ class ObjectivesPlot(WebvizPluginABC):
                         ]
                     )
                 else:
+                    y_values = func_data["value"]
+                    if radio_value == "Normalized":
+                        y_values = y_values * func_data["norm"]
+                    elif radio_value == "Weighted + Normalized":
+                        y_values = y_values * func_data["norm"] * func_data["weight"]
+
                     traces.append(
                         go.Scatter(
-                            y=func_data["value"],
+                            y=y_values,
                             x=func_data["batch"],
-                            mode="markers",
+                            mode=plot_mode,
                             marker={"size": 10},
                             name=key,
                             showlegend=True,
