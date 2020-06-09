@@ -1,4 +1,6 @@
 import os
+
+import pytest
 import pandas as pd
 import numpy as np
 
@@ -7,9 +9,10 @@ import everviz
 from everviz.pages.objectives import (
     _set_up_data_sources,
     _objective_values,
-    _objective_statistics,
     _total_objective_values,
 )
+
+from everviz.plugins.objectives_plot.util import calculate_statistics, parse_range
 
 OBJECTIVES = [
     {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
@@ -43,7 +46,8 @@ def test_objective_values_data_frame():
 
 def test_objective_statistics_data_frame():
     """Test for the correct layout and size of the objective statistics data frame"""
-    objective_statistics = _objective_statistics(pd.DataFrame(OBJECTIVES))
+    objective_values = _objective_values(pd.DataFrame(OBJECTIVES))
+    objective_statistics = calculate_statistics(objective_values)
 
     assert set(objective_statistics.columns) == {
         "batch",
@@ -61,7 +65,8 @@ def test_objective_statistics_data_frame():
 
 def test_objective_statistics_content():
     """Test for the correct content of the objectives statistics data frame."""
-    objective_statistics = _objective_statistics(pd.DataFrame(OBJECTIVES))
+    objective_values = _objective_values(pd.DataFrame(OBJECTIVES))
+    objective_statistics = calculate_statistics(objective_values)
 
     mean = []
     p10 = []
@@ -80,6 +85,26 @@ def test_objective_statistics_content():
     assert objective_statistics["Mean"].to_list() == mean
     assert objective_statistics["P10"].to_list() == p10
     assert objective_statistics["P90"].to_list() == p90
+
+
+@pytest.mark.parametrize(
+    "input_string, expected",
+    [
+        ("", set()),
+        (" ", set()),
+        ("1,2,3", {1, 2, 3}),
+        ("1, 2 ,3", {1, 2, 3}),
+        ("3,1,2", {1, 2, 3}),
+        ("3,1,3", {1, 3}),
+        ("1-3", {1, 2, 3}),
+        ("1, 2-3", {1, 2, 3}),
+        ("1, 1-3, 2", {1, 2, 3}),
+        ("x", set()),
+        ("1,2,x,3", {1, 2, 3}),
+    ],
+)
+def test_object_parse_range(input_string, expected):
+    assert parse_range(input_string) == expected
 
 
 def test_set_up_sources(mocker, monkeypatch, tmpdir):
@@ -101,10 +126,6 @@ def test_set_up_sources(mocker, monkeypatch, tmpdir):
     )
     data_source = _set_up_data_sources(mock_api)
     assert data_source.objective_values == tmpdir / "everviz" / "objective_values.csv"
-    assert (
-        data_source.objective_statistics
-        == tmpdir / "everviz" / "objective_statistics.csv"
-    )
     assert (
         data_source.total_objective_values
         == tmpdir / "everviz" / "total_objective_values.csv"
