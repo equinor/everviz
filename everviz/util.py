@@ -23,3 +23,19 @@ def identify_indexed_controls(controls):
             continue
 
     return base_names
+
+
+def parse_range(numbers):
+    result = set()
+    if numbers is not None:
+        for number in numbers.split(","):
+            number = number.strip()
+            if number.isdigit():
+                result.add(int(number))
+            elif "-" in number:
+                number_range = number.split("-")
+                start = number_range[0]
+                stop = number_range[1]
+                if start.isdigit() and stop.isdigit():
+                    result |= set(range(int(start), int(stop) + 1))
+    return result

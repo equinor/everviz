@@ -1,7 +1,6 @@
 import pandas as pd
 from everviz.plugins.objectives_plot.objectives_plot import ObjectivesPlot
 from everviz.pages.objectives import _objective_values
-from everviz.plugins.objectives_plot.util import calculate_statistics
 
 
 def test_objective_plot_callback(app, dash_duo, mocker, caplog):
@@ -80,15 +79,9 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
         },
     ]
 
-    def mock_get_data(data_type):
-        result = _objective_values(pd.DataFrame(test_data))
-        if data_type == "Statistics":
-            result = calculate_statistics(result)
-        return result
-
     mocker.patch(
         "everviz.plugins.objectives_plot.objectives_plot.get_data",
-        side_effect=mock_get_data,
+        return_value=_objective_values(pd.DataFrame(test_data)),
     )
 
     plugin = ObjectivesPlot(app, "values")

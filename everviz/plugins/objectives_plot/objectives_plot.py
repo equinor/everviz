@@ -13,8 +13,9 @@ from dash.dependencies import Output, Input, State
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
+from everviz.util import parse_range
 
-from .util import parse_range, calculate_statistics
+from .util import calculate_statistics
 
 
 class ObjectivesPlot(WebvizPluginABC):
