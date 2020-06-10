@@ -3,11 +3,8 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
-from everviz.pages.summary_values import (
-    page_layout,
-    _summary_values,
-    _summary_statistics,
-)
+from everviz.pages.summary_values import page_layout, _summary_values
+from everviz.plugins.summary_plot.util import calculate_statistics
 
 __TEST_DATA = {
     "realization": range(12),
@@ -57,7 +54,8 @@ def test_summary_values_data_frame():
 
 def test_summary_statistics_data_frame():
     """Test for the correct layout and size of the summary statistics data frame"""
-    summary_statistics = _summary_statistics(pd.DataFrame(__TEST_DATA))
+    summary_values = _summary_values(pd.DataFrame(__TEST_DATA))
+    summary_statistics = calculate_statistics(summary_values)
 
     assert list(summary_statistics.columns) == [
         "summary_key",
@@ -77,7 +75,8 @@ def test_summary_statistics_data_frame():
 
 def test_summary_statistics_content():
     """Test for the correct content of the summary statistics data frame."""
-    summary_statistics = _summary_statistics(pd.DataFrame(__TEST_DATA))
+    summary_values = _summary_values(pd.DataFrame(__TEST_DATA))
+    summary_statistics = calculate_statistics(summary_values)
 
     mean = []
     p10 = []

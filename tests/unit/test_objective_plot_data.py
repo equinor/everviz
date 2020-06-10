@@ -1,6 +1,5 @@
 import os
 
-import pytest
 import pandas as pd
 import numpy as np
 
@@ -12,7 +11,7 @@ from everviz.pages.objectives import (
     _total_objective_values,
 )
 
-from everviz.plugins.objectives_plot.util import calculate_statistics, parse_range
+from everviz.plugins.objectives_plot.util import calculate_statistics
 
 OBJECTIVES = [
     {
@@ -153,26 +152,6 @@ def test_objective_statistics_content():
     assert objective_statistics["Mean"].to_list() == mean
     assert objective_statistics["P10"].to_list() == p10
     assert objective_statistics["P90"].to_list() == p90
-
-
-@pytest.mark.parametrize(
-    "input_string, expected",
-    [
-        ("", set()),
-        (" ", set()),
-        ("1,2,3", {1, 2, 3}),
-        ("1, 2 ,3", {1, 2, 3}),
-        ("3,1,2", {1, 2, 3}),
-        ("3,1,3", {1, 3}),
-        ("1-3", {1, 2, 3}),
-        ("1, 2-3", {1, 2, 3}),
-        ("1, 1-3, 2", {1, 2, 3}),
-        ("x", set()),
-        ("1,2,x,3", {1, 2, 3}),
-    ],
-)
-def test_object_parse_range(input_string, expected):
-    assert parse_range(input_string) == expected
 
 
 def test_set_up_sources(mocker, monkeypatch, tmpdir):

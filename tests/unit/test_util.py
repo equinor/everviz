@@ -1,6 +1,6 @@
 import os
 import pytest
-from everviz.util import get_everviz_folder
+from everviz.util import get_everviz_folder, parse_range
 
 
 @pytest.fixture
@@ -18,3 +18,23 @@ def test_get_everviz_folder(tmpdir, mocked_api):
         everviz_path = get_everviz_folder(mocked_api)
         assert os.path.exists(everviz_path)
         assert expected_everviz_path == everviz_path
+
+
+@pytest.mark.parametrize(
+    "input_string, expected",
+    [
+        ("", set()),
+        (" ", set()),
+        ("1,2,3", {1, 2, 3}),
+        ("1, 2 ,3", {1, 2, 3}),
+        ("3,1,2", {1, 2, 3}),
+        ("3,1,3", {1, 3}),
+        ("1-3", {1, 2, 3}),
+        ("1, 2-3", {1, 2, 3}),
+        ("1, 1-3, 2", {1, 2, 3}),
+        ("x", set()),
+        ("1,2,x,3", {1, 2, 3}),
+    ],
+)
+def test_object_parse_range(input_string, expected):
+    assert parse_range(input_string) == expected

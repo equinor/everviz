@@ -13,6 +13,9 @@ from plotly.colors import DEFAULT_PLOTLY_COLORS
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
+from everviz.util import parse_range
+
+from .util import calculate_statistics
 
 
 class SummaryPlot(WebvizPluginABC):
@@ -27,16 +30,17 @@ class SummaryPlot(WebvizPluginABC):
     summarized by plotting the mean value together with a P10-P90 range.
     """
 
-    def __init__(self, app, values_file, statistics_file, xaxis="date"):
+    def __init__(self, app, csv_file, xaxis="date"):
         super().__init__()
 
         self.graph_id = f"graph-{uuid4()}"
         self.key_dropdown_id = f"dropdown-{uuid4()}"
         self.xaxis_dropdown_id = f"dropdown-{uuid4()}"
         self.radio_id = f"radio-{uuid4()}"
+        self.realization_filter_check_id = f"check-{uuid4()}"
+        self.realization_filter_input_id = f"input-{uuid4()}"
 
-        self.values_file = values_file
-        self.statistics_file = statistics_file
+        self.csv_file = csv_file
         self.xaxis = xaxis
 
         self.set_callbacks(app)
@@ -46,17 +50,17 @@ class SummaryPlot(WebvizPluginABC):
 
     def add_webvizstore(self):
         return [
-            (get_data, [{"values_file": self.values_file}]),
-            (get_data, [{"statistics_file": self.statistics_file}]),
+            (get_data, [{"csv_file": self.csv_file}]),
         ]
 
     @property
     def layout(self):
         radio_options = ["Statistics", "Data"]
-        data = get_data(self.statistics_file)
+        data = get_data(self.csv_file).set_index(["batch", "date", "realization"])
         key_dropdown_options = [
-            {"label": i, "value": i} for i in list(data["summary_key"].unique())
+            {"label": i, "value": i} for i in list(data.columns.unique())
         ]
+        data = data.reset_index()
         xaxis_dropdown_options = [
             {"label": i, "value": i}
             for i in list(data["batch" if self.xaxis == "date" else "date"].unique())
@@ -94,12 +98,36 @@ class SummaryPlot(WebvizPluginABC):
                 style={"margin-top": 20},
             ),
         ]
+
+        realization_elements = [
+            html.Div(
+                [
+                    dcc.Checklist(
+                        id=self.realization_filter_check_id,
+                        options=[{"label": "Filter realizations:", "value": "filter"}],
+                        style={"display": "inline-block", "margin-right": 8},
+                    ),
+                    dcc.Input(
+                        id=self.realization_filter_input_id,
+                        type="text",
+                        placeholder="example: 0, 3, 6-10",
+                        pattern=r"\s*|([0-9]+(\s*-\s*[0-9]+)?)(\s*,\s*[0-9]+(\s*-\s*[0-9]+)?)*",
+                        style={"display": "inline-block"},
+                    ),
+                ],
+                style={"margin-top": 20},
+            )
+        ]
+
         return html.Div(
             [
                 html.Div(
                     [
                         html.Div(
-                            keyword_elements + xaxis_elements + radio_elements,
+                            keyword_elements
+                            + xaxis_elements
+                            + radio_elements
+                            + realization_elements,
                             style={
                                 "width": "29%",
                                 "display": "inline-block",
@@ -127,46 +155,70 @@ class SummaryPlot(WebvizPluginABC):
         @app.callback(
             self.plugin_data_output,
             [self.plugin_data_requested],
-            [State(self.radio_id, "value")],
+            [
+                State(self.radio_id, "value"),
+                State(self.realization_filter_check_id, "value"),
+                State(self.realization_filter_input_id, "value"),
+            ],
         )
-        def user_download_data(data_requested, radio_value):
+        def user_download_data(
+            data_requested, radio_value, realizations_check, realizations_input
+        ):
             if data_requested:
+                content = get_data(self.csv_file)
+                if realizations_check:
+                    realizations = parse_range(realizations_input)
+                    if realizations:
+                        content = content[content["realization"].isin(realizations)]
                 if radio_value == "Statistics":
-                    data = get_data(self.statistics_file).set_index(
-                        ["summary_key", "batch", "date"]
-                    )
-                    file_path = self.statistics_file
+                    filename = "summary_statistics.csv"
+                    content = calculate_statistics(content)
                 else:
-                    data = get_data(self.values_file).set_index(["batch", "date"])
-                    file_path = self.values_file
-
+                    filename = "summary_values.csv"
                 return WebvizPluginABC.plugin_data_compress(
-                    [{"filename": Path(file_path).name, "content": data.to_csv(),}]
+                    [{"filename": filename, "content": content.to_csv(),}]
                 )
             return ""
 
+        @app.callback(
+            Output(self.realization_filter_input_id, "disabled"),
+            [Input(self.realization_filter_check_id, "value")],
+        )
+        def set_button_enabled_state(filter_realizations):
+            return not filter_realizations
+
+        # pylint: disable=too-many-locals
         @app.callback(
             Output(self.graph_id, "figure"),
             [
                 Input(self.key_dropdown_id, "value"),
                 Input(self.xaxis_dropdown_id, "value"),
                 Input(self.radio_id, "value"),
+                Input(self.realization_filter_check_id, "value"),
+                Input(self.realization_filter_input_id, "value"),
             ],
         )
-        def update_graph(key_list, line_list, radio_value):
+        def update_graph(
+            key_list, line_list, radio_value, realizations_check, realizations_input
+        ):
             # The key_list arguments is the list of keys to plot. The line_list
             # argument is a list of batches, or a list of dates to plot for
             # those keys.
             if key_list is None or line_list is None:
                 return {}
 
-            # Get the data, setting its index.
+            data = get_data(self.csv_file)
+            if realizations_check:
+                realizations = parse_range(realizations_input)
+                if realizations:
+                    data = data[data["realization"].isin(realizations)]
+
             if radio_value == "Statistics":
-                data = get_data(self.statistics_file).set_index(
+                data = calculate_statistics(data).set_index(
                     ["summary_key", "batch", "date"]
                 )
             else:
-                data = get_data(self.values_file).set_index(["batch", "date"])
+                data = data.set_index(["batch", "date"])
 
             # Make a cycle iterator over the plotly colors.
             colors = cycle(DEFAULT_PLOTLY_COLORS)
