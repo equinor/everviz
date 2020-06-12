@@ -17,7 +17,7 @@ from everviz.util import identify_indexed_controls
 from everviz.plugins.crossplot.callback.crossplot_indexed_dropdown import (
     dropdown_callback,
 )
-from everviz.plugins.crossplot.layout.crossplot_layout import get_sidebar_layout
+from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
 
 
 class CrossplotIndexed(WebvizPluginABC):

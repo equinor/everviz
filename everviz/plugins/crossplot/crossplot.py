@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
-from everviz.plugins.crossplot.layout.crossplot_layout import get_sidebar_layout
+from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
 from everviz.plugins.crossplot.callback.crossplot_callback import (
     crossplot_update_graph,
     get_graph_line,

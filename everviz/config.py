@@ -10,6 +10,7 @@ from everviz.pages import (
     summary_values,
     objectives,
     deltaplot,
+    wells_values,
 )
 
 logger = get_logger()
@@ -20,6 +21,7 @@ def webviz_config(api):
         {"title": "Everest", "content": [],},
         objectives.page_layout(api),
         summary_values.page_layout(api),
+        wells_values.page_layout(api),
         crossplot.page_layout(api),
         controls.page_layout(api),
         deltaplot.page_layout(api),

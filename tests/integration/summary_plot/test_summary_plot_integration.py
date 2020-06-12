@@ -38,6 +38,7 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
 
     # Test statistics plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 1)).click()
+    dash_duo.clear_input("#{}".format(plugin.key_dropdown_id))
     dash_duo.select_dcc_dropdown("#{}".format(plugin.key_dropdown_id), "key1")
 
     # Test data plot.

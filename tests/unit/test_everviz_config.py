@@ -38,6 +38,9 @@ def test_webviz_config(mocker, monkeypatch):
         "page_layout",
         mocker.Mock(return_value={"title": "Summary", "content": []}),
     )
+    monkeypatch.setattr(
+        everviz.pages.wells_values, "page_layout", mocker.Mock(return_value={}),
+    )
 
     expected_config = {
         "title": "Everest Optimization Report",

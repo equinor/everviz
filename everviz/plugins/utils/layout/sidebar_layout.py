@@ -32,13 +32,15 @@ def _get_radio(item_id, title=None, options=None):
 def _get_dropdown(item_id, title=None, options=None, multi=False):
     if options is None:
         options = []
+    options = [{"label": i, "value": i} for i in options]
+    initial_value = options[0]["value"] if len(options) > 0 else []
     return [
         title,
         dcc.Dropdown(
             id=item_id,
-            options=[{"label": i, "value": i} for i in options],
+            options=options,
             placeholder="Select a label",
-            value=options[0] if len(options) > 0 else [],
+            value=[initial_value] if multi else initial_value,
             multi=multi,
         ),
     ]

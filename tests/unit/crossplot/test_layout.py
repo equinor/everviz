@@ -10,26 +10,39 @@ from PIL import Image
 import everviz
 from everviz.plugins import Crossplot
 from everviz.pages import crossplot
-from everviz.plugins.crossplot.layout.crossplot_layout import (
+from everviz.plugins.utils.layout.sidebar_layout import (
     get_sidebar_layout,
     _get_dropdown,
     _get_radio,
 )
 
 
+@pytest.mark.parametrize("multi", [True, False])
 @pytest.mark.parametrize(
     "test_input,expected",
-    [(["dropdown_val"], "dropdown_val"), (["1", "2"], "1"), (["1", "2"], "2")],
+    [
+        (["dropdown_val"], "dropdown_val"),
+        (["1", "2"], "1"),
+        (["1", "2"], "2"),
+        (None, "Select"),
+    ],
 )
-def test_crossplot_layout_dropdown(dash_duo, test_input, expected):
+def test_crossplot_layout_dropdown(dash_duo, test_input, expected, multi):
     app = dash.Dash(__name__)
     item_id = "id"
-    layout = _get_dropdown(item_id=item_id, options=test_input)
+    layout = _get_dropdown(item_id=item_id, options=test_input, multi=multi)
     app.layout = html.Div(layout)
     dash_duo.start_server(app)
 
+    dash_duo.clear_input("#{}".format(item_id))
     dash_duo.select_dcc_dropdown("#{}".format(item_id), expected)
-    assert dash_duo.find_element("#{}".format(item_id)).text.split()[0] == expected
+    result = dash_duo.find_element("#{}".format(item_id)).text.split()[0]
+
+    # If multi is set the text will have an × in front in the dropdown text
+    if result.startswith("×"):
+        result = result[1:]
+
+    assert result == expected
 
 
 @pytest.mark.parametrize(
@@ -53,12 +66,10 @@ def test_get_sidebar_layout(monkeypatch, mocker):
     radio_mock = mocker.Mock(return_value=[])
     dropdown_mock = mocker.Mock(return_value=[])
     monkeypatch.setattr(
-        everviz.plugins.crossplot.layout.crossplot_layout, "_get_radio", radio_mock
+        everviz.plugins.utils.layout.sidebar_layout, "_get_radio", radio_mock
     )
     monkeypatch.setattr(
-        everviz.plugins.crossplot.layout.crossplot_layout,
-        "_get_dropdown",
-        dropdown_mock,
+        everviz.plugins.utils.layout.sidebar_layout, "_get_dropdown", dropdown_mock,
     )
 
     get_sidebar_layout(
