@@ -16,6 +16,5 @@ def test_crossplot_callback(app, dash_duo, monkeypatch, mocker, caplog):
     dash_duo.start_server(app)
 
     dash_duo.clear_input("#{}".format(plugin.keys_x_id))
-
     for record in caplog.records:
         assert record.levelname != "ERROR"

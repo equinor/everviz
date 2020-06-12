@@ -43,6 +43,7 @@ setup(
             "ControlsPlot = everviz.plugins:ControlsPlot",
             "DeltaPlot = everviz.plugins:DeltaPlot",
             "ConfigEditor = everviz.plugins:ConfigEditor",
+            "WellsPlot = everviz.plugins:WellsPlot",
         ],
         "everest": ["everviz = everviz.everest_hooks",],
     },

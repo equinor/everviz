@@ -1,21 +1,19 @@
 from pathlib import Path
 from uuid import uuid4
-from itertools import cycle
 import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Output, Input, State
 
-import plotly.graph_objs as go
-from plotly.colors import DEFAULT_PLOTLY_COLORS
-
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
 from everviz.util import parse_range
+from everviz.plugins.summary_plot import summary_callback
 
-from .util import calculate_statistics
+from everviz.plugins.summary_plot.util import calculate_statistics
+from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
 
 
 class SummaryPlot(WebvizPluginABC):
@@ -57,46 +55,35 @@ class SummaryPlot(WebvizPluginABC):
     def layout(self):
         radio_options = ["Statistics", "Data"]
         data = get_data(self.csv_file).set_index(["batch", "date", "realization"])
-        key_dropdown_options = [
-            {"label": i, "value": i} for i in list(data.columns.unique())
-        ]
+        key_dropdown_options = list(data.columns.unique())
         data = data.reset_index()
-        xaxis_dropdown_options = [
-            {"label": i, "value": i}
-            for i in list(data["batch" if self.xaxis == "date" else "date"].unique())
-        ]
+        xaxis_dropdown_options = list(
+            data["batch" if self.xaxis == "date" else "date"].unique()
+        )
         xaxis_dropdown_title = (
             "Batches to plot" if self.xaxis == "date" else "Dates to plot"
         )
 
-        # Keywords dropdown.
-        keyword_elements = [
-            html.Label("Keywords to plot:"),
-            dcc.Dropdown(
-                id=self.key_dropdown_id, options=key_dropdown_options, multi=True,
+        side_bar_config = [
+            (
+                "dropdown",
+                {
+                    "title": "Keywords to plot:",
+                    "item_id": self.key_dropdown_id,
+                    "options": key_dropdown_options,
+                    "multi": True,
+                },
             ),
-        ]
-
-        # X-axis dropdown.
-        xaxis_elements = [
-            html.Label(xaxis_dropdown_title, style={"margin-top": 24}),
-            dcc.Dropdown(
-                id=self.xaxis_dropdown_id,
-                options=xaxis_dropdown_options,
-                multi=True,
-                value=[xaxis_dropdown_options[0]["value"]],
+            (
+                "dropdown",
+                {
+                    "title": xaxis_dropdown_title,
+                    "item_id": self.xaxis_dropdown_id,
+                    "options": xaxis_dropdown_options,
+                    "multi": True,
+                },
             ),
-        ]
-
-        # Radio for switching between data and statistics.
-        radio_elements = [
-            dcc.RadioItems(
-                id=self.radio_id,
-                options=[{"label": i, "value": i} for i in radio_options],
-                value=radio_options[0],
-                labelStyle={"display": "inline-block"},
-                style={"margin-top": 20},
-            ),
+            ("radio", {"item_id": self.radio_id, "options": radio_options},),
         ]
 
         realization_elements = [
@@ -124,9 +111,7 @@ class SummaryPlot(WebvizPluginABC):
                 html.Div(
                     [
                         html.Div(
-                            keyword_elements
-                            + xaxis_elements
-                            + radio_elements
+                            [get_sidebar_layout(side_bar_config)]
                             + realization_elements,
                             style={
                                 "width": "29%",
@@ -220,76 +205,11 @@ class SummaryPlot(WebvizPluginABC):
             else:
                 data = data.set_index(["batch", "date"])
 
-            # Make a cycle iterator over the plotly colors.
-            colors = cycle(DEFAULT_PLOTLY_COLORS)
+            callback = summary_callback.get_callback_func(radio_value)
 
-            # Choose between dates or batches for different lines.
             line_key = "batch" if self.xaxis == "date" else "date"
-
-            traces = []
-            for color, key in zip(colors, key_list):
-                # Select all data belonging to the current key.
-                if radio_value == "Statistics":
-                    key_data = data.xs(key, level="summary_key", drop_level=True)
-                else:
-                    key_data = data[key]
-
-                for line in line_list:
-                    # Select all rows belonging the current batch or date.
-                    line_data = key_data.xs(
-                        line, level=line_key, drop_level=True
-                    ).reset_index()
-
-                    # Set the name of the plotted line.
-                    name = key
-                    if len(line_list) > 1:
-                        name += f", {line_key}:{line}"
-
-                    # Make the traces, with mean, P10 and P90, shading in between.
-                    if radio_value == "Statistics":
-                        traces.extend(
-                            [
-                                go.Scatter(
-                                    y=line_data["P90"],
-                                    x=line_data[self.xaxis],
-                                    mode="lines",
-                                    marker={"size": 10},
-                                    line={"color": color},
-                                    name=name + "(P90)",
-                                    showlegend=False,
-                                ),
-                                go.Scatter(
-                                    y=line_data["P10"],
-                                    x=line_data[self.xaxis],
-                                    mode="lines",
-                                    line={"color": color},
-                                    marker={"size": 10},
-                                    fill="tonexty",
-                                    name=name + "(P10)",
-                                    showlegend=False,
-                                ),
-                                go.Scatter(
-                                    y=line_data["mean"],
-                                    x=line_data[self.xaxis],
-                                    mode="lines",
-                                    marker={"size": 10},
-                                    line={"color": color},
-                                    name=name,
-                                    showlegend=True,
-                                ),
-                            ]
-                        )
-                    else:
-                        traces.append(
-                            go.Scatter(
-                                y=line_data[key],
-                                x=line_data[self.xaxis],
-                                mode="markers",
-                                marker={"size": 10},
-                                name=name,
-                                showlegend=True,
-                            )
-                        )
+            line_filter = "batch" if line_key == "date" else "date"
+            traces = callback(data, key_list, line_list, line_key, line_filter)
 
             return {
                 "data": traces,
