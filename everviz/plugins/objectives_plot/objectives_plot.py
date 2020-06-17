@@ -181,10 +181,16 @@ class ObjectivesPlot(WebvizPluginABC):
                 Input(self.radio_id_mode, "value"),
                 Input(self.realization_filter_check_id, "value"),
                 Input(self.realization_filter_input_id, "value"),
+                Input(self.graph_id, "clickData"),
             ],
         )
         def update_graph(
-            func_list, radio_value, plot_mode, realizations_check, realizations_input
+            func_list,
+            radio_value,
+            plot_mode,
+            realizations_check,
+            realizations_input,
+            click_data,
         ):
             # The key_list arguments is the list of functions to plot.
             if func_list is None:
@@ -214,59 +220,95 @@ class ObjectivesPlot(WebvizPluginABC):
 
                 # Make the traces, with mean, P10 and P90, shading in between.
                 if radio_value == "Statistics":
-                    traces.extend(
-                        [
-                            go.Scatter(
-                                y=func_data["P90"],
-                                x=func_data["batch"],
-                                mode=plot_mode,
-                                marker={"size": 10},
-                                line={"color": color},
-                                name=key + "(P90)",
-                                showlegend=False,
-                            ),
-                            go.Scatter(
-                                y=func_data["P10"],
-                                x=func_data["batch"],
-                                mode=plot_mode,
-                                line={"color": color},
-                                marker={"size": 10},
-                                fill="tonexty",
-                                name=key + "(P10)",
-                                showlegend=False,
-                            ),
-                            go.Scatter(
-                                y=func_data["Mean"],
-                                x=func_data["batch"],
-                                mode=plot_mode,
-                                marker={"size": 10},
-                                line={"color": color},
-                                name=key,
-                                showlegend=True,
-                            ),
-                        ]
-                    )
+                    traces.extend(statistics_traces(color, func_data, key, plot_mode))
                 else:
-                    y_values = func_data["value"]
-                    if radio_value == "Normalized":
-                        y_values = y_values * func_data["norm"]
-                    elif radio_value == "Weighted + Normalized":
-                        y_values = y_values * func_data["norm"] * func_data["weight"]
-
-                    traces.append(
-                        go.Scatter(
-                            y=y_values,
-                            x=func_data["batch"],
-                            mode=plot_mode,
-                            marker={"size": 10},
-                            name=key,
-                            showlegend=True,
+                    traces.extend(
+                        function_traces(
+                            func_list,
+                            click_data,
+                            color,
+                            func_data,
+                            key,
+                            plot_mode,
+                            radio_value,
                         )
                     )
 
             return {
                 "data": traces,
                 "layout": dict(
-                    xaxis={"title": "Batch"}, yaxis={"title": "Function Key Value"},
+                    xaxis={"title": "Batch"},
+                    yaxis={"title": "Function Key Value"},
+                    hovermode="closest",
                 ),
             }
+
+
+def statistics_traces(color, func_data, key, plot_mode):
+    return [
+        go.Scatter(
+            y=func_data["P90"],
+            x=func_data["batch"],
+            mode=plot_mode,
+            marker={"size": 10},
+            line={"color": color},
+            name=key + "(P90)",
+            showlegend=False,
+        ),
+        go.Scatter(
+            y=func_data["P10"],
+            x=func_data["batch"],
+            mode=plot_mode,
+            line={"color": color},
+            marker={"size": 10},
+            fill="tonexty",
+            name=key + "(P10)",
+            showlegend=False,
+        ),
+        go.Scatter(
+            y=func_data["Mean"],
+            x=func_data["batch"],
+            mode=plot_mode,
+            marker={"size": 10},
+            line={"color": color},
+            name=key,
+            showlegend=True,
+        ),
+    ]
+
+
+def function_traces(
+    func_list, click_data, color, func_data, key, plot_mode, radio_value
+):
+    realizations = func_data["realization"].unique()
+    for real in realizations:
+        line = func_data[func_data["realization"].isin([real])]
+        y_values = line["value"]
+        if radio_value == "Normalized":
+            y_values = y_values * line["norm"]
+        elif radio_value == "Weighted + Normalized":
+            y_values = y_values * line["norm"] * line["weight"]
+        line_style = {"dash": "dash"}
+        if len(func_list) > 1:
+            line_style["color"] = color
+
+        if click_data is not None:
+            clicked_realization = click_data["points"][0].get("customdata", None)
+            if clicked_realization == real:
+                line_style["width"] = 4
+                del line_style["dash"]
+
+        mode = plot_mode
+        if mode == "lines":
+            mode = "lines+markers"
+
+        yield go.Scatter(
+            y=y_values,
+            x=line["batch"],
+            mode=mode,
+            marker={"size": 10},
+            name=f"{key}_r_{real}",
+            customdata=[real] * len(line["value"]),
+            showlegend=True,
+            line=line_style,
+        )
