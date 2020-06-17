@@ -64,7 +64,7 @@ def test_summary_values_data_frame(mocker):
     assert set(summary_delta_values.columns) == {"realization", "date", "key1", "key2"}
 
     assert len(summary_delta_values) == 6
-    assert set(summary_delta_values["realization"]) == set(_SUMMARY["simulation"])
+    assert set(summary_delta_values["realization"]) == set(_SUMMARY["realization"])
     assert (summary_delta_values["key1"] == 6).all()
     assert (summary_delta_values["key2"] == 60).all()
 
