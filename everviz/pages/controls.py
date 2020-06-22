@@ -15,7 +15,7 @@ def _control_data_per_batch(api):
 
 def _control_data_initial_vs_best(api):
     objectives_df = pd.DataFrame(api.single_objective_values)
-    best_batch = objectives_df.batch[objectives_df.value.idxmax()]
+    best_batch = objectives_df.batch[objectives_df.objective.idxmax()]
     data = pd.DataFrame(api.control_values)
 
     # Keep only controls associated with initial and best batches

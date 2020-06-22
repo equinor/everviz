@@ -36,7 +36,7 @@ def _set_up_data_sources(api):
     everviz_path = os.path.join(everest_folder, "everviz")
 
     objectives_df = pd.DataFrame(api.single_objective_values)
-    best_batch = objectives_df.batch[objectives_df.value.idxmax()]
+    best_batch = objectives_df.batch[objectives_df.objective.idxmax()]
 
     logger.info("Generating objective delta plot source data file")
     objective_csv_path = os.path.join(everviz_path, "objective_delta_values.csv")
