@@ -35,7 +35,7 @@ _SUMMARY = {
     "key2": range(10, 130, 10),
 }
 
-_SINGLE_OBJECTIVES = {"batch": [0, 2], "value": [0.0, 1.0]}
+_SINGLE_OBJECTIVES = {"batch": [0, 2], "objective": [0.0, 1.0]}
 
 
 def test_objective_values_data_frame(mocker):

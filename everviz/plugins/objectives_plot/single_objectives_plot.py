@@ -1,11 +1,13 @@
 from uuid import uuid4
 from pathlib import Path
+from itertools import cycle
 import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
 
 import plotly.graph_objs as go
+from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 from dash.dependencies import Output, Input
 from webviz_config import WebvizPluginABC
@@ -25,10 +27,9 @@ class SingleObjectivesPlot(WebvizPluginABC):
 
         self.graph_id = f"graph-{uuid4()}"
         self.div_id = f"div-{uuid4()}"
-
+        self.function_dropdown_id = f"dropdown-{uuid4()}"
         self.csv_file = csv_file
         self.set_callbacks(app)
-
         ASSETS_DIR = Path(pkg_resources.resource_filename("everviz", "assets"))
         WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
@@ -39,18 +40,43 @@ class SingleObjectivesPlot(WebvizPluginABC):
 
     @property
     def layout(self):
+        data = get_data(self.csv_file)
+        exclude = ["batch", "accepted"]
+        functions = [name for name in data.columns if name not in exclude]
+        function_dropdown_options = [{"label": i, "value": i} for i in functions]
+        func_elements = [
+            html.Label("Functions to plot:"),
+            dcc.Dropdown(
+                id=self.function_dropdown_id,
+                options=function_dropdown_options,
+                multi=True,
+                value=[functions[0]],
+            ),
+        ]
         return html.Div(
             [
-                dcc.Graph(
-                    id=self.graph_id,
-                    config={
-                        "modeBarButtonsToRemove": ["toImage"],
-                        "displaylogo": False,
+                html.Div(
+                    func_elements,
+                    style={
+                        "width": "29%",
+                        "display": "inline-block",
+                        "vertical-align": "top",
                     },
-                )
-            ],
-            id=self.div_id,
-            style={"width": "69%", "display": "inline-block"},
+                ),
+                html.Div(
+                    [
+                        dcc.Graph(
+                            id=self.graph_id,
+                            config={
+                                "modeBarButtonsToRemove": ["toImage"],
+                                "displaylogo": False,
+                            },
+                        )
+                    ],
+                    id=self.div_id,
+                    style={"width": "69%", "display": "inline-block"},
+                ),
+            ]
         )
 
     def set_callbacks(self, app):
@@ -68,28 +94,49 @@ class SingleObjectivesPlot(WebvizPluginABC):
             return ""
 
         @app.callback(
-            Output(self.graph_id, "figure"), [Input(self.div_id, "children")],
+            Output(self.graph_id, "figure"),
+            [Input(self.function_dropdown_id, "value"), Input(self.div_id, "children")],
         )
-        def update_graph(_):
+        def update_graph(function_list, _):
+            if function_list is None:
+                return {}
+
             data = get_data(self.csv_file)
-            accepted_data = data[data.accepted == True]  # pylint: disable=C0121
-            not_accepted_data = data[data.accepted == False]  # pylint: disable=C0121
-            traces = [
-                go.Scatter(
-                    y=accepted_data.value,
-                    x=accepted_data.batch,
-                    mode="lines+markers",
-                    marker={"color": "blue", "size": 10},
-                    name="accepted",
-                ),
-                go.Scatter(
-                    y=not_accepted_data.value,
-                    x=not_accepted_data.batch,
-                    mode="markers",
-                    marker={"color": "red", "size": 9},
-                    name="not accepted",
-                ),
-            ]
+            accepted_data = data[data.accepted == 1]
+            not_accepted_data = data[data.accepted == 0]
+
+            colors = cycle(DEFAULT_PLOTLY_COLORS)
+            traces = []
+            for name, color in zip(function_list, colors):
+                if name != "objective":
+                    traces.append(
+                        go.Scatter(
+                            y=data[name],
+                            x=data.batch,
+                            mode="lines+markers",
+                            marker={"color": color, "size": 10},
+                            name=name,
+                        ),
+                    )
+                else:
+                    traces.extend(
+                        [
+                            go.Scatter(
+                                y=accepted_data[name],
+                                x=accepted_data.batch,
+                                mode="lines+markers",
+                                marker={"color": "blue", "size": 10},
+                                name="accepted",
+                            ),
+                            go.Scatter(
+                                y=not_accepted_data[name],
+                                x=not_accepted_data.batch,
+                                mode="markers",
+                                marker={"color": "red", "size": 9},
+                                name="rejected",
+                            ),
+                        ]
+                    )
 
             return {
                 "data": traces,

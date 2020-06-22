@@ -14,11 +14,7 @@ def _objective_values_from_api(api):
 
 
 def _total_objective_values_from_api(api):
-    single_objectives = api.single_objective_values
-    accepted_batches = api.accepted_batches
-    for objective in single_objectives:
-        objective.update({"accepted": objective["batch"] in accepted_batches})
-    return pd.DataFrame(single_objectives)
+    return pd.DataFrame(api.single_objective_values)
 
 
 def _objective_values(data):
@@ -67,8 +63,8 @@ def _set_up_data_sources(api):
 def _single_objective_title(api):
     nr_function = len(api.objective_function_names)
     if nr_function > 1:
-        return "Weighted objective function"
-    return "Objective function"
+        return "Objective functions"
+    return "Objective"
 
 
 def page_layout(api):

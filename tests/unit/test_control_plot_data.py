@@ -31,13 +31,13 @@ controls = [
     ],
 ]
 objectives = [
-    [{"batch": 0, "value": 1,},],
-    [{"batch": 0, "value": 1,}, {"batch": 1, "value": 2,},],
+    [{"batch": 0, "objective": 1,},],
+    [{"batch": 0, "objective": 1,}, {"batch": 1, "objective": 2,},],
     [
-        {"batch": 0, "value": 1,},
-        {"batch": 1, "value": 2,},
-        {"batch": 2, "value": 4,},  # best value
-        {"batch": 3, "value": 0,},
+        {"batch": 0, "objective": 1,},
+        {"batch": 1, "objective": 2,},
+        {"batch": 2, "objective": 4,},  # best value
+        {"batch": 3, "objective": 0,},
     ],
 ]
 
