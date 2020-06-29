@@ -141,15 +141,20 @@ class SummaryPlot(WebvizPluginABC):
             self.plugin_data_output,
             [self.plugin_data_requested],
             [
+                State(self.key_dropdown_id, "value"),
                 State(self.radio_id, "value"),
                 State(self.realization_filter_check_id, "value"),
                 State(self.realization_filter_input_id, "value"),
             ],
         )
         def user_download_data(
-            data_requested, radio_value, realizations_check, realizations_input
+            data_requested,
+            key_list,
+            radio_value,
+            realizations_check,
+            realizations_input,
         ):
-            if data_requested:
+            if data_requested and key_list is not None and len(key_list) > 0:
                 content = get_data(self.csv_file)
                 if realizations_check:
                     realizations = parse_range(realizations_input)
@@ -157,7 +162,7 @@ class SummaryPlot(WebvizPluginABC):
                         content = content[content["realization"].isin(realizations)]
                 if radio_value == "Statistics":
                     filename = "summary_statistics.csv"
-                    content = calculate_statistics(content)
+                    content = calculate_statistics(content, key_list)
                 else:
                     filename = "summary_values.csv"
                 return WebvizPluginABC.plugin_data_compress(
@@ -191,6 +196,8 @@ class SummaryPlot(WebvizPluginABC):
             # those keys.
             if key_list is None or line_list is None:
                 return {}
+            if len(key_list) + len(line_list) <= 1:
+                return {}
 
             data = get_data(self.csv_file)
             if realizations_check:
@@ -199,7 +206,7 @@ class SummaryPlot(WebvizPluginABC):
                     data = data[data["realization"].isin(realizations)]
 
             if radio_value == "Statistics":
-                data = calculate_statistics(data).set_index(
+                data = calculate_statistics(data, key_list).set_index(
                     ["summary_key", "batch", "date"]
                 )
             else:

@@ -14,6 +14,7 @@ def _summary_values(summary_values):
     sorted_values = (
         summary_values.drop(columns="simulation")
         .set_index(["batch", "date", "realization"])
+        .dropna(axis=1, how="all")
         .sort_index()
         .reset_index()
     )

@@ -25,10 +25,13 @@ def _get_summary_delta_values(api, best_batch):
         api.summary_values()
         .drop(columns="simulation")
         .set_index(["realization", "date"])
+        .dropna(axis=1, how="all")
     )
-    initial = data[(data.batch == 0)].drop(columns=["batch"])
-    best = data[data.batch == best_batch].drop(columns=["batch"])
-    return (best - initial).reset_index()
+    if not data.empty:
+        initial = data[(data.batch == 0)].drop(columns=["batch"])
+        best = data[data.batch == best_batch].drop(columns=["batch"])
+        return (best - initial).reset_index()
+    return data
 
 
 def _set_up_data_sources(api):

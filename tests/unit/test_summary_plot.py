@@ -55,7 +55,7 @@ def test_summary_values_data_frame():
 def test_summary_statistics_data_frame():
     """Test for the correct layout and size of the summary statistics data frame"""
     summary_values = _summary_values(pd.DataFrame(__TEST_DATA))
-    summary_statistics = calculate_statistics(summary_values)
+    summary_statistics = calculate_statistics(summary_values, ["key1", "key2"])
 
     assert list(summary_statistics.columns) == [
         "summary_key",
@@ -76,7 +76,7 @@ def test_summary_statistics_data_frame():
 def test_summary_statistics_content():
     """Test for the correct content of the summary statistics data frame."""
     summary_values = _summary_values(pd.DataFrame(__TEST_DATA))
-    summary_statistics = calculate_statistics(summary_values)
+    summary_statistics = calculate_statistics(summary_values, ["key1", "key2"])
 
     mean = []
     p10 = []

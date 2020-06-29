@@ -140,11 +140,15 @@ class WellsPlot(WebvizPluginABC):
         def update_graph(well_keys, batch_list, statistics, target_rate):
             if well_keys is None or batch_list is None:
                 return {}
+            if well_keys is not None and len(well_keys) == 0:
+                return {}
+            if batch_list is not None and len(batch_list) == 0:
+                return {}
 
             df = get_data(self.csv_file)
 
             if statistics == "Statistics":
-                df = calculate_statistics(df).set_index(
+                df = calculate_statistics(df, well_keys).set_index(
                     ["summary_key", "batch", "date"]
                 )
             else:

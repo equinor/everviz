@@ -193,7 +193,7 @@ class ObjectivesPlot(WebvizPluginABC):
             click_data,
         ):
             # The key_list arguments is the list of functions to plot.
-            if func_list is None:
+            if func_list is None or len(func_list) == 0:
                 return {}
 
             # Get the data, filter if requested.
