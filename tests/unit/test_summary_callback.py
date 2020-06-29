@@ -44,20 +44,30 @@ def test_get_data_callback(monkeypatch, lines, x_filter, x_key):
 
 
 @pytest.mark.parametrize(
-    "lines, x_filter, x_key",
-    [([datetime(2000, 1, 1)], "date", "batch"), ([0], "batch", "date")],
+    "keys, lines, x_filter, x_key",
+    [
+        ([], [datetime(2000, 1, 1)], "date", "batch"),
+        (None, [0], "date", "batch"),
+        (["key1"], [datetime(2000, 1, 1)], "date", "batch"),
+        (["key1"], [0], "batch", "date"),
+        (["key1", "key2"], [datetime(2000, 1, 1)], "date", "batch"),
+        (["key1", "key2"], [0], "batch", "date"),
+    ],
 )
-def test_get_lines_callback(monkeypatch, lines, x_filter, x_key):
+def test_get_lines_callback(monkeypatch, keys, lines, x_filter, x_key):
     plotly_mock = mock.Mock()
     plotly_mock.Scatter.return_value = "scatter"
     monkeypatch.setattr(summary_callback, "go", plotly_mock)
     df = pd.DataFrame(__TEST_DATA)
 
-    df = calculate_statistics(df).set_index(["summary_key", "batch", "date"])
+    try:
+        df = calculate_statistics(df, keys).set_index(["summary_key", "batch", "date"])
 
-    traces = summary_callback._get_statistics_lines(
-        df, ["key1"], lines, x_filter, x_key
-    )
+        traces = summary_callback._get_statistics_lines(
+            df, ["key1"], lines, x_filter, x_key
+        )
 
-    assert plotly_mock.Scatter.call_count == 3
-    assert traces == ["scatter", "scatter", "scatter"]
+        assert plotly_mock.Scatter.call_count == 3
+        assert traces == ["scatter", "scatter", "scatter"]
+    except AssertionError as e:
+        assert str(e) in "List of summary keys is required"

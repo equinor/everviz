@@ -119,6 +119,7 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
 
     # Clear the dropdown, which should not cause an error.
     dash_duo.clear_input("#{}".format(plugin.function_dropdown_id))
+    dash_duo.clear_input("#{}".format(plugin.function_dropdown_id))
 
     for record in caplog.records:
         assert record.levelname != "ERROR"
