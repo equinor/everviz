@@ -165,7 +165,7 @@ class DeltaPlot(WebvizPluginABC):
             return {
                 "data": traces,
                 "layout": dict(
-                    xaxis={"title": "Realization"},
+                    xaxis={"title": "Realization", "tickformat": ",d"},
                     yaxis={"title": "(best realization) - (initial realization)"},
                 ),
             }
