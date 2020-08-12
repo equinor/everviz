@@ -120,6 +120,7 @@ class ControlsPlot(WebvizPluginABC):
             return {
                 "data": traces,
                 "layout": dict(
-                    xaxis={"title": "Batch"}, yaxis={"title": "Control Value"},
+                    xaxis={"title": "Batch", "tickformat": ",d"},
+                    yaxis={"title": "Control Value"},
                 ),
             }

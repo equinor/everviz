@@ -141,7 +141,7 @@ class SingleObjectivesPlot(WebvizPluginABC):
             return {
                 "data": traces,
                 "layout": dict(
-                    xaxis={"title": "Batch"},
+                    xaxis={"title": "Batch", "tickformat": ",d"},
                     yaxis={"title": "Objective function value"},
                 ),
             }
