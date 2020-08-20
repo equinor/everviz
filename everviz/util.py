@@ -39,3 +39,15 @@ def parse_range(numbers):
                 if start.isdigit() and stop.isdigit():
                     result |= set(range(int(start), int(stop) + 1))
     return result
+
+
+def get_placeholder_text(realizations):
+    if len(realizations) == 0:
+        return "No realizations found"
+
+    if len(realizations) > 1:
+        min_r = min(realizations)
+        max_r = max(realizations)
+        return f"example: {min_r}, {max_r}, {min_r}-{max_r}"
+
+    return f"example: {realizations[0]}"

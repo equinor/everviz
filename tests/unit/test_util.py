@@ -1,6 +1,6 @@
 import os
 import pytest
-from everviz.util import get_everviz_folder, parse_range
+from everviz.util import get_everviz_folder, parse_range, get_placeholder_text
 
 
 @pytest.fixture
@@ -38,3 +38,15 @@ def test_get_everviz_folder(tmpdir, mocked_api):
 )
 def test_object_parse_range(input_string, expected):
     assert parse_range(input_string) == expected
+
+
+@pytest.mark.parametrize(
+    "realizations, expected",
+    [
+        ([], "No realizations found"),
+        ([1, 2, 3, 5], "example: 1, 5, 1-5"),
+        ([0], "example: 0"),
+    ],
+)
+def test_get_placeholder_text(realizations, expected):
+    assert get_placeholder_text(realizations) == expected
