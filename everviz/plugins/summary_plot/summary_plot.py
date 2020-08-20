@@ -9,7 +9,7 @@ from dash.dependencies import Output, Input, State
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
-from everviz.util import parse_range
+from everviz.util import parse_range, get_placeholder_text
 from everviz.plugins.summary_plot import summary_callback
 
 from everviz.plugins.summary_plot.util import calculate_statistics
@@ -57,6 +57,7 @@ class SummaryPlot(WebvizPluginABC):
         data = get_data(self.csv_file).set_index(["batch", "date", "realization"])
         key_dropdown_options = list(data.columns.unique())
         data = data.reset_index()
+        placeholder_text = get_placeholder_text(data["realization"].unique())
         xaxis_dropdown_options = list(
             data["batch" if self.xaxis == "date" else "date"].unique()
         )
@@ -97,7 +98,7 @@ class SummaryPlot(WebvizPluginABC):
                     dcc.Input(
                         id=self.realization_filter_input_id,
                         type="text",
-                        placeholder="example: 0, 3, 6-10",
+                        placeholder=placeholder_text,
                         pattern=r"\s*|([0-9]+(\s*-\s*[0-9]+)?)(\s*,\s*[0-9]+(\s*-\s*[0-9]+)?)*",
                         style={"display": "inline-block"},
                     ),
