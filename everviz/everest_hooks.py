@@ -4,21 +4,10 @@ import signal
 import sys
 import os
 
+from everest.plugins import hookimpl  # pylint: disable=import-error
 from everviz.util import get_everviz_folder
 from everviz.config import setup_default_everviz_config
 from everviz.log import setup_logger
-
-
-# Mock the hookimpl decorator
-# Allow everviz to be installed and have tests run without installing everest
-def mock_impl(func):
-    return func
-
-
-try:
-    from everest.plugins import hookimpl
-except ImportError:
-    hookimpl = mock_impl
 
 
 def handle_exit(*args):  # pylint: disable=unused-argument)
