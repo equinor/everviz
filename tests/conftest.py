@@ -1,7 +1,15 @@
 import os
+import sys
+import pluggy
 import pytest
 import dash
+
 from PIL import ImageFilter, ImageChops
+
+# Allow everviz to be installed and have tests run without installing everest
+module = type(sys)("everest.plugins")
+module.hookimpl = pluggy.HookimplMarker("test")
+sys.modules["everest.plugins"] = module
 
 
 @pytest.fixture()
