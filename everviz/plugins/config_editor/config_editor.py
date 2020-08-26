@@ -3,15 +3,15 @@ import io
 import os
 from pathlib import Path
 from uuid import uuid4
+import yaml
 from dash import callback_context
 from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import dash_core_components as dcc
-from webviz_config import WebvizPluginABC
-import yaml
+from everviz.plugins.plugin_abc import EvervizPluginABC
 
 
-class ConfigEditor(WebvizPluginABC):
+class ConfigEditor(EvervizPluginABC):
     """
     Webviz plugin designed to allow the user to edit a everviz config file.
      Plugin supports the following functionality, allow the user to:

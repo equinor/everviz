@@ -1,14 +1,11 @@
-import os
 from pathlib import Path
 from uuid import uuid4
-import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Output, Input
 
-from webviz_config import WebvizPluginABC
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
 
 
@@ -19,7 +16,7 @@ from everviz.plugins.summary_plot import summary_callback
 _WELL_RATE_KEYS = ["WOPR", "WWIR", "WGPR", "WGIR"]
 
 
-class WellsPlot(WebvizPluginABC):
+class WellsPlot(EvervizPluginABC):
     """
     WellsPlot is made to visualize well rates and well target
     rates.
@@ -36,10 +33,6 @@ class WellsPlot(WebvizPluginABC):
 
         self.csv_file = csv_file
         self.set_callbacks(app)
-
-        ASSETS_DIR = pkg_resources.resource_filename("everviz", os.path.join("assets"))
-
-        WEBVIZ_ASSETS.add(Path(ASSETS_DIR) / "axis_customization.css")
 
     def add_webvizstore(self):
         return [
@@ -118,7 +111,7 @@ class WellsPlot(WebvizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return WebvizPluginABC.plugin_data_compress(
+                return EvervizPluginABC.plugin_data_compress(
                     [
                         {
                             "filename": Path(self.csv_file).name,

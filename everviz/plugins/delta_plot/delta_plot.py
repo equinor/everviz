@@ -1,6 +1,5 @@
 from uuid import uuid4
 from pathlib import Path
-import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
@@ -8,12 +7,11 @@ import dash_core_components as dcc
 import plotly.graph_objs as go
 
 from dash.dependencies import Output, Input
-from webviz_config import WebvizPluginABC
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
 
 
-class DeltaPlot(WebvizPluginABC):
+class DeltaPlot(EvervizPluginABC):
     """
     The DeltaPlot class implements a plugin for Webviz, for plotting the
     difference in values generated during an Everest optimization.
@@ -30,9 +28,6 @@ class DeltaPlot(WebvizPluginABC):
         self.pre_select = pre_select
 
         self.set_callbacks(app)
-
-        ASSETS_DIR = Path(pkg_resources.resource_filename("everviz", "assets"))
-        WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
     def add_webvizstore(self):
         return [
@@ -112,7 +107,7 @@ class DeltaPlot(WebvizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return WebvizPluginABC.plugin_data_compress(
+                return EvervizPluginABC.plugin_data_compress(
                     [
                         {
                             "filename": Path(self.csv_file).name,

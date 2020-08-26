@@ -1,13 +1,11 @@
-import os
 from pathlib import Path
 from uuid import uuid4
-import pkg_resources
 import dash_html_components as html
 import dash_core_components as dcc
 
 from dash.dependencies import Input, Output
-from webviz_config import WebvizPluginABC
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
+from everviz.plugins.plugin_abc import EvervizPluginABC
+
 
 from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
 from everviz.plugins.crossplot.callback.crossplot_callback import (
@@ -17,7 +15,7 @@ from everviz.plugins.crossplot.callback.crossplot_callback import (
 from everviz.data.load_csv.get_data import get_data
 
 
-class Crossplot(WebvizPluginABC):
+class Crossplot(EvervizPluginABC):
     """
     The Crossplot class implements a plugin for Webviz, which can plot any
     column from a CSV file against any other column. This is used by Everviz for
@@ -37,10 +35,6 @@ class Crossplot(WebvizPluginABC):
 
         self.data_path = data_path
         self.set_callbacks(app)
-
-        ASSETS_DIR = pkg_resources.resource_filename("everviz", os.path.join("assets"))
-
-        WEBVIZ_ASSETS.add(Path(ASSETS_DIR) / "axis_customization.css")
 
     def add_webvizstore(self):
         return [(get_data, [{"data_path": self.data_path}])]
@@ -109,7 +103,7 @@ class Crossplot(WebvizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return WebvizPluginABC.plugin_data_compress(
+                return EvervizPluginABC.plugin_data_compress(
                     [
                         {
                             "filename": Path(self.data_path).name,
