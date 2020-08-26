@@ -1,7 +1,6 @@
 from uuid import uuid4
 from pathlib import Path
 from itertools import cycle
-import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
@@ -10,12 +9,11 @@ import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 from dash.dependencies import Output, Input
-from webviz_config import WebvizPluginABC
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
 from everviz.data.load_csv.get_data import get_data
+from everviz.plugins.plugin_abc import EvervizPluginABC
 
 
-class SingleObjectivesPlot(WebvizPluginABC):
+class SingleObjectivesPlot(EvervizPluginABC):
     """
     This webviz plugin is designed to display the single objective function
     calculated as the weighted sum of the objective functions from a multi
@@ -30,8 +28,6 @@ class SingleObjectivesPlot(WebvizPluginABC):
         self.function_dropdown_id = f"dropdown-{uuid4()}"
         self.csv_file = csv_file
         self.set_callbacks(app)
-        ASSETS_DIR = Path(pkg_resources.resource_filename("everviz", "assets"))
-        WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
     def add_webvizstore(self):
         return [
@@ -83,7 +79,7 @@ class SingleObjectivesPlot(WebvizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return WebvizPluginABC.plugin_data_compress(
+                return EvervizPluginABC.plugin_data_compress(
                     [
                         {
                             "filename": Path(self.csv_file).name,

@@ -1,7 +1,5 @@
 from uuid import uuid4
-from pathlib import Path
 from itertools import cycle
-import pkg_resources
 
 import dash_html_components as html
 import dash_core_components as dcc
@@ -10,15 +8,14 @@ import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 from dash.dependencies import Output, Input, State
-from webviz_config import WebvizPluginABC
-from webviz_config.webviz_assets import WEBVIZ_ASSETS
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
 from everviz.util import parse_range, get_placeholder_text
 
 from .util import calculate_statistics
 
 
-class ObjectivesPlot(WebvizPluginABC):
+class ObjectivesPlot(EvervizPluginABC):
     """
     The ObjectivesPlot class implements a plugin for Webviz, for plotting the
     objective values generated during an Everest optimization.
@@ -32,7 +29,6 @@ class ObjectivesPlot(WebvizPluginABC):
 
     def __init__(self, app, csv_file):
         super().__init__()
-
         self.graph_id = f"graph-{uuid4()}"
         self.radio_id = f"dropdown-{uuid4()}"
         self.radio_id_mode = f"dropdown-{uuid4()}"
@@ -42,9 +38,6 @@ class ObjectivesPlot(WebvizPluginABC):
 
         self.csv_file = csv_file
         self.set_callbacks(app)
-
-        ASSETS_DIR = Path(pkg_resources.resource_filename("everviz", "assets"))
-        WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
     def add_webvizstore(self):
         return [
@@ -162,7 +155,7 @@ class ObjectivesPlot(WebvizPluginABC):
                     content = calculate_statistics(content)
                 else:
                     filename = "objective_values.csv"
-                return WebvizPluginABC.plugin_data_compress(
+                return EvervizPluginABC.plugin_data_compress(
                     [{"filename": filename, "content": content.to_csv(),}]
                 )
             return ""
