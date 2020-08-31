@@ -69,7 +69,9 @@ def test_get_sidebar_layout(monkeypatch, mocker):
         everviz.plugins.utils.layout.sidebar_layout, "_get_radio", radio_mock
     )
     monkeypatch.setattr(
-        everviz.plugins.utils.layout.sidebar_layout, "_get_dropdown", dropdown_mock,
+        everviz.plugins.utils.layout.sidebar_layout,
+        "_get_dropdown",
+        dropdown_mock,
     )
 
     get_sidebar_layout(
@@ -133,9 +135,17 @@ def test_webviz_page_layout(mocker):
         "title": "Cross plots",
         "content": [
             crossplot._crossplot_doc,
-            {"Crossplot": {"data_path": "everest_export.csv",},},
+            {
+                "Crossplot": {
+                    "data_path": "everest_export.csv",
+                },
+            },
             crossplot._crossplot_indexed_doc,
-            {"CrossplotIndexed": {"data_path": "everest_export.csv",}},
+            {
+                "CrossplotIndexed": {
+                    "data_path": "everest_export.csv",
+                }
+            },
         ],
     }
     assert expected_page_layout == result
@@ -150,7 +160,11 @@ def test_webviz_page_layout_no_crossplot(mocker):
         "title": "Cross plots",
         "content": [
             crossplot._crossplot_doc,
-            {"Crossplot": {"data_path": "everest_export.csv",},},
+            {
+                "Crossplot": {
+                    "data_path": "everest_export.csv",
+                },
+            },
         ],
     }
     assert expected_page_layout == result

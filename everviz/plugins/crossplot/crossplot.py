@@ -55,8 +55,14 @@ class Crossplot(EvervizPluginABC):
                     "options": axis_type,
                 },
             ),
-            ("radio", {"item_id": self.axis_opt_x_id, "options": axis_options},),
-            ("dropdown", {"item_id": self.keys_x_id, "options": plot_keys},),
+            (
+                "radio",
+                {"item_id": self.axis_opt_x_id, "options": axis_options},
+            ),
+            (
+                "dropdown",
+                {"item_id": self.keys_x_id, "options": plot_keys},
+            ),
             (
                 "radio",
                 {
@@ -65,13 +71,22 @@ class Crossplot(EvervizPluginABC):
                     "options": axis_type,
                 },
             ),
-            ("radio", {"item_id": self.axis_opt_y_id, "options": axis_options},),
-            ("dropdown", {"item_id": self.keys_y_id, "options": plot_keys},),
+            (
+                "radio",
+                {"item_id": self.axis_opt_y_id, "options": axis_options},
+            ),
+            (
+                "dropdown",
+                {"item_id": self.keys_y_id, "options": plot_keys},
+            ),
         ]
 
         return html.Div(
             [
-                html.H1(children=self.title, style={"textAlign": "center"},),
+                html.H1(
+                    children=self.title,
+                    style={"textAlign": "center"},
+                ),
                 html.Div(
                     [
                         html.Div(

@@ -78,7 +78,10 @@ class SummaryPlot(EvervizPluginABC):
                     "multi": True,
                 },
             ),
-            ("radio", {"item_id": self.radio_id, "options": radio_options},),
+            (
+                "radio",
+                {"item_id": self.radio_id, "options": radio_options},
+            ),
         ]
 
         realization_elements = [
@@ -161,7 +164,12 @@ class SummaryPlot(EvervizPluginABC):
                 else:
                     filename = "summary_values.csv"
                 return EvervizPluginABC.plugin_data_compress(
-                    [{"filename": filename, "content": content.to_csv(),}]
+                    [
+                        {
+                            "filename": filename,
+                            "content": content.to_csv(),
+                        }
+                    ]
                 )
             return ""
 

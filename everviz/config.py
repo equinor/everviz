@@ -18,7 +18,10 @@ logger = get_logger()
 
 def webviz_config(api):
     pages = [
-        {"title": "Everest", "content": [],},
+        {
+            "title": "Everest",
+            "content": [],
+        },
         objectives.page_layout(api),
         summary_values.page_layout(api),
         wells_values.page_layout(api),

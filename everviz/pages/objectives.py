@@ -73,8 +73,16 @@ def page_layout(api):
         "title": "Objectives",
         "content": [
             "## Objective function values",
-            {"ObjectivesPlot": {"csv_file": sources.objective_values,},},
+            {
+                "ObjectivesPlot": {
+                    "csv_file": sources.objective_values,
+                },
+            },
             f"## {_single_objective_title(api)}",
-            {"SingleObjectivesPlot": {"csv_file": sources.total_objective_values,},},
+            {
+                "SingleObjectivesPlot": {
+                    "csv_file": sources.total_objective_values,
+                },
+            },
         ],
     }

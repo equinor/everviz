@@ -158,7 +158,10 @@ class WellsPlot(EvervizPluginABC):
 
             return {
                 "data": traces,
-                "layout": dict(xaxis={"title": "Date"}, yaxis={"title": "Well rates"},),
+                "layout": dict(
+                    xaxis={"title": "Date"},
+                    yaxis={"title": "Well rates"},
+                ),
             }
 
 

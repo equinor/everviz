@@ -123,7 +123,8 @@ class DeltaPlot(EvervizPluginABC):
             inputs.append(Input(self.date_dropdown_id, "value"))
 
         @app.callback(
-            Output(self.graph_id, "figure"), inputs,
+            Output(self.graph_id, "figure"),
+            inputs,
         )
         def update_graph(key_list, *args):
             if key_list is None:

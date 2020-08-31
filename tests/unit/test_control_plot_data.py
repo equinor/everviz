@@ -14,7 +14,9 @@ from everviz.pages.controls import (
 
 
 controls = [
-    [{"control": "c1", "batch": 0, "value": 12},],
+    [
+        {"control": "c1", "batch": 0, "value": 12},
+    ],
     [
         {"control": "c1", "batch": 0, "value": 12},
         {"control": "c1", "batch": 1, "value": 30},
@@ -31,18 +33,46 @@ controls = [
     ],
 ]
 objectives = [
-    [{"batch": 0, "objective": 1,},],
-    [{"batch": 0, "objective": 1,}, {"batch": 1, "objective": 2,},],
     [
-        {"batch": 0, "objective": 1,},
-        {"batch": 1, "objective": 2,},
-        {"batch": 2, "objective": 4,},  # best value
-        {"batch": 3, "objective": 0,},
+        {
+            "batch": 0,
+            "objective": 1,
+        },
+    ],
+    [
+        {
+            "batch": 0,
+            "objective": 1,
+        },
+        {
+            "batch": 1,
+            "objective": 2,
+        },
+    ],
+    [
+        {
+            "batch": 0,
+            "objective": 1,
+        },
+        {
+            "batch": 1,
+            "objective": 2,
+        },
+        {
+            "batch": 2,
+            "objective": 4,
+        },  # best value
+        {
+            "batch": 3,
+            "objective": 0,
+        },
     ],
 ]
 
 expected = [
-    [{"control": "c1", "batch": "initial", "value": 12},],
+    [
+        {"control": "c1", "batch": "initial", "value": 12},
+    ],
     [
         {"control": "c1", "batch": "initial", "value": 12},
         {"control": "c1", "batch": "best", "value": 30},

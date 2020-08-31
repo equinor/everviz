@@ -67,8 +67,14 @@ class CrossplotIndexed(EvervizPluginABC):
                     "options": axis_type,
                 },
             ),
-            ("radio", {"item_id": self.axis_options_x_id, "options": axis_options},),
-            ("dropdown", {"item_id": self.dropdown_x_id, "options": dropdown_options},),
+            (
+                "radio",
+                {"item_id": self.axis_options_x_id, "options": axis_options},
+            ),
+            (
+                "dropdown",
+                {"item_id": self.dropdown_x_id, "options": dropdown_options},
+            ),
             (
                 "radio",
                 {
@@ -77,8 +83,14 @@ class CrossplotIndexed(EvervizPluginABC):
                     "options": axis_type,
                 },
             ),
-            ("radio", {"item_id": self.axis_options_y_id, "options": axis_options},),
-            ("dropdown", {"item_id": self.dropdown_y_id, "options": dropdown_options},),
+            (
+                "radio",
+                {"item_id": self.axis_options_y_id, "options": axis_options},
+            ),
+            (
+                "dropdown",
+                {"item_id": self.dropdown_y_id, "options": dropdown_options},
+            ),
             (
                 "radio",
                 {
@@ -130,7 +142,9 @@ class CrossplotIndexed(EvervizPluginABC):
     def set_callbacks(self, app):
         @app.callback(
             Output(self.dropdown_y_id, "options"),
-            [Input(self.dropdown_x_id, "value"),],
+            [
+                Input(self.dropdown_x_id, "value"),
+            ],
         )
         def update_dropwdown_y(selected_control):
             df = get_data(self.data_path)
@@ -138,7 +152,8 @@ class CrossplotIndexed(EvervizPluginABC):
             return dropdown_callback(selected_control, indexed_controls)
 
         @app.callback(
-            Output(self.dropdown_y_id, "value"), [Input(self.dropdown_y_id, "options")],
+            Output(self.dropdown_y_id, "value"),
+            [Input(self.dropdown_y_id, "options")],
         )
         def set_y_val_dropdown(available_options):
             try:

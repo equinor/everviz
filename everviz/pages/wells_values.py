@@ -33,13 +33,19 @@ def page_layout(api):
     if sources is None:
         return {
             "title": "Well rates",
-            "content": [WELLS_EXPLANATION,],
+            "content": [
+                WELLS_EXPLANATION,
+            ],
         }
 
     return {
         "title": "Well rates",
         "content": [
             "## Well rate values as a function of date",
-            {"WellsPlot": {"csv_file": sources.summary_values,},},
+            {
+                "WellsPlot": {
+                    "csv_file": sources.summary_values,
+                },
+            },
         ],
     }
