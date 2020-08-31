@@ -55,7 +55,9 @@ class ConfigEditor(EvervizPluginABC):
             if len(pages) > 0:
                 # Ensure the config editor page is always part of the config
                 conf_ed_content = {
-                    "ConfigEditor": {"data_path": self.data_path,},
+                    "ConfigEditor": {
+                        "data_path": self.data_path,
+                    },
                 }
                 # Check if the ConfigEditor plugin is part of the configuration
                 found = next(
@@ -74,15 +76,28 @@ class ConfigEditor(EvervizPluginABC):
         config_str = self.get_config_str()
         if self.editing:
             style = {"width": "100%", "height": 800}
-            return [dcc.Textarea(id=self.text_area, value=config_str, style=style,)]
+            return [
+                dcc.Textarea(
+                    id=self.text_area,
+                    value=config_str,
+                    style=style,
+                )
+            ]
 
         md_content = f"""```
 {config_str}
 ```
 """
         return [
-            dcc.Textarea(id=self.text_area, value=config_str, hidden=not self.editing,),
-            dcc.Markdown(id=self.md_area, children=md_content,),
+            dcc.Textarea(
+                id=self.text_area,
+                value=config_str,
+                hidden=not self.editing,
+            ),
+            dcc.Markdown(
+                id=self.md_area,
+                children=md_content,
+            ),
         ]
 
     def render_buttons(self):
@@ -91,20 +106,35 @@ class ConfigEditor(EvervizPluginABC):
                 html.Button("Edit", id=self.btn_edit),
                 # Had to wrap the button in a div because the hidden option was not
                 # working on the button element
-                html.Div([html.Button("Cancel", id=self.btn_cancel),], hidden=True),
                 html.Div(
-                    dcc.Upload(html.Button("Upload File"), id=self.btn_upload),
-                    style={"display": "inline-block",},
+                    [
+                        html.Button("Cancel", id=self.btn_cancel),
+                    ],
+                    hidden=True,
                 ),
                 html.Div(
-                    [html.Button("Reset", id=self.btn_reset),],
+                    dcc.Upload(html.Button("Upload File"), id=self.btn_upload),
+                    style={
+                        "display": "inline-block",
+                    },
+                ),
+                html.Div(
+                    [
+                        html.Button("Reset", id=self.btn_reset),
+                    ],
                     hidden=not self.default_conf_path.exists(),
                 ),
             ]
         return [
             html.Button("Save", id=self.btn_edit),
             html.Button("Cancel", id=self.btn_cancel),
-            html.Div(html.Button("Reset", id=self.btn_reset,), hidden=True),
+            html.Div(
+                html.Button(
+                    "Reset",
+                    id=self.btn_reset,
+                ),
+                hidden=True,
+            ),
             dcc.Upload(children=None, id=self.btn_upload),
         ]
 
@@ -112,7 +142,10 @@ class ConfigEditor(EvervizPluginABC):
     def layout(self):
         return html.Div(
             [
-                html.H1(children=self.title, style={"textAlign": "center"},),
+                html.H1(
+                    children=self.title,
+                    style={"textAlign": "center"},
+                ),
                 html.Div(
                     [
                         html.Div(

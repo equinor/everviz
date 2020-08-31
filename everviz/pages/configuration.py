@@ -7,5 +7,11 @@ def page_layout(api):
     config_path = os.path.join(everviz_path, DEFAULT_CONFIG)
     return {
         "title": "Config editor",
-        "content": [{"ConfigEditor": {"data_path": config_path,},},],
+        "content": [
+            {
+                "ConfigEditor": {
+                    "data_path": config_path,
+                },
+            },
+        ],
     }

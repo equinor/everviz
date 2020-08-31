@@ -6,7 +6,7 @@ from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
 
 class EvervizPluginABC(WebvizPluginABC):
-    """ Subclass of the WebvizPluginABC base class
+    """Subclass of the WebvizPluginABC base class
     All everviz-webviz plugins should be subclasses of this base class
     e.g.
     ```python

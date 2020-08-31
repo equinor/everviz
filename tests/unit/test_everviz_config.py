@@ -19,19 +19,29 @@ def test_write_webviz_config(tmpdir):
 
 def test_webviz_config(mocker, monkeypatch):
     monkeypatch.setattr(
-        everviz.pages.controls, "page_layout", mocker.Mock(return_value=""),
+        everviz.pages.controls,
+        "page_layout",
+        mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
-        everviz.pages.crossplot, "page_layout", mocker.Mock(return_value=""),
+        everviz.pages.crossplot,
+        "page_layout",
+        mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
-        everviz.pages.configuration, "page_layout", mocker.Mock(return_value=""),
+        everviz.pages.configuration,
+        "page_layout",
+        mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
-        everviz.pages.objectives, "page_layout", mocker.Mock(return_value=""),
+        everviz.pages.objectives,
+        "page_layout",
+        mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
-        everviz.pages.deltaplot, "page_layout", mocker.Mock(return_value=""),
+        everviz.pages.deltaplot,
+        "page_layout",
+        mocker.Mock(return_value=""),
     )
     monkeypatch.setattr(
         everviz.pages.summary_values,
@@ -39,14 +49,22 @@ def test_webviz_config(mocker, monkeypatch):
         mocker.Mock(return_value={"title": "Summary", "content": []}),
     )
     monkeypatch.setattr(
-        everviz.pages.wells_values, "page_layout", mocker.Mock(return_value={}),
+        everviz.pages.wells_values,
+        "page_layout",
+        mocker.Mock(return_value={}),
     )
 
     expected_config = {
         "title": "Everest Optimization Report",
         "pages": [
-            {"title": "Everest", "content": [],},
-            {"title": "Summary", "content": [],},
+            {
+                "title": "Everest",
+                "content": [],
+            },
+            {
+                "title": "Summary",
+                "content": [],
+            },
         ],
     }
 
@@ -60,7 +78,10 @@ def test_setup_default_everviz_config(mocker, monkeypatch, tmpdir):
         everviz.config,
         "webviz_config",
         mocker.Mock(
-            return_value={"title": "Everest Optimization Report", "pages": [],}
+            return_value={
+                "title": "Everest Optimization Report",
+                "pages": [],
+            }
         ),
     )
 

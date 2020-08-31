@@ -45,6 +45,8 @@ setup(
             "ConfigEditor = everviz.plugins:ConfigEditor",
             "WellsPlot = everviz.plugins:WellsPlot",
         ],
-        "everest": ["everviz = everviz.everest_hooks",],
+        "everest": [
+            "everviz = everviz.everest_hooks",
+        ],
     },
 )

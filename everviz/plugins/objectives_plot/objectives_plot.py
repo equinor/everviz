@@ -142,7 +142,10 @@ class ObjectivesPlot(EvervizPluginABC):
             ],
         )
         def user_download_data(
-            data_requested, radio_value, realizations_check, realizations_input,
+            data_requested,
+            radio_value,
+            realizations_check,
+            realizations_input,
         ):
             if data_requested:
                 content = get_data(self.csv_file)
@@ -156,7 +159,12 @@ class ObjectivesPlot(EvervizPluginABC):
                 else:
                     filename = "objective_values.csv"
                 return EvervizPluginABC.plugin_data_compress(
-                    [{"filename": filename, "content": content.to_csv(),}]
+                    [
+                        {
+                            "filename": filename,
+                            "content": content.to_csv(),
+                        }
+                    ]
                 )
             return ""
 

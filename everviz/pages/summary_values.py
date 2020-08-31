@@ -51,8 +51,18 @@ def page_layout(api):
         "title": "Summary Values",
         "content": [
             "## Summary values as a function of date",
-            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "date",},},
+            {
+                "SummaryPlot": {
+                    "csv_file": sources.summary_values,
+                    "xaxis": "date",
+                },
+            },
             "## Summary values as a function of batch",
-            {"SummaryPlot": {"csv_file": sources.summary_values, "xaxis": "batch",},},
+            {
+                "SummaryPlot": {
+                    "csv_file": sources.summary_values,
+                    "xaxis": "batch",
+                },
+            },
         ],
     }
