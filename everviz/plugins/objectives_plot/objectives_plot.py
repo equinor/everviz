@@ -35,7 +35,7 @@ class ObjectivesPlot(EvervizPluginABC):
         self.function_dropdown_id = f"dropdown-{uuid4()}"
         self.realization_filter_check_id = f"check-{uuid4()}"
         self.realization_filter_input_id = f"input-{uuid4()}"
-
+        self.label_id = f"label-{uuid4()}"
         self.csv_file = csv_file
         self.set_callbacks(app)
 
@@ -50,7 +50,8 @@ class ObjectivesPlot(EvervizPluginABC):
 
         functions = data["function"].unique()
         function_dropdown_options = [{"label": i, "value": i} for i in functions]
-        placeholder_text = get_placeholder_text(data["realization"].unique())
+        realizations = data["realization"].unique()
+        placeholder_text = get_placeholder_text(realizations)
         func_elements = [
             html.Label("Functions to plot:"),
             dcc.Dropdown(
@@ -63,6 +64,11 @@ class ObjectivesPlot(EvervizPluginABC):
 
         radio_options = ["Statistics", "Values", "Normalized", "Weighted + Normalized"]
         radio_elements = [
+            html.Label(
+                f"Statistics are calculated based on {len(realizations)} realizations",
+                id=self.label_id,
+                style={"display": "none"},
+            ),
             dcc.RadioItems(
                 id=self.radio_id,
                 options=[{"label": i, "value": i} for i in radio_options],
@@ -174,6 +180,15 @@ class ObjectivesPlot(EvervizPluginABC):
         )
         def set_button_enabled_state(filter_realizations):
             return not filter_realizations
+
+        @app.callback(
+            Output(self.label_id, "style"),
+            [Input(self.radio_id, "value")],
+        )
+        def radio_group_click(option):
+            if option == "Statistics":
+                return {}
+            return {"display": "none"}
 
         @app.callback(
             Output(self.graph_id, "figure"),

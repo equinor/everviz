@@ -88,12 +88,27 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     app.layout = plugin.layout
     dash_duo.start_server(app)
 
+    # Tests warning label not there
+    assert (
+        "Statistics are calculated"
+        not in dash_duo.find_element(f"#{plugin.label_id}").text
+    )
     # Test statistics plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 1)).click()
+    # Tests warning label is there
+    assert (
+        "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
+    )
+
     dash_duo.select_dcc_dropdown("#{}".format(plugin.function_dropdown_id), "f1")
 
     # Test values plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
+    # Tests warning label not there
+    assert (
+        "Statistics are calculated"
+        not in dash_duo.find_element(f"#{plugin.label_id}").text
+    )
 
     # Test normalized values
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 3)).click()

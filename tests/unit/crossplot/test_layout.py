@@ -65,6 +65,7 @@ def test_crossplot_layout_radio(dash_duo, expected, placement, valid_options):
 def test_get_sidebar_layout(monkeypatch, mocker):
     radio_mock = mocker.Mock(return_value=[])
     dropdown_mock = mocker.Mock(return_value=[])
+    label_mock = mocker.Mock(return_value=[])
     monkeypatch.setattr(
         everviz.plugins.utils.layout.sidebar_layout, "_get_radio", radio_mock
     )
@@ -73,13 +74,23 @@ def test_get_sidebar_layout(monkeypatch, mocker):
         "_get_dropdown",
         dropdown_mock,
     )
+    monkeypatch.setattr(
+        everviz.plugins.utils.layout.sidebar_layout,
+        "_get_label",
+        label_mock,
+    )
 
     get_sidebar_layout(
-        [("radio", {"item_id": "radio_id"}), ("dropdown", {"item_id": "dropdown_id"})]
+        [
+            ("label", {"item_id": "label_id"}),
+            ("radio", {"item_id": "radio_id"}),
+            ("dropdown", {"item_id": "dropdown_id"}),
+        ]
     )
 
     radio_mock.assert_called_once_with(item_id="radio_id")
     dropdown_mock.assert_called_once_with(item_id="dropdown_id")
+    label_mock.assert_called_once_with(item_id="label_id")
 
 
 def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_images):
