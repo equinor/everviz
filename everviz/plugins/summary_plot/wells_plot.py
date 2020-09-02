@@ -30,6 +30,7 @@ class WellsPlot(EvervizPluginABC):
         self.dropdown_batch = f"dropdown-{uuid4()}"
         self.radio_target = f"radio-{uuid4()}"
         self.radio_statistics = f"radio-{uuid4()}"
+        self.label_id = f"label-{uuid4()}"
 
         self.csv_file = csv_file
         self.set_callbacks(app)
@@ -46,6 +47,7 @@ class WellsPlot(EvervizPluginABC):
             i for i in list(data.columns.unique()) if i.split(":")[0] in _WELL_RATE_KEYS
         ]
         data = data.reset_index()
+        realizations = data["realization"].unique()
         batches = list(data["batch"].unique())
         statistics_toggle = ["Data", "Statistics"]
         target_rate_toggle = ["Off", "On"]
@@ -62,6 +64,14 @@ class WellsPlot(EvervizPluginABC):
             (
                 "dropdown",
                 {"item_id": self.dropdown_batch, "options": batches, "multi": True},
+            ),
+            (
+                "label",
+                {
+                    "item_id": self.label_id,
+                    "text": f"Statistics are calculated based on {len(realizations)} realizations",
+                    "style": {},
+                },
             ),
             (
                 "radio",
@@ -120,6 +130,15 @@ class WellsPlot(EvervizPluginABC):
                     ]
                 )
             return ""
+
+        @app.callback(
+            Output(self.label_id, "style"),
+            [Input(self.radio_statistics, "value")],
+        )
+        def radio_group_click(option):
+            if option == "Statistics":
+                return {}
+            return {"display": "none"}
 
         @app.callback(
             Output(self.graph_id, "figure"),

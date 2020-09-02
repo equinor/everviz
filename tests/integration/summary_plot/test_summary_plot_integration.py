@@ -37,12 +37,20 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.start_server(app)
 
     # Test statistics plot.
+    assert (
+        "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
+    )
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 1)).click()
     dash_duo.clear_input("#{}".format(plugin.key_dropdown_id))
     dash_duo.select_dcc_dropdown("#{}".format(plugin.key_dropdown_id), "key1")
 
     # Test data plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
+    # Tests warning label not there
+    assert (
+        "Statistics are calculated"
+        not in dash_duo.find_element(f"#{plugin.label_id}").text
+    )
 
     # Test filtering realizations.
     dash_duo.find_element(

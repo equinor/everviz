@@ -3,7 +3,11 @@ import dash_html_components as html
 
 
 def get_sidebar_layout(configurations):
-    _FUNCTION_MAP = {"radio": _get_radio, "dropdown": _get_dropdown}
+    _FUNCTION_MAP = {
+        "radio": _get_radio,
+        "dropdown": _get_dropdown,
+        "label": _get_label,
+    }
 
     divs = []
     for comp_name, args in configurations:
@@ -44,3 +48,7 @@ def _get_dropdown(item_id, title=None, options=None, multi=False):
             multi=multi,
         ),
     ]
+
+
+def _get_label(item_id, text, style):
+    return [html.Label(text, id=item_id, style=style)]

@@ -34,6 +34,7 @@ class SummaryPlot(EvervizPluginABC):
         self.radio_id = f"radio-{uuid4()}"
         self.realization_filter_check_id = f"check-{uuid4()}"
         self.realization_filter_input_id = f"input-{uuid4()}"
+        self.label_id = f"label-{uuid4()}"
 
         self.csv_file = csv_file
         self.xaxis = xaxis
@@ -51,7 +52,8 @@ class SummaryPlot(EvervizPluginABC):
         data = get_data(self.csv_file).set_index(["batch", "date", "realization"])
         key_dropdown_options = list(data.columns.unique())
         data = data.reset_index()
-        placeholder_text = get_placeholder_text(data["realization"].unique())
+        realizations = data["realization"].unique()
+        placeholder_text = get_placeholder_text(realizations)
         xaxis_dropdown_options = list(
             data["batch" if self.xaxis == "date" else "date"].unique()
         )
@@ -76,6 +78,14 @@ class SummaryPlot(EvervizPluginABC):
                     "item_id": self.xaxis_dropdown_id,
                     "options": xaxis_dropdown_options,
                     "multi": True,
+                },
+            ),
+            (
+                "label",
+                {
+                    "item_id": self.label_id,
+                    "text": f"Statistics are calculated based on {len(realizations)} realizations",
+                    "style": {},
                 },
             ),
             (
@@ -172,6 +182,15 @@ class SummaryPlot(EvervizPluginABC):
                     ]
                 )
             return ""
+
+        @app.callback(
+            Output(self.label_id, "style"),
+            [Input(self.radio_id, "value")],
+        )
+        def radio_group_click(option):
+            if option == "Statistics":
+                return {}
+            return {"display": "none"}
 
         @app.callback(
             Output(self.realization_filter_input_id, "disabled"),
