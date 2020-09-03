@@ -40,7 +40,7 @@ def test_get_data_callback(monkeypatch, lines, x_filter, x_key):
     df = pd.DataFrame(__TEST_DATA)
     df = df.set_index(["batch", "date"])
     summary_callback._get_data_lines(df, ["key1"], lines, x_filter, x_key)
-    plotly_mock.Scatter.assert_called_once()
+    plotly_mock.Scatter.assert_called()
 
 
 @pytest.mark.parametrize(
@@ -67,7 +67,7 @@ def test_get_lines_callback(monkeypatch, keys, lines, x_filter, x_key):
             df, ["key1"], lines, x_filter, x_key
         )
 
-        assert plotly_mock.Scatter.call_count == 3
-        assert traces == ["scatter", "scatter", "scatter"]
+        assert plotly_mock.Scatter.call_count == 5
+        assert traces == 5 * ["scatter"]
     except AssertionError as e:
         assert str(e) in "List of summary keys is required"

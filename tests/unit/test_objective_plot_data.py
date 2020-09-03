@@ -119,9 +119,13 @@ def test_objective_statistics_data_frame():
     assert set(objective_statistics.columns) == {
         "batch",
         "function",
-        "Mean",
+        "mean",
         "P10",
         "P90",
+        "min_value",
+        "max_value",
+        "min_realization",
+        "max_realization",
     }
     assert len(objective_statistics) == 2 * 2  # #batches * #functions
     assert set(objective_statistics["batch"]) == {obj["batch"] for obj in OBJECTIVES}
@@ -130,14 +134,17 @@ def test_objective_statistics_data_frame():
     }
 
 
-def test_objective_statistics_content():
+def test_objective_statistics_contenIt():
     """Test for the correct content of the objectives statistics data frame."""
     objective_values = _objective_values(pd.DataFrame(OBJECTIVES))
     objective_statistics = calculate_statistics(objective_values)
-
     mean = []
     p10 = []
     p90 = []
+    min_value = []
+    max_value = []
+    min_realization = []
+    max_realization = []
     for func in ["f0", "f1"]:
         for batch in [0, 2]:
             values = [
@@ -145,13 +152,25 @@ def test_objective_statistics_content():
                 for obj in OBJECTIVES
                 if obj["batch"] == batch and obj["function"] == func
             ]
+            realizations = [
+                obj["realization"]
+                for obj in OBJECTIVES
+                if obj["batch"] == batch and obj["function"] == func
+            ]
             mean.append(np.mean(values))
             p10.append(np.quantile(values, q=0.1))
             p90.append(np.quantile(values, q=0.9))
-
-    assert objective_statistics["Mean"].to_list() == mean
+            min_value.append(np.min(values))
+            max_value.append(np.max(values))
+            min_realization.append(realizations[np.argmin(values)])
+            max_realization.append(realizations[np.argmax(values)])
+    assert objective_statistics["mean"].to_list() == mean
     assert objective_statistics["P10"].to_list() == p10
     assert objective_statistics["P90"].to_list() == p90
+    assert objective_statistics["min_value"].to_list() == min_value
+    assert objective_statistics["max_value"].to_list() == max_value
+    assert objective_statistics["min_realization"].to_list() == min_realization
+    assert objective_statistics["max_realization"].to_list() == max_realization
 
 
 def test_set_up_sources(mocker, monkeypatch, tmpdir):

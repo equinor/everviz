@@ -1,3 +1,4 @@
+from time import sleep
 import pandas as pd
 from everviz.plugins.objectives_plot.objectives_plot import ObjectivesPlot
 from everviz.pages.objectives import _objective_values
@@ -89,6 +90,7 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.start_server(app)
 
     # Tests warning label not there
+    sleep(0.1)
     assert (
         "Statistics are calculated"
         not in dash_duo.find_element(f"#{plugin.label_id}").text
@@ -96,6 +98,7 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     # Test statistics plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 1)).click()
     # Tests warning label is there
+    sleep(0.1)
     assert (
         "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
     )
@@ -105,6 +108,7 @@ def test_objective_plot_callback(app, dash_duo, mocker, caplog):
     # Test values plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
     # Tests warning label not there
+    sleep(0.1)
     assert (
         "Statistics are calculated"
         not in dash_duo.find_element(f"#{plugin.label_id}").text
