@@ -180,6 +180,7 @@ class WellsPlot(EvervizPluginABC):
                 "layout": dict(
                     xaxis={"title": "Date"},
                     yaxis={"title": "Well rates"},
+                    hovermode="closest",
                 ),
             }
 

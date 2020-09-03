@@ -245,5 +245,6 @@ class SummaryPlot(EvervizPluginABC):
                 "layout": dict(
                     xaxis={"title": self.xaxis.capitalize()},
                     yaxis={"title": "Summary Key Value"},
+                    hovermode="closest",
                 ),
             }

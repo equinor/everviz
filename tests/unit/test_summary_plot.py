@@ -64,6 +64,10 @@ def test_summary_statistics_data_frame():
         "mean",
         "P10",
         "P90",
+        "min_value",
+        "max_value",
+        "min_realization",
+        "max_realization",
     ]
     assert len(summary_statistics) == 2 * 3 * 2  # #batches * #dates * #keys
     assert set(summary_statistics["summary_key"]) == set(["key1", "key2"])
@@ -81,19 +85,39 @@ def test_summary_statistics_content():
     mean = []
     p10 = []
     p90 = []
+    min_value = []
+    max_value = []
+    min_realization = []
+    max_realization = []
     for key in ["key1", "key2"]:
-        zipped = list(zip(__TEST_DATA["batch"], __TEST_DATA["date"], __TEST_DATA[key]))
+        zipped = list(
+            zip(
+                __TEST_DATA["batch"],
+                __TEST_DATA["date"],
+                __TEST_DATA[key],
+                __TEST_DATA["realization"],
+            )
+        )
         for batch in [0, 1]:
             for date in [
                 datetime(2000, 1, 1),
                 datetime(2000, 2, 1),
                 datetime(2000, 3, 1),
             ]:
-                values = [v for b, d, v in zipped if batch == b and date == d]
+                values = [v for b, d, v, _ in zipped if batch == b and date == d]
+                realizations = [r for b, d, _, r in zipped if batch == b and date == d]
                 mean.append(np.mean(values))
                 p10.append(np.quantile(values, q=0.1))
                 p90.append(np.quantile(values, q=0.9))
+                min_value.append(np.min(values))
+                max_value.append(np.max(values))
+                min_realization.append(realizations[np.argmin(values)])
+                max_realization.append(realizations[np.argmax(values)])
 
     assert summary_statistics["mean"].to_list() == mean
     assert summary_statistics["P10"].to_list() == p10
     assert summary_statistics["P90"].to_list() == p90
+    assert summary_statistics["min_value"].to_list() == min_value
+    assert summary_statistics["max_value"].to_list() == max_value
+    assert summary_statistics["min_realization"].to_list() == min_realization
+    assert summary_statistics["max_realization"].to_list() == max_realization
