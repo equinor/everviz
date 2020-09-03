@@ -16,7 +16,7 @@ def _get_statistics_lines(
     """
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     traces = []
-    for color, key in zip(colors, summary_key_list):
+    for key in summary_key_list:
         # Select all data belonging to the current key.
         key_data = data.xs(key, level="summary_key", drop_level=True)
 
@@ -28,6 +28,9 @@ def _get_statistics_lines(
             name = key
             if len(line_list) > 1:
                 name += f", {x_filter}:{line}"
+
+            # Select new color for the trace lines
+            color = next(colors)
 
             # Make the traces, with mean, P10 and P90, shading in between.
             traces.extend(
@@ -101,7 +104,7 @@ def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="ma
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     realizations = data["realization"].unique()
     traces = []
-    for color, key in zip(colors, summary_key_list):
+    for key in summary_key_list:
         # Select all data belonging to the current key.
         key_data = data[[key, "realization"]]
         for line in line_list:
@@ -114,6 +117,7 @@ def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="ma
             # Plot each realization separately, adapting the hovertext.
             show_legend = True
             for real in realizations:
+                color = next(colors)
                 line = line_data[line_data["realization"].isin([real])]
                 traces.append(
                     go.Scatter(

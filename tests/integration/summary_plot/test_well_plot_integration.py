@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 import pandas as pd
 import pytest
@@ -39,6 +40,7 @@ def test_well_plot(app, dash_duo, mocker, caplog):
     app.layout = plugin.layout
     dash_duo.start_server(app)
 
+    time.sleep(1)
     # Tests warning label not there
     assert (
         "Statistics are calculated"
@@ -50,6 +52,7 @@ def test_well_plot(app, dash_duo, mocker, caplog):
     dash_duo.find_element(
         "#{} label:nth-child({})".format(plugin.radio_statistics, 2)
     ).click()
+    time.sleep(1)
     # Tests warning label is there
     assert (
         "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
