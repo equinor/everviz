@@ -216,9 +216,7 @@ class SummaryPlot(EvervizPluginABC):
             # The key_list arguments is the list of keys to plot. The line_list
             # argument is a list of batches, or a list of dates to plot for
             # those keys.
-            if key_list is None or line_list is None:
-                return {}
-            if len(key_list) + len(line_list) <= 1:
+            if not key_list or not line_list:
                 return {}
 
             data = get_data(self.csv_file)
