@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import sleep
 import pandas as pd
 from everviz.plugins.summary_plot.summary_plot import SummaryPlot
 from everviz.pages.summary_values import _summary_values
@@ -38,10 +37,7 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.start_server(app)
 
     # Test statistics plot.
-    sleep(0.1)
-    assert (
-        "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
-    )
+    dash_duo.wait_for_contains_text(f"#{plugin.label_id}", "Statistics are calculated")
 
     # Test data plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
@@ -49,11 +45,7 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.select_dcc_dropdown("#{}".format(plugin.key_dropdown_id), "key1")
 
     # Tests warning label not there
-    sleep(0.1)
-    assert (
-        "Statistics are calculated"
-        not in dash_duo.find_element(f"#{plugin.label_id}").text
-    )
+    dash_duo.wait_for_contains_text(f"#{plugin.label_id}", "")
 
     # Test filtering realizations.
     dash_duo.find_element(

@@ -1,5 +1,4 @@
 from datetime import datetime
-import time
 
 import pandas as pd
 import pytest
@@ -40,23 +39,18 @@ def test_well_plot(app, dash_duo, mocker, caplog):
     app.layout = plugin.layout
     dash_duo.start_server(app)
 
-    time.sleep(1)
     # Tests warning label not there
-    assert (
-        "Statistics are calculated"
-        not in dash_duo.find_element(f"#{plugin.label_id}").text
-    )
+    dash_duo.wait_for_contains_text(f"#{plugin.label_id}", "")
+
     dash_duo.clear_input("#{}".format(plugin.dropdown_key))
     dash_duo.select_dcc_dropdown("#{}".format(plugin.dropdown_key), "WOPR:OP1")
     result = dash_duo.find_element("#{}".format(plugin.dropdown_key)).text.split()[0]
     dash_duo.find_element(
         "#{} label:nth-child({})".format(plugin.radio_statistics, 2)
     ).click()
-    time.sleep(1)
+
     # Tests warning label is there
-    assert (
-        "Statistics are calculated" in dash_duo.find_element(f"#{plugin.label_id}").text
-    )
+    dash_duo.wait_for_contains_text(f"#{plugin.label_id}", "Statistics are calculated")
 
     for record in caplog.records:
         assert record.levelname != "ERROR"
