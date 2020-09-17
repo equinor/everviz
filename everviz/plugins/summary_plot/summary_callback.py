@@ -16,7 +16,7 @@ def _get_statistics_lines(
     """
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     traces = []
-    for key in summary_key_list:
+    for idx, key in enumerate(summary_key_list):
         # Select all data belonging to the current key.
         key_data = data.xs(key, level="summary_key", drop_level=True)
 
@@ -31,7 +31,6 @@ def _get_statistics_lines(
 
             # Select new color for the trace lines
             color = next(colors)
-
             # Make the traces, with mean, P10 and P90, shading in between.
             traces.extend(
                 [
@@ -42,6 +41,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         line={"color": color},
                         name=name + "(P90)",
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                         showlegend=False,
                     ),
                     go.Scatter(
@@ -52,6 +52,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         fill="tonexty",
                         name=name + "(P10)",
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                         showlegend=False,
                     ),
                     go.Scatter(
@@ -61,6 +62,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         line={"color": color},
                         name=name,
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                         showlegend=True,
                     ),
                     go.Scatter(
@@ -70,6 +72,7 @@ def _get_statistics_lines(
                         marker={"size": 10, "symbol": "square"},
                         line={"color": color},
                         name=key,
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                         showlegend=False,
                         hovertext=[
                             f"realization: {r}" for r in line_data["min_realization"]
@@ -83,6 +86,7 @@ def _get_statistics_lines(
                         line={"color": color},
                         name=key,
                         showlegend=False,
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                         hovertext=[
                             f"realization: {r}" for r in line_data["max_realization"]
                         ],
@@ -104,7 +108,7 @@ def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="ma
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     realizations = data["realization"].unique()
     traces = []
-    for key in summary_key_list:
+    for idx, key in enumerate(summary_key_list):
         # Select all data belonging to the current key.
         key_data = data[[key, "realization"]]
         for line in line_list:
@@ -129,6 +133,7 @@ def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="ma
                         showlegend=show_legend,
                         line={"color": color},
                         hovertext=f"realization:{real}",
+                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
                     )
                 )
                 show_legend = False
@@ -139,3 +144,37 @@ def get_callback_func(statistics):
     if statistics == "Statistics":
         return _get_statistics_lines
     return _get_data_lines
+
+
+def get_layout(summary_key_list, xaxis_title):
+    """
+    :param summary_key_list: List of summary keys to plot
+    :param xaxis_title: X-axis title for the plot
+    :return: The graph figure layout
+    """
+    layout = dict(
+        xaxis={"title": xaxis_title},
+        hovermode="closest",
+    )
+    colors = cycle(DEFAULT_PLOTLY_COLORS)
+    for idx, key in enumerate(summary_key_list):
+        color = next(colors)
+        y_axis = f"yaxis{idx + 1}" if idx > 0 else "yaxis"
+        layout.update(
+            {
+                y_axis: dict(
+                    title=key,
+                    titlefont=dict(color=color),
+                    tickfont=dict(color=color),
+                )
+            }
+        )
+        if idx > 0:
+            layout[y_axis].update(
+                dict(
+                    anchor="x",
+                    overlaying="y",
+                    side="right" if idx % 2 else "left",
+                )
+            )
+    return layout
