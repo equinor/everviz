@@ -234,12 +234,9 @@ class SummaryPlot(EvervizPluginABC):
             line_key = "batch" if self.xaxis == "date" else "date"
             line_filter = "batch" if line_key == "date" else "date"
             traces = callback(data, key_list, line_list, line_key, line_filter)
-
             return {
                 "data": traces,
-                "layout": dict(
-                    xaxis={"title": self.xaxis.capitalize()},
-                    yaxis={"title": "Summary Key Value"},
-                    hovermode="closest",
+                "layout": summary_callback.get_layout(
+                    summary_key_list=key_list, xaxis_title=self.xaxis.capitalize()
                 ),
             }

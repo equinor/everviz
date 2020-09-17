@@ -1,8 +1,10 @@
+from itertools import cycle
 from datetime import datetime
 from unittest import mock
 
 import pytest
 import pandas as pd
+from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 from everviz.plugins.summary_plot import summary_callback
 from everviz.plugins.summary_plot.util import calculate_statistics
@@ -71,3 +73,44 @@ def test_get_lines_callback(monkeypatch, keys, lines, x_filter, x_key):
         assert traces == 5 * ["scatter"]
     except AssertionError as e:
         assert str(e) in "List of summary keys is required"
+
+
+@pytest.mark.parametrize(
+    "keys, x_axis_title",
+    [
+        ([], "date"),
+        (["key1", "key2", "key3"], "batch"),
+    ],
+)
+def test_get_layout(keys, x_axis_title):
+    expected = dict(
+        xaxis={"title": x_axis_title},
+        hovermode="closest",
+    )
+    colors = cycle(DEFAULT_PLOTLY_COLORS)
+    for idx, key in enumerate(keys):
+        color = next(colors)
+        y_axis = f"yaxis{idx + 1}" if idx > 0 else "yaxis"
+        expected.update(
+            {
+                y_axis: dict(
+                    title=key,
+                    titlefont=dict(color=color),
+                    tickfont=dict(color=color),
+                )
+            }
+        )
+        if idx > 0:
+            expected[y_axis].update(
+                dict(
+                    anchor="x",
+                    overlaying="y",
+                    side="right" if idx % 2 else "left",
+                )
+            )
+
+    layout = summary_callback.get_layout(keys, x_axis_title)
+    assert expected == layout
+    if len(keys) > 0:
+        assert "yaxis1" not in layout
+        assert "yaxis3" in layout
