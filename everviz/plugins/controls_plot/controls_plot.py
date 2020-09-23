@@ -9,6 +9,7 @@ import plotly.graph_objs as go
 from dash.dependencies import Output, Input
 from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
+from everviz.util import base64encode
 
 
 class ControlsPlot(EvervizPluginABC):
@@ -78,15 +79,12 @@ class ControlsPlot(EvervizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return EvervizPluginABC.plugin_data_compress(
-                    [
-                        {
-                            "filename": Path(self.csv_file).name,
-                            "content": get_data(self.csv_file).to_csv(),
-                        }
-                    ]
-                )
-            return ""
+                return {
+                    "filename": Path(self.csv_file).name,
+                    "content": base64encode(get_data(self.csv_file).to_csv()),
+                    "mime_type": "text/csv",
+                }
+            return None
 
         @app.callback(
             Output(self.graph_id, "figure"),

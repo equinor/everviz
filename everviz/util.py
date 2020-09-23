@@ -1,4 +1,5 @@
 import os
+import base64
 from collections import defaultdict
 
 DEFAULT_CONFIG = "everviz_webviz_config.yml"
@@ -51,3 +52,7 @@ def get_placeholder_text(realizations):
         return f"example: {min_r}, {max_r}, {min_r}-{max_r}"
 
     return f"example: {realizations[0]}"
+
+
+def base64encode(csv):
+    return base64.b64encode(csv.encode("ascii")).decode("ascii")

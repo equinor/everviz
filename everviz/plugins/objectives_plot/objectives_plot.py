@@ -10,7 +10,7 @@ from plotly.colors import DEFAULT_PLOTLY_COLORS
 from dash.dependencies import Output, Input, State
 from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
-from everviz.util import parse_range, get_placeholder_text
+from everviz.util import parse_range, get_placeholder_text, base64encode
 
 from .util import calculate_statistics
 
@@ -164,15 +164,12 @@ class ObjectivesPlot(EvervizPluginABC):
                     content = calculate_statistics(content)
                 else:
                     filename = "objective_values.csv"
-                return EvervizPluginABC.plugin_data_compress(
-                    [
-                        {
-                            "filename": filename,
-                            "content": content.to_csv(),
-                        }
-                    ]
-                )
-            return ""
+                return {
+                    "filename": filename,
+                    "content": base64encode(content.to_csv()),
+                    "mime_type": "text/csv",
+                }
+            return None
 
         @app.callback(
             Output(self.realization_filter_input_id, "disabled"),
