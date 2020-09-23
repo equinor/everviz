@@ -11,7 +11,7 @@ from everviz.plugins.crossplot.callback.crossplot_callback import (
     get_graph_line,
     crossplot_update_graph,
 )
-from everviz.util import identify_indexed_controls
+from everviz.util import identify_indexed_controls, base64encode
 from everviz.plugins.crossplot.callback.crossplot_indexed_dropdown import (
     dropdown_callback,
 )
@@ -164,15 +164,12 @@ class CrossplotIndexed(EvervizPluginABC):
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
-                return EvervizPluginABC.plugin_data_compress(
-                    [
-                        {
-                            "filename": Path(self.data_path).name,
-                            "content": get_data(self.data_path).to_csv(),
-                        }
-                    ]
-                )
-            return ""
+                return {
+                    "filename": Path(self.data_path).name,
+                    "content": base64encode(csv=get_data(self.data_path).to_csv()),
+                    "mime_type": "text/csv",
+                }
+            return None
 
         @app.callback(
             Output(self.graph_id, "figure"),
