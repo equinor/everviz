@@ -22,7 +22,7 @@ setup(
         "pandas",
         "numpy",
         "dash",
-        "webviz-config",
+        "webviz-config>=0.2.0",
         "plotly",
         "flask",
     ],

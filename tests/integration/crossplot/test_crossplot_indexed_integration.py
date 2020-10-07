@@ -25,7 +25,9 @@ def test_crossplot_indexed_callback(app, dash_duo, monkeypatch, mocker, caplog):
     assert columns_names == options_x.text.split("\n")
     dash_duo.clear_input("#{}".format(plugin.dropdown_x_id))
 
-    dash_duo.find_element(f"#{plugin.graph_id}").click()
+    dash_duo.click_at_coord_fractions(
+        dash_duo.find_element(f"#{plugin.graph_id}"), 0, 0
+    )
 
     dropdown_y = dash_duo.find_element(f"#{plugin.dropdown_y_id}")
     dropdown_y.click()

@@ -49,13 +49,13 @@ def test_single_objective_plot_layout(
     ref_image = Image.open(ref_image_path)
 
     with tmpdir.as_cwd():
-        time.sleep(1)
+        time.sleep(10)
         dash_duo.driver.save_screenshot("example_snapshot.png")
         screen_shot = Image.open("example_snapshot.png")
 
     if screen_shot.size != ref_image.size:
         pytest.skip("Reference image size does not match {}".format(screen_shot.size))
-    assert_equal_images(ref_image, screen_shot, threshold=0.5)
+    assert_equal_images(ref_image, screen_shot, threshold=1.0)
 
     dash_duo.clear_input("#{}".format(plugin.function_dropdown_id))
 

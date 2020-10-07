@@ -34,7 +34,7 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
     dash_duo.driver.set_window_size(1024, 768)
     with tmpdir.as_cwd():
         # Graph can be slow to load, so we need to ensure it has loaded.
-        time.sleep(1)
+        time.sleep(10)
         dash_duo.driver.save_screenshot("example_snapshot.png")
         snapshot = Image.open("example_snapshot.png")
 
@@ -51,4 +51,4 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
         )
     )
 
-    assert_equal_images(reference_image, snapshot, threshold=0.5)
+    assert_equal_images(reference_image, snapshot, threshold=1.0)
