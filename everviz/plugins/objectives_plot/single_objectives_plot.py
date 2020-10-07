@@ -65,7 +65,6 @@ class SingleObjectivesPlot(EvervizPluginABC):
                         dcc.Graph(
                             id=self.graph_id,
                             config={
-                                "modeBarButtonsToRemove": ["toImage"],
                                 "displaylogo": False,
                             },
                         )
