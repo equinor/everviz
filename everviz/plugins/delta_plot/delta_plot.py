@@ -83,6 +83,13 @@ class DeltaPlot(EvervizPluginABC):
                 ]
             )
 
+        if "objective" in self.csv_file:
+            plot_filename = "delta_objectives"
+        elif "summary" in self.csv_file:
+            plot_filename = "delta_summary"
+        else:
+            plot_filename = "delta"
+
         return html.Div(
             [
                 html.Div(
@@ -96,7 +103,17 @@ class DeltaPlot(EvervizPluginABC):
                             },
                         ),
                         html.Div(
-                            [dcc.Graph(id=self.graph_id)],
+                            [
+                                dcc.Graph(
+                                    id=self.graph_id,
+                                    config={
+                                        "displaylogo": False,
+                                        "toImageButtonOptions": {
+                                            "filename": plot_filename
+                                        },
+                                    },
+                                )
+                            ],
                             style={"width": "69%", "display": "inline-block"},
                         ),
                     ]

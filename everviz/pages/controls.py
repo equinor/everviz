@@ -56,15 +56,8 @@ def page_layout(api):
             {"ControlsPlot": {"csv_file": sources.controls_per_batch}},
             "## Initial controls versus best controls",
             {
-                "TablePlotter": {
-                    "lock": True,
+                "BestControlsPlot": {
                     "csv_file": sources.controls_initial_vs_best,
-                    "plot_options": {
-                        "x": "control",
-                        "y": "value",
-                        "type": "scatter",
-                        "color": "batch",
-                    },
                 }
             },
         ],
