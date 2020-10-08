@@ -41,6 +41,7 @@ setup(
             "ObjectivesPlot = everviz.plugins:ObjectivesPlot",
             "SingleObjectivesPlot = everviz.plugins:SingleObjectivesPlot",
             "ControlsPlot = everviz.plugins:ControlsPlot",
+            "BestControlsPlot = everviz.plugins:BestControlsPlot",
             "DeltaPlot = everviz.plugins:DeltaPlot",
             "ConfigEditor = everviz.plugins:ConfigEditor",
             "WellsPlot = everviz.plugins:WellsPlot",

@@ -133,6 +133,9 @@ class SummaryPlot(EvervizPluginABC):
                                     id=self.graph_id,
                                     config={
                                         "displaylogo": False,
+                                        "toImageButtonOptions": {
+                                            "filename": f"summary_by_{self.xaxis}"
+                                        },
                                     },
                                 )
                             ],

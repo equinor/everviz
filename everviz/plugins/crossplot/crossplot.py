@@ -104,6 +104,9 @@ class Crossplot(EvervizPluginABC):
                                     id=self.graph_id,
                                     config={
                                         "displaylogo": False,
+                                        "toImageButtonOptions": {
+                                            "filename": "crossplot"
+                                        },
                                     },
                                 )
                             ],
