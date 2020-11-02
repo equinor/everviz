@@ -29,14 +29,3 @@ install:
 
 script:
     - tox
-
-deploy:
-  - provider: pypi
-    distributions: bdist_wheel sdist
-    skip_existing: true
-    user: statoil-travis
-    password:
-      secure: hnOLsz/JpdeCKYGjw2msTPAQe6W5k9Maner4HySo6HYoWbYqYtkWcboo9f69Mfi7YSAdq+zdeOmwOSLEmcN9Fkh/RxVce+9vkvDmCv+EFmQrilQIwkYA7YTA2T9ylV/b/zknhnX86ucr9+zBM3J9Gb3w0AbdG3/MxXmDpWFJ0Vg9HZWGnevY17j4JxwGSSIhRstJFHzbnYCpYK4+t4p8lOUUIEl7TgU2GWltIRGoc8Ir7obDEkzTsFfF7kfntI7gdGBqpwcQWfApUEl9DoVdtSIRExh2TMzVfVrBzQ+YNvNBqdzW5/AjbrYcP/EYGPnET/zOS0z8hruJ0nxKMz6dtiXbAbqrPppx1WfwQQHakvo+SB4HZ9RXDizA2WWR9gY01n47UF7JCojEgqO0Rfl6hkzHl1V06j+e+WarYB70p/aIz3VEFyEGju/3TNqhxRXvVJUTFllUYcfP0bjoQNVs9iPPNwO4yZwv9oV004uFKD2DeeaGI11cu8cZH+HLMD/j8v3FfqO9G5t+U4aFKLJOw9nPjU7cnV1VLWo5w45k5rGHos4EteaJqYeWAHzAHx3CVsNkdaJnuntjh1SNCrtIf3rLvzVBAqyE/3em4+NxIi7MnRMDNGH8wx+5rITDN/ZturXPSjQIeFMd/+AAfwzlk/7/xU5zOh5YYELSfmRyR6Y=
-    on:
-      tags: true
-      branch: master
