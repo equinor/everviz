@@ -1,5 +1,5 @@
-[![PyPI Latest Release](https://img.shields.io/pypi/v/everviz.svg)](https://pypi.org/project/everviz/)
-[![Build Status](https://travis-ci.com/equinor/everviz.svg?branch=master)](https://travis-ci.com/equinor/everviz)
+![Publish Python 🐍 distributions 📦 to PyPI](https://github.com/equinor/everviz/workflows/Publish%20Python%20%F0%9F%90%8D%20distributions%20%F0%9F%93%A6%20to%20PyPI/badge.svg)
+![Python package](https://github.com/equinor/everviz/workflows/Python%20package/badge.svg)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
