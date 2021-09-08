@@ -166,7 +166,9 @@ class WellsPlot(EvervizPluginABC):
 
             callback = summary_callback.get_callback_func(statistics)
 
-            traces = callback(df, well_keys, batch_list, "batch", "date")
+            traces = callback(
+                df, well_keys, batch_list, "batch", "date", multi_axis=False
+            )
             if target_rate == "On":
                 target_keys = _get_target_keys(df, well_keys)
                 traces.extend(

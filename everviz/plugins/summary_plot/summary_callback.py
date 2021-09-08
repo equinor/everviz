@@ -4,8 +4,8 @@ import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 
-def _get_statistics_lines(
-    data, summary_key_list, line_list, x_filter, x_key, mode="lines"
+def _get_statistics_lines(  # pylint: disable=too-many-locals
+    data, summary_key_list, line_list, x_filter, x_key, mode="lines", multi_axis=True
 ):
     """
     :param data: Dataframe
@@ -41,7 +41,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         line={"color": color},
                         name=name + "(P90)",
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=False,
                     ),
                     go.Scatter(
@@ -52,7 +52,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         fill="tonexty",
                         name=name + "(P10)",
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=False,
                     ),
                     go.Scatter(
@@ -62,7 +62,7 @@ def _get_statistics_lines(
                         marker={"size": 10},
                         line={"color": color},
                         name=name,
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=True,
                     ),
                     go.Scatter(
@@ -72,7 +72,7 @@ def _get_statistics_lines(
                         marker={"size": 10, "symbol": "square"},
                         line={"color": color},
                         name=key,
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=False,
                         hovertext=[
                             f"realization: {r}" for r in line_data["min_realization"]
@@ -86,7 +86,7 @@ def _get_statistics_lines(
                         line={"color": color},
                         name=key,
                         showlegend=False,
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         hovertext=[
                             f"realization: {r}" for r in line_data["max_realization"]
                         ],
@@ -96,7 +96,9 @@ def _get_statistics_lines(
     return traces
 
 
-def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="markers"):
+def _get_data_lines(
+    data, summary_key_list, line_list, x_filter, x_key, mode="markers", multi_axis=True
+):
     """
     :param data: Dataframe
     :param summary_key_list: List of summary keys to plot
@@ -133,7 +135,7 @@ def _get_data_lines(data, summary_key_list, line_list, x_filter, x_key, mode="ma
                         showlegend=show_legend,
                         line={"color": color},
                         hovertext=f"realization:{real}",
-                        yaxis=f"y{idx + 1}" if idx > 0 else "y",
+                        yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                     )
                 )
                 show_legend = False
@@ -146,7 +148,7 @@ def get_callback_func(statistics):
     return _get_data_lines
 
 
-def get_layout(summary_key_list, xaxis_title):
+def get_layout(summary_key_list, xaxis_title, multi_axis=True):
     """
     :param summary_key_list: List of summary keys to plot
     :param xaxis_title: X-axis title for the plot
@@ -159,7 +161,7 @@ def get_layout(summary_key_list, xaxis_title):
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     for idx, key in enumerate(summary_key_list):
         color = next(colors)
-        y_axis = f"yaxis{idx + 1}" if idx > 0 else "yaxis"
+        y_axis = f"yaxis{idx + 1}" if idx > 0 and multi_axis else "yaxis"
         layout.update(
             {
                 y_axis: dict(
