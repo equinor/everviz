@@ -39,12 +39,12 @@ class ConfigEditor(EvervizPluginABC):
         self.set_callbacks(app)
 
     def get_config_str(self):
-        with open(self.data_path, "r") as f:
+        with open(self.data_path, "r", encoding="utf-8") as f:
             return f.read()
 
     @staticmethod
     def write_config(config, path):
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf-8") as f:
             yaml.safe_dump(config, f, default_flow_style=False, sort_keys=False)
 
     def update_everviz_config(self, new_config_text):

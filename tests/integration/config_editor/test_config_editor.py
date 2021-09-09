@@ -48,7 +48,7 @@ def write_text_area(driver, css_selector, text):
 def test_config_editor_callback(app, dash_duo, caplog, tmpdir):
     with tmpdir.as_cwd():
         config_file = "everviz_config.yml"
-        with open(config_file, "w") as f:
+        with open(config_file, "w", encoding="utf-8") as f:
             f.write(everviz_config_1)
 
         plugin = ConfigEditor(app, config_file)
