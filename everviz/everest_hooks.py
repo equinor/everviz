@@ -15,7 +15,9 @@ def handle_exit(*args):  # pylint: disable=unused-argument)
     print("Session terminated by the user.\n" "Thank you for using Everviz!")
     print("=" * 32)
     sys.tracebacklimit = 0
-    sys.stdout = open(os.devnull, "w")
+    sys.stdout = open(  # pylint: disable=consider-using-with
+        os.devnull, "w", encoding="utf-8"
+    )
     sys.exit()
 
 

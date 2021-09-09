@@ -30,8 +30,6 @@ def test_everest_hooks_registered():
         if not str(err).startswith("Plugin already registered"):
             raise err
     assert any(
-        [
-            hook.plugin_name.startswith("everviz")
-            for hook in pm.hook.visualize_data.get_hookimpls()
-        ]
+        hook.plugin_name.startswith("everviz")
+        for hook in pm.hook.visualize_data.get_hookimpls()  # pylint: disable=no-member
     )
