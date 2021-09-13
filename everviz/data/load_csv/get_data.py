@@ -6,4 +6,4 @@ from webviz_config.webviz_store import webvizstore
 @CACHE.memoize(timeout=CACHE.TIMEOUT)
 @webvizstore
 def get_data(data_path) -> pd.DataFrame:
-    return pd.Dataframe(pd.read_csv(data_path, sep=None, engine="python"))
+    return pd.DataFrame(pd.read_csv(data_path, sep=None, engine="python"))
