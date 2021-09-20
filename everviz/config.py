@@ -11,6 +11,7 @@ from everviz.pages import (
     objectives,
     deltaplot,
     wells_values,
+    gradientplot,
 )
 
 logger = get_logger()
@@ -27,6 +28,7 @@ def webviz_config(api):
         wells_values.page_layout(api),
         crossplot.page_layout(api),
         controls.page_layout(api),
+        gradientplot.page_layout(api),
         deltaplot.page_layout(api),
         configuration.page_layout(api),
     ]
