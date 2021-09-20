@@ -53,6 +53,11 @@ def test_webviz_config(mocker, monkeypatch):
         "page_layout",
         mocker.Mock(return_value={}),
     )
+    monkeypatch.setattr(
+        everviz.pages.gradientplot,
+        "page_layout",
+        mocker.Mock(return_value=""),
+    )
 
     expected_config = {
         "title": "Everest Optimization Report",

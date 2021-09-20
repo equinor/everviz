@@ -6,5 +6,6 @@ from everviz.plugins.objectives_plot.single_objectives_plot import SingleObjecti
 from everviz.plugins.controls_plot.controls_plot import ControlsPlot
 from everviz.plugins.best_controls_plot.best_controls_plot import BestControlsPlot
 from everviz.plugins.delta_plot.delta_plot import DeltaPlot
+from everviz.plugins.gradient_plot import GradientPlot
 from everviz.plugins.config_editor.config_editor import ConfigEditor
 from everviz.plugins.summary_plot.wells_plot import WellsPlot

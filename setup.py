@@ -43,6 +43,7 @@ setup(
             "ControlsPlot = everviz.plugins:ControlsPlot",
             "BestControlsPlot = everviz.plugins:BestControlsPlot",
             "DeltaPlot = everviz.plugins:DeltaPlot",
+            "GradientPlot = everviz.plugins:GradientPlot",
             "ConfigEditor = everviz.plugins:ConfigEditor",
             "WellsPlot = everviz.plugins:WellsPlot",
         ],
