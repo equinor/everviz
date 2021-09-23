@@ -2,11 +2,10 @@ from uuid import uuid4
 from pathlib import Path
 
 from pandas import IndexSlice
-import dash_html_components as html
-import dash_core_components as dcc
 
 import plotly.graph_objs as go
 
+from dash import html, dcc
 from dash.dependencies import Output, Input
 from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data

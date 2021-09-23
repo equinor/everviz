@@ -21,7 +21,7 @@ setup(
         "pyyaml",
         "pandas",
         "numpy",
-        "dash",
+        "dash>=2.0",
         "webviz-config>=0.2.0",
         "plotly",
         "flask",

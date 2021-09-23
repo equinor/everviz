@@ -1,8 +1,7 @@
 from uuid import uuid4
 from pathlib import Path
 
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html, dcc
 
 import plotly.express as px
 

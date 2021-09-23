@@ -2,12 +2,10 @@ from uuid import uuid4
 from pathlib import Path
 from itertools import cycle
 
-import dash_html_components as html
-import dash_core_components as dcc
-
 import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
+from dash import html, dcc
 from dash.dependencies import Output, Input
 from everviz.data.load_csv.get_data import get_data
 from everviz.plugins.plugin_abc import EvervizPluginABC
