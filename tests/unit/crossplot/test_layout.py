@@ -3,7 +3,7 @@ import time
 
 import dash
 import pytest
-import dash_html_components as html
+from dash import html
 import pandas as pd
 from PIL import Image
 
