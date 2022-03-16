@@ -35,7 +35,7 @@ def test_empty_summary_values(mocker):
     mock_api.output_folder = "dummy"
     mock_api.summary_values.return_value = pd.DataFrame()
     layout = page_layout(mock_api)
-    assert layout == {}
+    assert not layout
 
 
 def test_summary_values_data_frame():

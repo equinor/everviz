@@ -122,8 +122,8 @@ def _get_data_lines(
                 name += f", {x_filter}:{line}"
             # Plot each realization separately, adapting the hovertext.
             show_legend = True
+            color = next(colors)
             for real in realizations:
-                color = next(colors)
                 line = line_data[line_data["realization"].isin([real])]
                 traces.append(
                     go.Scattergl(
