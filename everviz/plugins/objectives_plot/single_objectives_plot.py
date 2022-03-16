@@ -104,7 +104,7 @@ class SingleObjectivesPlot(EvervizPluginABC):
             for name, color in zip(function_list, colors):
                 if name != "objective":
                     traces.append(
-                        go.Scatter(
+                        go.Scattergl(
                             y=data[name],
                             x=data.batch,
                             mode="lines+markers",
@@ -115,14 +115,14 @@ class SingleObjectivesPlot(EvervizPluginABC):
                 else:
                     traces.extend(
                         [
-                            go.Scatter(
+                            go.Scattergl(
                                 y=accepted_data[name],
                                 x=accepted_data.batch,
                                 mode="lines+markers",
                                 marker={"color": "blue", "size": 10},
                                 name="accepted",
                             ),
-                            go.Scatter(
+                            go.Scattergl(
                                 y=not_accepted_data[name],
                                 x=not_accepted_data.batch,
                                 mode="markers",

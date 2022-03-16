@@ -29,7 +29,7 @@ def get_graph_line(
     line_shape=None,
     name=None,
 ):
-    return go.Scatter(
+    return go.Scattergl(
         y=y_data if yaxis_option != "Cumulative" else np.cumsum(y_data),
         x=x_data if xaxis_option != "Cumulative" else np.cumsum(x_data),
         mode=mode,

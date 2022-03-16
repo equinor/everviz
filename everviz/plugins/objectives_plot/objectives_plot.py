@@ -260,7 +260,7 @@ class ObjectivesPlot(EvervizPluginABC):
 
 def statistics_traces(color, func_data, key, plot_mode):
     return [
-        go.Scatter(
+        go.Scattergl(
             y=func_data["P90"],
             x=func_data["batch"],
             mode=plot_mode,
@@ -269,7 +269,7 @@ def statistics_traces(color, func_data, key, plot_mode):
             name=key + "(P90)",
             showlegend=False,
         ),
-        go.Scatter(
+        go.Scattergl(
             y=func_data["P10"],
             x=func_data["batch"],
             mode=plot_mode,
@@ -279,7 +279,7 @@ def statistics_traces(color, func_data, key, plot_mode):
             name=key + "(P10)",
             showlegend=False,
         ),
-        go.Scatter(
+        go.Scattergl(
             y=func_data["mean"],
             x=func_data["batch"],
             mode=plot_mode,
@@ -288,7 +288,7 @@ def statistics_traces(color, func_data, key, plot_mode):
             name=key,
             showlegend=True,
         ),
-        go.Scatter(
+        go.Scattergl(
             y=func_data["min_value"],
             x=func_data["batch"],
             mode="markers",
@@ -298,7 +298,7 @@ def statistics_traces(color, func_data, key, plot_mode):
             showlegend=False,
             hovertext=[f"realization: {r}" for r in func_data["min_realization"]],
         ),
-        go.Scatter(
+        go.Scattergl(
             y=func_data["max_value"],
             x=func_data["batch"],
             mode="markers",
@@ -336,7 +336,7 @@ def function_traces(
         if mode == "lines":
             mode = "lines+markers"
 
-        yield go.Scatter(
+        yield go.Scattergl(
             y=y_values,
             x=line["batch"],
             mode=mode,
