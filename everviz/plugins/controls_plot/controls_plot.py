@@ -102,7 +102,7 @@ class ControlsPlot(EvervizPluginABC):
             for control in control_list:
                 control_data = data.xs(control)
                 traces.append(
-                    go.Scatter(
+                    go.Scattergl(
                         y=control_data["value"],
                         x=control_data["batch"],
                         mode="lines",

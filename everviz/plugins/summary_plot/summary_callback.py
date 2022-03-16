@@ -34,7 +34,7 @@ def _get_statistics_lines(  # pylint: disable=too-many-locals
             # Make the traces, with mean, P10 and P90, shading in between.
             traces.extend(
                 [
-                    go.Scatter(
+                    go.Scattergl(
                         y=line_data["P90"],
                         x=line_data[x_key],
                         mode=mode,
@@ -44,7 +44,7 @@ def _get_statistics_lines(  # pylint: disable=too-many-locals
                         yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=False,
                     ),
-                    go.Scatter(
+                    go.Scattergl(
                         y=line_data["P10"],
                         x=line_data[x_key],
                         mode=mode,
@@ -55,7 +55,7 @@ def _get_statistics_lines(  # pylint: disable=too-many-locals
                         yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=False,
                     ),
-                    go.Scatter(
+                    go.Scattergl(
                         y=line_data["mean"],
                         x=line_data[x_key],
                         mode=mode,
@@ -65,7 +65,7 @@ def _get_statistics_lines(  # pylint: disable=too-many-locals
                         yaxis=f"y{idx + 1}" if idx > 0 and multi_axis else "y",
                         showlegend=True,
                     ),
-                    go.Scatter(
+                    go.Scattergl(
                         y=line_data["min_value"],
                         x=line_data[x_key],
                         mode="markers",
@@ -78,7 +78,7 @@ def _get_statistics_lines(  # pylint: disable=too-many-locals
                             f"realization: {r}" for r in line_data["min_realization"]
                         ],
                     ),
-                    go.Scatter(
+                    go.Scattergl(
                         y=line_data["max_value"],
                         x=line_data[x_key],
                         mode="markers",
@@ -126,7 +126,7 @@ def _get_data_lines(
                 color = next(colors)
                 line = line_data[line_data["realization"].isin([real])]
                 traces.append(
-                    go.Scatter(
+                    go.Scattergl(
                         y=line[key],
                         x=line[x_key],
                         mode=mode,
