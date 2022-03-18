@@ -28,7 +28,8 @@ class SummaryPlot(EvervizPluginABC):
         super().__init__()
 
         self.graph_id = f"graph-{uuid4()}"
-        self.key_dropdown_id = f"dropdown-{uuid4()}"
+        self.key1_dropdown_id = f"dropdown-{uuid4()}"
+        self.key2_dropdown_id = f"dropdown-{uuid4()}"
         self.xaxis_dropdown_id = f"dropdown-{uuid4()}"
         self.radio_id = f"radio-{uuid4()}"
         self.realization_filter_check_id = f"check-{uuid4()}"
@@ -65,9 +66,18 @@ class SummaryPlot(EvervizPluginABC):
                 "dropdown",
                 {
                     "title": "Keywords to plot:",
-                    "item_id": self.key_dropdown_id,
+                    "item_id": self.key1_dropdown_id,
                     "options": key_dropdown_options,
-                    "multi": True,
+                    "multi": False,
+                },
+            ),
+            (
+                "dropdown",
+                {
+                    "item_id": self.key2_dropdown_id,
+                    "options": key_dropdown_options,
+                    "multi": False,
+                    "set_initial_value": False,
                 },
             ),
             (
@@ -150,7 +160,8 @@ class SummaryPlot(EvervizPluginABC):
             self.plugin_data_output,
             [self.plugin_data_requested],
             [
-                State(self.key_dropdown_id, "value"),
+                State(self.key1_dropdown_id, "value"),
+                State(self.key2_dropdown_id, "value"),
                 State(self.radio_id, "value"),
                 State(self.realization_filter_check_id, "value"),
                 State(self.realization_filter_input_id, "value"),
@@ -158,11 +169,18 @@ class SummaryPlot(EvervizPluginABC):
         )
         def user_download_data(
             data_requested,
-            key_list,
+            key1,
+            key2,
             radio_value,
             realizations_check,
             realizations_input,
         ):
+            key_list = []
+            if key1:
+                key_list.append(key1)
+            if key2:
+                key_list.append(key2)
+
             if data_requested and key_list is not None and len(key_list) > 0:
                 content = get_data(self.csv_file)
                 if realizations_check:
@@ -201,7 +219,8 @@ class SummaryPlot(EvervizPluginABC):
         @app.callback(
             Output(self.graph_id, "figure"),
             [
-                Input(self.key_dropdown_id, "value"),
+                Input(self.key1_dropdown_id, "value"),
+                Input(self.key2_dropdown_id, "value"),
                 Input(self.xaxis_dropdown_id, "value"),
                 Input(self.radio_id, "value"),
                 Input(self.realization_filter_check_id, "value"),
@@ -209,11 +228,17 @@ class SummaryPlot(EvervizPluginABC):
             ],
         )
         def update_graph(
-            key_list, line_list, radio_value, realizations_check, realizations_input
+            key1, key2, line_list, radio_value, realizations_check, realizations_input
         ):
             # The key_list arguments is the list of keys to plot. The line_list
             # argument is a list of batches, or a list of dates to plot for
             # those keys.
+            key_list = []
+            if key1:
+                key_list.append(key1)
+            if key2:
+                key_list.append(key2)
+
             if not key_list or not line_list:
                 return {}
 

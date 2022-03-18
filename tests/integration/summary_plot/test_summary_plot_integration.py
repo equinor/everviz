@@ -41,8 +41,8 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
 
     # Test data plot.
     dash_duo.find_element("#{} label:nth-child({})".format(plugin.radio_id, 2)).click()
-    dash_duo.clear_input("#{}".format(plugin.key_dropdown_id))
-    dash_duo.select_dcc_dropdown("#{}".format(plugin.key_dropdown_id), "key1")
+    dash_duo.clear_input("#{}".format(plugin.key1_dropdown_id))
+    dash_duo.select_dcc_dropdown("#{}".format(plugin.key1_dropdown_id), "key1")
 
     # Tests warning label not there
     dash_duo.wait_for_contains_text(f"#{plugin.label_id}", "")
@@ -61,7 +61,7 @@ def test_summary_plot_callback(app, dash_duo, mocker, caplog):
     # button, you get an error, because the the dropdown stays open and overlaps
     # with the radio buttons.
     dash_duo.clear_input("#{}".format(plugin.xaxis_dropdown_id))
-    dash_duo.clear_input("#{}".format(plugin.key_dropdown_id))
+    dash_duo.clear_input("#{}".format(plugin.key1_dropdown_id))
 
     for record in caplog.records:
         assert record.levelname != "ERROR"
