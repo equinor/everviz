@@ -14,7 +14,7 @@ _DATA = [
 ]
 
 
-def test_gradient_plot_callback(app, dash_duo, mocker, caplog):
+def test_gradient_plot_callback(app, dash_duo, mocker, caplog, helpers):
     mocker.patch(
         "everviz.plugins.gradient_plot.get_data",
         return_value=pd.DataFrame(_DATA),
@@ -23,6 +23,18 @@ def test_gradient_plot_callback(app, dash_duo, mocker, caplog):
     plugin = GradientPlot(app, "dummy")
     app.layout = plugin.layout
     dash_duo.start_server(app)
+
+    control_list_id = f"#multi-selector_id_{plugin.list_select_id}"
+    control_selected_id = f"#selected_dropdown_id_{plugin.list_select_id}"
+
+    dash_duo.wait_for_contains_text(control_list_id, "c1\nc2", timeout=5)
+
+    first_control = helpers.select_first(dash_duo, control_list_id)
+    dash_duo.wait_for_text_to_equal(control_list_id, "c2", timeout=5)
+
+    second_control = helpers.select_first(dash_duo, control_list_id)
+    assert {first_control, second_control} == {"c1", "c2"}
+    dash_duo.wait_for_text_to_equal(control_list_id, "", timeout=5)
 
     # Test adding a function.
     dash_duo.select_dcc_dropdown("#{}".format(plugin.function_dropdown_id), "f2")
@@ -54,6 +66,9 @@ def test_gradient_plot_callback(app, dash_duo, mocker, caplog):
     dash_duo.find_element(
         "#{} label:nth-child({})".format(plugin.abs_check_id, 1)
     ).click()
+
+    helpers.clear_dropdown(dash_duo, control_selected_id)
+    dash_duo.wait_for_contains_text(control_list_id, "c1\nc2", timeout=5)
 
     for record in caplog.records:
         assert record.levelname != "ERROR"
