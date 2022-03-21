@@ -55,3 +55,25 @@ def app():
     dash_app = dash.Dash(__name__)
     dash_app.config.suppress_callback_exceptions = True
     yield dash_app
+
+
+class HelperFunctions:
+    """Class containing helper functions used in tests"""
+
+    @staticmethod
+    def select_first(dash_duo, selector):
+        element = dash_duo.find_element(selector)
+        option = element.find_element_by_css_selector("option")
+        option_text = option.text
+        option.click()
+        return option_text
+
+    @staticmethod
+    def clear_dropdown(dash_duo, selector):
+        element = dash_duo.find_element(selector)
+        element.find_element_by_css_selector("span.Select-clear").click()
+
+
+@pytest.fixture
+def helpers():
+    return HelperFunctions

@@ -7,9 +7,11 @@ import plotly.graph_objs as go
 
 from dash import html, dcc
 from dash.dependencies import Output, Input
+
 from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
 from everviz.util import base64encode
+from everviz.components import list_select
 
 
 class GradientPlot(EvervizPluginABC):
@@ -24,8 +26,10 @@ class GradientPlot(EvervizPluginABC):
         self.graph_id = f"graph-{uuid4()}"
         self.function_dropdown_id = f"dropdown-{uuid4()}"
         self.batch_dropdown_id = f"dropdown-{uuid4()}"
+        self.control_dropdown_id = f"dropdown-{uuid4()}"
         self.normalization_radio_id = f"dropdown-{uuid4()}"
         self.abs_check_id = f"dropdown-{uuid4()}"
+        self.list_select_id = str(uuid4())
 
         self.csv_file = csv_file
         self.set_callbacks(app)
@@ -33,15 +37,24 @@ class GradientPlot(EvervizPluginABC):
     def add_webvizstore(self):
         return [(get_data, [{"csv_file": self.csv_file}])]
 
+    @staticmethod
+    def get_options(str_list):
+        return [{"label": str_elem, "value": str_elem} for str_elem in str_list]
+
     @property
     def layout(self):
         data = get_data(self.csv_file)
 
         functions = data["function"].unique()
-        function_dropdown_options = [{"label": i, "value": i} for i in functions]
         batches = data["batch"].unique()
-        batch_dropdown_options = [{"label": i, "value": i} for i in batches]
-        normalization_radio_options = ["None", "By Function", "All"]
+        controls = data["control"].unique()
+        radio_buttons = ["None", "By Function", "All"]
+
+        function_dropdown_options = self.get_options(functions)
+        batch_dropdown_options = self.get_options(batches)
+        controls_dropdown_options = self.get_options(controls)
+        radio_options = self.get_options(radio_buttons)
+
         control_elements = [
             html.Label("Functions to plot:"),
             dcc.Dropdown(
@@ -56,13 +69,14 @@ class GradientPlot(EvervizPluginABC):
                 options=batch_dropdown_options,
                 multi=True,
                 value=[batches[0]],
-                style={"margin-bottom": 20},
             ),
+            html.Label("Controls to plot:"),
+            list_select.layout(self.list_select_id, controls_dropdown_options),
             html.Label("Normalization:"),
             dcc.RadioItems(
                 id=self.normalization_radio_id,
-                options=[{"label": i, "value": i} for i in normalization_radio_options],
-                value=normalization_radio_options[0],
+                options=radio_options,
+                value=radio_buttons[0],
                 labelStyle={"display": "inline-block"},
             ),
             dcc.Checklist(
@@ -108,6 +122,8 @@ class GradientPlot(EvervizPluginABC):
         )
 
     def set_callbacks(self, app):
+        list_select_id = list_select.controller_callback(self.list_select_id, app)
+
         @app.callback(self.plugin_data_output, [self.plugin_data_requested])
         def user_download_data(data_requested):
             if data_requested:
@@ -123,23 +139,25 @@ class GradientPlot(EvervizPluginABC):
             [
                 Input(self.function_dropdown_id, "value"),
                 Input(self.batch_dropdown_id, "value"),
+                Input(list_select_id, "value"),
                 Input(self.normalization_radio_id, "value"),
                 Input(self.abs_check_id, "value"),
             ],
         )
-        def update_graph(function_list, batch_list, normalization, absolute_values):
-            if function_list is None or batch_list is None:
+        def update_graph(
+            function_list, batch_list, control_list, normalization, absolute_values
+        ):
+            if function_list is None or batch_list is None or not control_list:
                 return {}
 
             data = (
                 get_data(self.csv_file)
-                .set_index(["batch", "function"])
-                .loc[IndexSlice[batch_list, function_list], :]
+                .set_index(["batch", "function", "control"])
+                .loc[IndexSlice[batch_list, function_list, control_list], :]
             )
 
             if absolute_values:
                 data["value"] = data["value"].abs()
-
             if normalization == "All":
                 data["value"] /= data["value"].abs().max()
             elif normalization == "By Function":
@@ -147,7 +165,6 @@ class GradientPlot(EvervizPluginABC):
                     data.loc[IndexSlice[:, function], "value"] /= (
                         data.loc[IndexSlice[:, function], "value"].abs().max()
                     )
-
             traces = []
             for function in function_list:
                 for batch in batch_list:
@@ -155,7 +172,7 @@ class GradientPlot(EvervizPluginABC):
                     traces.append(
                         go.Bar(
                             y=batch_data["value"],
-                            x=batch_data["control"],
+                            x=batch_data.index,
                             name=f"{function}: batch:{batch}",
                             showlegend=True,
                         ),
