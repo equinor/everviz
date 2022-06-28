@@ -3,6 +3,7 @@ import sys
 import pluggy
 import pytest
 import dash
+from selenium.webdriver.common.by import By
 
 from PIL import ImageFilter, ImageChops
 
@@ -63,7 +64,7 @@ class HelperFunctions:
     @staticmethod
     def select_first(dash_duo, selector):
         element = dash_duo.find_element(selector)
-        option = element.find_element_by_css_selector("option")
+        option = element.find_element(By.CSS_SELECTOR, "option")
         option_text = option.text
         option.click()
         return option_text
@@ -71,7 +72,7 @@ class HelperFunctions:
     @staticmethod
     def clear_dropdown(dash_duo, selector):
         element = dash_duo.find_element(selector)
-        element.find_element_by_css_selector("span.Select-clear").click()
+        element.find_element(By.CSS_SELECTOR, "span.Select-clear").click()
 
 
 @pytest.fixture

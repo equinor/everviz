@@ -1,5 +1,6 @@
 import time
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from everviz.plugins.config_editor.config_editor import ConfigEditor
 
@@ -28,7 +29,7 @@ config_editor_page = """
 
 def write_text_area(driver, css_selector, text):
     """Simulate key press to clear the input."""
-    elem = driver.find_element_by_css_selector(css_selector)
+    elem = driver.find_element(By.CSS_SELECTOR, css_selector)
     (
         ActionChains(driver)
         .move_to_element(elem)
