@@ -12,7 +12,7 @@ from everviz.log import setup_logger
 
 def handle_exit(*args):  # pylint: disable=unused-argument)
     print("\n" + "=" * 32)
-    print("Session terminated by the user.\n" "Thank you for using Everviz!")
+    print("Session terminated by the user.\nThank you for using Everviz!")
     print("=" * 32)
     sys.tracebacklimit = 0
     sys.stdout = open(  # pylint: disable=consider-using-with
