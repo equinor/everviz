@@ -37,7 +37,7 @@ def assert_equal_images(tmpdir):
         ]
 
         pixel_pairs = zip(list(image_1.getdata()), list(image_2.getdata()))
-        diff = sum([(pixel_1 - pixel_2) ** 2 for pixel_1, pixel_2 in pixel_pairs])
+        diff = sum((pixel_1 - pixel_2) ** 2 for pixel_1, pixel_2 in pixel_pairs)
 
         error = diff / (image_1.size[0] * image_1.size[1])
 
