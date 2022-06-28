@@ -1,4 +1,6 @@
 import pandas as pd
+from selenium.webdriver.common.by import By
+
 import everviz
 from everviz.plugins.crossplot.crossplot_indexed import CrossplotIndexed
 
@@ -21,7 +23,7 @@ def test_crossplot_indexed_callback(app, dash_duo, monkeypatch, mocker, caplog):
 
     dropdown_x = dash_duo.find_element(f"#{plugin.dropdown_x_id}")
     dropdown_x.click()
-    options_x = dropdown_x.find_element_by_css_selector("div.Select-menu-outer")
+    options_x = dropdown_x.find_element(By.CSS_SELECTOR, "div.Select-menu-outer")
     assert columns_names == options_x.text.split("\n")
     dash_duo.clear_input("#{}".format(plugin.dropdown_x_id))
 
@@ -31,7 +33,7 @@ def test_crossplot_indexed_callback(app, dash_duo, monkeypatch, mocker, caplog):
 
     dropdown_y = dash_duo.find_element(f"#{plugin.dropdown_y_id}")
     dropdown_y.click()
-    options_y = dropdown_y.find_element_by_css_selector("div.Select-menu-outer")
+    options_y = dropdown_y.find_element(By.CSS_SELECTOR, "div.Select-menu-outer")
     assert columns_names == options_y.text.split("\n")
     dash_duo.clear_input("#{}".format(plugin.dropdown_y_id))
 
