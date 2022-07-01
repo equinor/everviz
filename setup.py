@@ -16,7 +16,10 @@ setup(
     author="Software Innovation Bergen, Equinor ASA",
     license="AGPL-3.0",
     url="https://github.com/equinor/everviz",
-    setup_requires=["setuptools_scm"],
+    setup_requires=[
+        "setuptools_scm<7; python_version<'3.7'",
+        "setuptools_scm; python_version>='3.7'",
+    ],
     install_requires=[
         "pyyaml",
         "pandas",
