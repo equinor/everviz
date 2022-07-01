@@ -30,12 +30,12 @@ pip install tox
 tox
 ```
 
-or to run it for a particular Python version (in this case Python 3.8):
+or to run it for a particular Python version (in this case Python 3.7):
 
 ```sh
 # Test
 pip install tox
-tox -e py38
+tox -e py37
 ```
 
 [pytest](https://docs.pytest.org/en/latest/) is used as the test runner, so for quicker
