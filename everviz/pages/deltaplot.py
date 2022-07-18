@@ -21,9 +21,11 @@ def _get_objective_delta_values(api, best_batch):
 
 
 def _get_summary_delta_values(api, best_batch):
+    summary = api.summary_values()
+    if summary.empty:
+        return summary
     data = (
-        api.summary_values()
-        .drop(columns="simulation")
+        summary.drop(columns="simulation")
         .set_index(["realization", "date"])
         .dropna(axis=1, how="all")
     )
