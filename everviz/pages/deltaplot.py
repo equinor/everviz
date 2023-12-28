@@ -12,9 +12,11 @@ logger = get_logger()
 
 
 def _get_objective_delta_values(api, best_batch):
+    # pylint: disable=E1136
     data = pd.DataFrame(api.objective_values).drop(columns=["simulation"])
     initial = data[(data.batch == 0)].drop(columns=["batch"])
     best = data[data.batch == best_batch].drop(columns=["batch"])
+    # pylint: enable=E1136
     initial = initial.pivot(index="realization", values="value", columns="function")
     best = best.pivot(index="realization", values="value", columns="function")
     return (best - initial).reset_index()

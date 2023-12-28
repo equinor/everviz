@@ -50,7 +50,6 @@ def test_crossplot_layout_dropdown(dash_duo, test_input, expected, multi):
 )
 @pytest.mark.parametrize("expected, placement", [("OPT_1", 1), ("OPT_2", 2)])
 def test_crossplot_layout_radio(dash_duo, expected, placement, valid_options):
-
     app = dash.Dash(__name__)
     layout = _get_radio("radio_id", options=valid_options)
     app.layout = html.Div(layout)
