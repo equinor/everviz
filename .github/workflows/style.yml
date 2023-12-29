@@ -1,4 +1,4 @@
-name: Style
+name: style
 
 on: [pull_request]
 
@@ -10,10 +10,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-      - name: Install tox
-        run: pip install tox
-      - name: Run style
+          python-version: 3.12
+      - name: Install everviz with style dependencies
         run: |
-          tox -e linting
-          tox -e formatting
+          pip install ".[style]"
+      - name: Run style check
+        run: |
+          ruff .
+          black --check .

@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "everviz"
+description = "Visualization for Everest"
+authors = [
+  {name = "Equinor ASA", email = "fg_sib-scout@equinor.com"},
+]
+license = {text = "AGPL-3.0"}
+readme = "README.md"
+classifiers = [
+    "Environment :: Plugins",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License (GNU AGPLv3)",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ["version"]
+dependencies = [
+    "pyyaml",
+    "pandas",
+    "numpy",
+    "dash>=2.0",
+    "webviz-config>=0.2.0",
+    "plotly",
+    "flask",
+]
+
+[project.urls]
+repository = "https://github.com/equinor/everviz"
+
+[project.optional-dependencies]
+test = [
+    "dash[testing]",
+    "pillow",
+    "pytest-mock",
+    "sphinx-build"
+]
+style = [
+    "ruff",
+    "pylint",
+    "black"
+]

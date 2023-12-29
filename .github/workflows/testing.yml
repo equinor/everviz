@@ -1,4 +1,4 @@
-name: Python package
+name: testing
 
 on: [pull_request]
 
@@ -8,33 +8,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: '3.8'
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
+    - name: Install everviz and dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
         wget https://chromedriver.storage.googleapis.com/$(wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE -q -O -)/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
         export PATH=$PATH:$PWD
-        python -m pip install tox tox-gh-actions
+        python -m pip install ".[test]"
 
-    - name: Build Documentation
-      run: |
-        python -m tox -e docs
+    - name: Run sphinx
+      run: sphinx-build -d "doctrees" docs/ "docs_out" --color -W -bhtml
 
     - name: Run Tests
-      run: |
-        python -m tox
+      run: pytest --headless
