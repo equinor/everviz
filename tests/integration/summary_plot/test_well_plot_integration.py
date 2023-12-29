@@ -44,7 +44,6 @@ def test_well_plot(app, dash_duo, mocker, caplog):
 
     dash_duo.clear_input("#{}".format(plugin.dropdown_key))
     dash_duo.select_dcc_dropdown("#{}".format(plugin.dropdown_key), "WOPR:OP1")
-    result = dash_duo.find_element("#{}".format(plugin.dropdown_key)).text.split()[0]
     dash_duo.find_element(
         "#{} label:nth-child({})".format(plugin.radio_statistics, 2)
     ).click()

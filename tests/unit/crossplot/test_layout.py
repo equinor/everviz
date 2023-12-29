@@ -120,7 +120,7 @@ def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_im
         dash_duo.driver.save_screenshot("example_snapshot.png")
         snapshot = Image.open("example_snapshot.png")
 
-    if not snapshot.size in _REFERENCE_IMAGES:
+    if snapshot.size not in _REFERENCE_IMAGES:
         pytest.skip("No reference image for layout size: {}".format(snapshot.size))
 
     reference_image = Image.open(
