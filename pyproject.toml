@@ -44,7 +44,7 @@ test = [
     "dash[testing]",
     "pillow",
     "pytest-mock",
-    "sphinx-build"
+    "sphinx"
 ]
 style = [
     "ruff",
