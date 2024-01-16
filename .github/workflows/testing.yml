@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: '3.8'
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
@@ -31,8 +31,8 @@ jobs:
         export PATH=$PATH:$PWD
         python -m pip install ".[test]"
 
-    - name: Run sphinx
-      run: sphinx-build -d "doctrees" docs/ "docs_out" --color -W -bhtml
-
     - name: Run Tests
       run: pytest --headless
+
+    - name: Build documentation
+      run: sphinx-build -d "doctrees" docs/ "docs_out" --color -W -bhtml
