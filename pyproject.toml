@@ -52,3 +52,18 @@ style = [
     "pylint",
     "black"
 ]
+
+[project.entry-points."everest"]
+everviz = "everviz.everest_hooks"
+[project.entry-points."webviz_config_plugins"]
+Crossplot = "everviz.plugins:Crossplot"
+CrossplotIndexed = "everviz.plugins:CrossplotIndexed"
+SummaryPlot = "everviz.plugins:SummaryPlot"
+ObjectivesPlot = "everviz.plugins:ObjectivesPlot"
+SingleObjectivesPlot = "everviz.plugins:SingleObjectivesPlot"
+ControlsPlot = "everviz.plugins:ControlsPlot"
+BestControlsPlot = "everviz.plugins:BestControlsPlot"
+DeltaPlot = "everviz.plugins:DeltaPlot"
+GradientPlot = "everviz.plugins:GradientPlot"
+ConfigEditor = "everviz.plugins:ConfigEditor"
+WellsPlot = "everviz.plugins:WellsPlot"
