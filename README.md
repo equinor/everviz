@@ -21,33 +21,12 @@ pip install everviz
 ```
 
 ## Run tests
-[tox](https://tox.readthedocs.io/en/latest/) is used as the test facilitator,
-to run the full test suite:
 
 ```sh
 # Test
-pip install tox
-tox
-```
-
-or to run it for a particular Python version (in this case Python 3.7):
-
-```sh
-# Test
-pip install tox
-tox -e py37
-```
-
-[pytest](https://docs.pytest.org/en/latest/) is used as the test runner, so for quicker
-iteration it is possible to run:
-
-```sh
-# Test
-pytest
-# or to run the tests headless:
+wget https://chromedriver.storage.googleapis.com/$(wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE -q -O -)/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+export PATH=$PATH:$PWD
+python -m pip install ".[test]"
 pytest --headless
 ```
-
-this requires that the test dependencies from `tox.ini` are installed.
-
-The tests requires WebDrivers (default: Chrome), more information can be found [here](https://dash.plotly.com/testing)
