@@ -67,3 +67,9 @@ DeltaPlot = "everviz.plugins:DeltaPlot"
 GradientPlot = "everviz.plugins:GradientPlot"
 ConfigEditor = "everviz.plugins:ConfigEditor"
 WellsPlot = "everviz.plugins:WellsPlot"
+
+[tool.setuptools_scm]
+write_to = "everviz/version.py"
+
+[tool.setuptools.dynamic]
+version = {attr = "everviz.version.__version__"}
