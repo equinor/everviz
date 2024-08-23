@@ -1,15 +1,13 @@
 import os
 
-import pytest
 import pandas as pd
-
-from everviz.util import get_everviz_folder
+import pytest
 from everviz.pages.gradientplot import (
-    _gradient_values,
     DataSources,
+    _gradient_values,
     _set_up_data_sources,
 )
-
+from everviz.util import get_everviz_folder
 
 _DATA = [
     {"batch": 0, "function": "f1", "control": "c1", "value": 1},

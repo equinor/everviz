@@ -1,6 +1,6 @@
 import logging
-import sys
 import os
+import sys
 
 
 def _formatter():

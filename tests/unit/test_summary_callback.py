@@ -1,13 +1,12 @@
-from itertools import cycle
 from datetime import datetime
+from itertools import cycle
 from unittest import mock
 
-import pytest
 import pandas as pd
-from plotly.colors import DEFAULT_PLOTLY_COLORS
-
+import pytest
 from everviz.plugins.summary_plot import summary_callback
 from everviz.plugins.summary_plot.util import calculate_statistics
+from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 __TEST_DATA = {
     "realization": range(12),
@@ -83,30 +82,30 @@ def test_get_lines_callback(monkeypatch, keys, lines, x_filter, x_key):
     ],
 )
 def test_get_layout(keys, x_axis_title):
-    expected = dict(
-        xaxis={"title": x_axis_title},
-        hovermode="closest",
-    )
+    expected = {
+        "xaxis": {"title": x_axis_title},
+        "hovermode": "closest",
+    }
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     for idx, key in enumerate(keys):
         color = next(colors)
         y_axis = f"yaxis{idx + 1}" if idx > 0 else "yaxis"
         expected.update(
             {
-                y_axis: dict(
-                    title=key,
-                    titlefont=dict(color=color),
-                    tickfont=dict(color=color),
-                )
+                y_axis: {
+                    "title": key,
+                    "titlefont": {"color": color},
+                    "tickfont": {"color": color},
+                }
             }
         )
         if idx > 0:
             expected[y_axis].update(
-                dict(
-                    anchor="x",
-                    overlaying="y",
-                    side="right" if idx % 2 else "left",
-                )
+                {
+                    "anchor": "x",
+                    "overlaying": "y",
+                    "side": "right" if idx % 2 else "left",
+                }
             )
 
     layout = summary_callback.get_layout(keys, x_axis_title)

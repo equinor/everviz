@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 import pandas
-
 from everviz.pages.deltaplot import (
     _get_objective_delta_values,
     _get_summary_delta_values,

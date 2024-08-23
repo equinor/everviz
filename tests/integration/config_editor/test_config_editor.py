@@ -1,8 +1,9 @@
 import time
+
+from everviz.plugins.config_editor.config_editor import ConfigEditor
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from everviz.plugins.config_editor.config_editor import ConfigEditor
 
 everviz_config_1 = """title: Everest Optimization Report Test
 pages:

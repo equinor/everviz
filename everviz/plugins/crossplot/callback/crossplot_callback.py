@@ -7,16 +7,16 @@ def crossplot_update_graph(
 ):
     return {
         "data": data,
-        "layout": dict(
-            xaxis={
+        "layout": {
+            "xaxis": {
                 "title": xaxis_column_name,
                 "type": xaxis_type.lower(),
             },
-            yaxis={
+            "yaxis": {
                 "title": yaxis_column_name,
                 "type": yaxis_type.lower(),
             },
-        ),
+        },
     }
 
 

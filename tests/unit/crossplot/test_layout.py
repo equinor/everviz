@@ -2,19 +2,18 @@ import os
 import time
 
 import dash
+import everviz
+import pandas as pd
 import pytest
 from dash import html
-import pandas as pd
-from PIL import Image
-
-import everviz
-from everviz.plugins import Crossplot
 from everviz.pages import crossplot
+from everviz.plugins import Crossplot
 from everviz.plugins.utils.layout.sidebar_layout import (
-    get_sidebar_layout,
     _get_dropdown,
     _get_radio,
+    get_sidebar_layout,
 )
+from PIL import Image
 
 
 @pytest.mark.parametrize("multi", [True, False])

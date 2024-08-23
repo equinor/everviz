@@ -1,5 +1,6 @@
-from pathlib import Path
 import abc
+from pathlib import Path
+
 import pkg_resources
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
@@ -25,7 +26,7 @@ class EvervizPluginABC(WebvizPluginABC):
         WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
     def plugin_name(self):
-        name = map(lambda c: f"_{c.lower()}" if c.isupper() else c, type(self).__name__)
+        name = [f"_{c.lower()}" if c.isupper() else c for c in type(self).__name__]
         return "everviz" + "".join(name)
 
     @property

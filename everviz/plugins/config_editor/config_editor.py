@@ -3,10 +3,11 @@ import io
 import os
 from pathlib import Path
 from uuid import uuid4
+
 import yaml
-from dash import callback_context
+from dash import callback_context, dcc, html
 from dash.dependencies import Input, Output, State
-from dash import html, dcc
+
 from everviz.plugins.plugin_abc import EvervizPluginABC
 
 
@@ -195,7 +196,7 @@ class ConfigEditor(EvervizPluginABC):
                 os.rename(self.default_conf_path, self.data_path)
 
             elif upload_content is not None:
-                content_type, content_string = upload_content.split(",")
+                _content_type, content_string = upload_content.split(",")
                 decoded = base64.b64decode(content_string).decode("utf-8")
                 new_config = "".join(io.StringIO(decoded).readlines())
 

@@ -1,16 +1,13 @@
 import os
 
-import pandas as pd
-import numpy as np
-
 import everviz
-
+import numpy as np
+import pandas as pd
 from everviz.pages.objectives import (
-    _set_up_data_sources,
     _objective_values,
+    _set_up_data_sources,
     _total_objective_values,
 )
-
 from everviz.plugins.objectives_plot.util import calculate_statistics
 
 OBJECTIVES = [

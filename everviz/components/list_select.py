@@ -1,11 +1,10 @@
 from typing import List
+
 import dash
-
-from dash.development.base_component import Component
-from dash.dependencies import Output, Input, State
-from dash import html, dcc
-
 import webviz_core_components as wcc
+from dash import dcc, html
+from dash.dependencies import Input, Output, State
+from dash.development.base_component import Component
 
 
 def layout(uuid: str, default_options: List[str] = None) -> Component:

@@ -1,7 +1,6 @@
 import pandas as pd
 from everviz.plugins.gradient_plot import GradientPlot
 
-
 _DATA = [
     {"batch": 0, "function": "f1", "control": "c1", "value": 1},
     {"batch": 0, "function": "f1", "control": "c2", "value": 2},

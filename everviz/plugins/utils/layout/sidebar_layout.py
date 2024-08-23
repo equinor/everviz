@@ -1,5 +1,4 @@
-from dash import dcc
-from dash import html
+from dash import dcc, html
 
 
 def get_sidebar_layout(configurations):
