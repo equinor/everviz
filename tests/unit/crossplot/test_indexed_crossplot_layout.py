@@ -1,12 +1,12 @@
 import os
 import time
-import dash
-import pytest
 
-import pandas as pd
-from PIL import Image
+import dash
 import everviz
+import pandas as pd
+import pytest
 from everviz.plugins import CrossplotIndexed
+from PIL import Image
 
 
 def test_crossplot_layout(dash_duo, monkeypatch, mocker, tmpdir, assert_equal_images):

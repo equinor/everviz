@@ -1,6 +1,7 @@
 import os
+
 import pytest
-from everviz.util import get_everviz_folder, parse_range, get_placeholder_text
+from everviz.util import get_everviz_folder, get_placeholder_text, parse_range
 
 
 @pytest.fixture

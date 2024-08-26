@@ -2,9 +2,8 @@ from datetime import datetime
 
 import pandas as pd
 import pytest
-
-from everviz.plugins.summary_plot.wells_plot import WellsPlot, _get_target_keys
 from everviz.pages.summary_values import _summary_values
+from everviz.plugins.summary_plot.wells_plot import WellsPlot, _get_target_keys
 
 
 def test_well_plot(app, dash_duo, mocker, caplog):

@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import pkg_resources
+from importlib_metadata import distribution
 
 # -- Project information -----------------------------------------------------
 
@@ -21,7 +21,7 @@ author = "Equinor"
 
 def get_version():
     # Retrieve the everviz installed version.
-    everviz_version = pkg_resources.get_distribution(project).version
+    everviz_version = distribution(project).version
     print("everest version: {}".format(everviz_version))
     return everviz_version
 

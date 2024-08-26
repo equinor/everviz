@@ -1,9 +1,8 @@
 from datetime import datetime
 
 import pandas
-
-from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 from everviz.pages.deltaplot import _get_summary_delta_values
+from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 
 _SUMMARY = {
     "realization": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],

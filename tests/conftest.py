@@ -1,11 +1,11 @@
 import os
 import sys
+
+import dash
 import pluggy
 import pytest
-import dash
+from PIL import ImageChops, ImageFilter
 from selenium.webdriver.common.by import By
-
-from PIL import ImageFilter, ImageChops
 
 # Allow everviz to be installed and have tests run without installing everest
 module = type(sys)("everest.plugins")

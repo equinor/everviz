@@ -1,5 +1,5 @@
-import os
 import base64
+import os
 from collections import defaultdict
 
 DEFAULT_CONFIG = "everviz_webviz_config.yml"

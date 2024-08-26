@@ -1,7 +1,8 @@
 from datetime import datetime
+
 import pandas as pd
-from everviz.plugins.summary_plot.summary_plot import SummaryPlot
 from everviz.pages.summary_values import _summary_values
+from everviz.plugins.summary_plot.summary_plot import SummaryPlot
 
 
 def test_summary_plot_callback(app, dash_duo, mocker, caplog):

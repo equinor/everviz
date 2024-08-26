@@ -3,7 +3,6 @@ from collections import namedtuple
 
 from everviz.log import get_logger
 
-
 DataSources = namedtuple("DataSource", ["summary_values"])
 
 logger = get_logger()

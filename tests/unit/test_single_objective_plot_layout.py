@@ -1,12 +1,11 @@
-import time
 import os
-import pytest
-
-import pandas as pd
-from PIL import Image
+import time
 
 import everviz
+import pandas as pd
+import pytest
 from everviz.plugins.objectives_plot.single_objectives_plot import SingleObjectivesPlot
+from PIL import Image
 
 
 def test_single_objective_plot_layout(

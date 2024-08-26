@@ -1,5 +1,5 @@
-from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 from everviz.pages.deltaplot import _get_objective_delta_values
+from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 
 _OBJECTIVES = [
     {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},

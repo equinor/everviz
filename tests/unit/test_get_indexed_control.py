@@ -1,5 +1,4 @@
 import pytest
-
 from everviz.util import identify_indexed_controls
 
 

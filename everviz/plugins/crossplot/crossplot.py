@@ -1,17 +1,16 @@
 from pathlib import Path
 from uuid import uuid4
-from dash import html, dcc
 
+from dash import dcc, html
 from dash.dependencies import Input, Output
-from everviz.plugins.plugin_abc import EvervizPluginABC
 
-
-from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
+from everviz.data.load_csv.get_data import get_data
 from everviz.plugins.crossplot.callback.crossplot_callback import (
     crossplot_update_graph,
     get_graph_line,
 )
-from everviz.data.load_csv.get_data import get_data
+from everviz.plugins.plugin_abc import EvervizPluginABC
+from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
 from everviz.util import base64encode
 
 

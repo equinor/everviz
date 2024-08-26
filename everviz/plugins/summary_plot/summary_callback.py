@@ -1,6 +1,6 @@
 from itertools import cycle
-import plotly.graph_objs as go
 
+import plotly.graph_objs as go
 from plotly.colors import DEFAULT_PLOTLY_COLORS
 
 
@@ -154,29 +154,29 @@ def get_layout(summary_key_list, xaxis_title, multi_axis=True):
     :param xaxis_title: X-axis title for the plot
     :return: The graph figure layout
     """
-    layout = dict(
-        xaxis={"title": xaxis_title},
-        hovermode="closest",
-    )
+    layout = {
+        "xaxis": {"title": xaxis_title},
+        "hovermode": "closest",
+    }
     colors = cycle(DEFAULT_PLOTLY_COLORS)
     for idx, key in enumerate(summary_key_list):
         color = next(colors)
         y_axis = f"yaxis{idx + 1}" if idx > 0 and multi_axis else "yaxis"
         layout.update(
             {
-                y_axis: dict(
-                    title=key,
-                    titlefont=dict(color=color),
-                    tickfont=dict(color=color),
-                )
+                y_axis: {
+                    "title": key,
+                    "titlefont": {"color": color},
+                    "tickfont": {"color": color},
+                }
             }
         )
         if idx > 0:
             layout[y_axis].update(
-                dict(
-                    anchor="x",
-                    overlaying="y",
-                    side="right" if idx % 2 else "left",
-                )
+                {
+                    "anchor": "x",
+                    "overlaying": "y",
+                    "side": "right" if idx % 2 else "left",
+                }
             )
     return layout

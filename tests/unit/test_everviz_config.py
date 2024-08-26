@@ -1,9 +1,10 @@
 import os
+
 import everviz
 from everviz.config import (
-    write_webviz_config,
-    webviz_config,
     setup_default_everviz_config,
+    webviz_config,
+    write_webviz_config,
 )
 from everviz.util import DEFAULT_CONFIG
 

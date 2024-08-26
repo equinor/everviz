@@ -1,6 +1,10 @@
-from pathlib import Path
 import abc
-import pkg_resources
+import sys
+
+if sys.version_info >= (3, 9):
+    from importlib.resources import files
+else:
+    from importlib_resources import files
 from webviz_config import WebvizPluginABC
 from webviz_config.webviz_assets import WEBVIZ_ASSETS
 
@@ -21,11 +25,11 @@ class EvervizPluginABC(WebvizPluginABC):
     def __init__(self):
         super().__init__()
         self._screenshot_filename = f"{self.plugin_name()}.png"
-        ASSETS_DIR = Path(pkg_resources.resource_filename("everviz", "assets"))
+        ASSETS_DIR = files("everviz") / "assets"
         WEBVIZ_ASSETS.add(ASSETS_DIR / "axis_customization.css")
 
     def plugin_name(self):
-        name = map(lambda c: f"_{c.lower()}" if c.isupper() else c, type(self).__name__)
+        name = [f"_{c.lower()}" if c.isupper() else c for c in type(self).__name__]
         return "everviz" + "".join(name)
 
     @property

@@ -1,17 +1,15 @@
 import os
 
-import pytest
 import numpy as np
 import pandas as pd
-
-from everviz.util import get_everviz_folder
+import pytest
 from everviz.pages.controls import (
-    _control_data_per_batch,
-    _control_data_initial_vs_best,
     DataSources,
+    _control_data_initial_vs_best,
+    _control_data_per_batch,
     _set_up_data_sources,
 )
-
+from everviz.util import get_everviz_folder
 
 controls = [
     [

@@ -1,12 +1,11 @@
-from uuid import uuid4
 from pathlib import Path
-
-from dash import html, dcc
+from uuid import uuid4
 
 import plotly.express as px
+from dash import dcc, html
 
-from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.util import base64encode
 
 

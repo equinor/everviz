@@ -1,5 +1,6 @@
 import os
-from everviz.util import get_everviz_folder, DEFAULT_CONFIG
+
+from everviz.util import DEFAULT_CONFIG, get_everviz_folder
 
 
 def page_layout(api):

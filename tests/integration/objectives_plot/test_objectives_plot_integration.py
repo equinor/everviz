@@ -1,6 +1,6 @@
 import pandas as pd
-from everviz.plugins.objectives_plot.objectives_plot import ObjectivesPlot
 from everviz.pages.objectives import _objective_values
+from everviz.plugins.objectives_plot.objectives_plot import ObjectivesPlot
 
 
 def test_objective_plot_callback(app, dash_duo, mocker, caplog):

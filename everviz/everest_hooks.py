@@ -1,13 +1,14 @@
-import subprocess
+import os
 import shutil
 import signal
+import subprocess
 import sys
-import os
 
 from everest.plugins import hookimpl  # pylint: disable=import-error
-from everviz.util import get_everviz_folder
+
 from everviz.config import setup_default_everviz_config
 from everviz.log import setup_logger
+from everviz.util import get_everviz_folder
 
 
 def handle_exit(*args):  # pylint: disable=unused-argument)
@@ -15,7 +16,7 @@ def handle_exit(*args):  # pylint: disable=unused-argument)
     print("Session terminated by the user.\nThank you for using Everviz!")
     print("=" * 32)
     sys.tracebacklimit = 0
-    sys.stdout = open(  # pylint: disable=consider-using-with
+    sys.stdout = open(  # noqa: SIM115 pylint: disable=consider-using-with noqa: SIM115
         os.devnull, "w", encoding="utf-8"
     )
     sys.exit()

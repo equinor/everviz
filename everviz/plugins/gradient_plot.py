@@ -1,17 +1,15 @@
-from uuid import uuid4
 from pathlib import Path
-
-from pandas import IndexSlice
+from uuid import uuid4
 
 import plotly.graph_objs as go
+from dash import dcc, html
+from dash.dependencies import Input, Output
+from pandas import IndexSlice
 
-from dash import html, dcc
-from dash.dependencies import Output, Input
-
-from everviz.plugins.plugin_abc import EvervizPluginABC
-from everviz.data.load_csv.get_data import get_data
-from everviz.util import base64encode
 from everviz.components import list_select
+from everviz.data.load_csv.get_data import get_data
+from everviz.plugins.plugin_abc import EvervizPluginABC
+from everviz.util import base64encode
 
 
 class GradientPlot(EvervizPluginABC):
@@ -179,8 +177,12 @@ class GradientPlot(EvervizPluginABC):
                     )
             return {
                 "data": traces,
-                "layout": dict(
-                    xaxis={"title": "Controls", "tickformat": ",d", "automargin": True},
-                    yaxis={"title": "Gradient Value"},
-                ),
+                "layout": {
+                    "xaxis": {
+                        "title": "Controls",
+                        "tickformat": ",d",
+                        "automargin": True,
+                    },
+                    "yaxis": {"title": "Gradient Value"},
+                },
             }

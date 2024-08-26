@@ -1,8 +1,9 @@
 import os
 from collections import namedtuple
-import pandas as pd
-from everviz.log import get_logger
 
+import pandas as pd
+
+from everviz.log import get_logger
 
 DataSources = namedtuple("DataSource", "controls_per_batch, controls_initial_vs_best")
 
