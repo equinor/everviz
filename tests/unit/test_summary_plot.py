@@ -8,7 +8,6 @@ from everviz.plugins.summary_plot.util import calculate_statistics
 
 __TEST_DATA = {
     "realization": range(12),
-    "simulation": range(12),
     "batch": [0] * 6 + [1] * 6,
     "date": [
         datetime(2000, 1, 1),
@@ -45,7 +44,6 @@ def test_summary_values_data_frame():
     assert list(
         summary_values.columns == ["summary_key", "batch", "date", "key1", "key2"]
     )
-    assert len(summary_values) == len(__TEST_DATA["simulation"])
     assert set(summary_values["batch"]) == set(__TEST_DATA["batch"])
     assert set(summary_values["date"]) == {
         pd.Timestamp(date) for date in __TEST_DATA["date"]

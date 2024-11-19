@@ -19,7 +19,6 @@ def _total_objective_values_from_api(api):
 
 def _objective_values(data):
     # Sort by the index columns.
-    data = data.drop(columns=["simulation"])
     sorted_values = (
         data.set_index(["function", "batch", "realization"]).sort_index().reset_index()
     )

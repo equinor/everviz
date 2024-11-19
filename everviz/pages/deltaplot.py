@@ -12,7 +12,7 @@ logger = get_logger()
 
 
 def _get_objective_delta_values(api, best_batch):
-    data = pd.DataFrame(api.objective_values).drop(columns=["simulation"])
+    data = pd.DataFrame(api.objective_values)
     initial = data[(data.batch == 0)].drop(columns=["batch"])
     best = data[data.batch == best_batch].drop(columns=["batch"])
     initial = initial.pivot(index="realization", values="value", columns="function")
@@ -25,7 +25,7 @@ def _get_summary_delta_values(api, best_batch):
     if summary.empty:
         return summary
     data = (
-        summary.drop(columns="simulation")
+        summary
         .set_index(["realization", "date"])
         .dropna(axis=1, how="all")
     )

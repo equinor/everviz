@@ -7,7 +7,6 @@ from everviz.pages.deltaplot import _get_summary_delta_values
 
 _SUMMARY = {
     "realization": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
-    "simulation": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
     "batch": [0] * 6 + [2] * 6,
     "date": 4
     * [
@@ -19,7 +18,7 @@ _SUMMARY = {
     "key2": range(10, 130, 10),
 }
 
-_EMPTY_SUMMARY = {"realization": [], "simulation": [], "date": [], "batch": []}
+_EMPTY_SUMMARY = {"realization": [], "date": [], "batch": []}
 
 
 def test_summary_delta_plot_callback(app, dash_duo, mocker, caplog):
