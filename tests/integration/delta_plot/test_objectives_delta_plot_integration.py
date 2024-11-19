@@ -2,14 +2,14 @@ from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 from everviz.pages.deltaplot import _get_objective_delta_values
 
 _OBJECTIVES = [
-    {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
-    {"batch": 0, "realization": 2, "function": "f0", "value": 200, "simulation": 2},
-    {"batch": 0, "realization": 1, "function": "f1", "value": 300, "simulation": 1},
-    {"batch": 0, "realization": 2, "function": "f1", "value": 400, "simulation": 2},
-    {"batch": 2, "realization": 1, "function": "f0", "value": 500, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f0", "value": 600, "simulation": 2},
-    {"batch": 2, "realization": 1, "function": "f1", "value": 800, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f1", "value": 900, "simulation": 2},
+    {"batch": 0, "realization": 1, "function": "f0", "value": 100 },
+    {"batch": 0, "realization": 2, "function": "f0", "value": 200 },
+    {"batch": 0, "realization": 1, "function": "f1", "value": 300 },
+    {"batch": 0, "realization": 2, "function": "f1", "value": 400 },
+    {"batch": 2, "realization": 1, "function": "f0", "value": 500 },
+    {"batch": 2, "realization": 2, "function": "f0", "value": 600 },
+    {"batch": 2, "realization": 1, "function": "f1", "value": 800 },
+    {"batch": 2, "realization": 2, "function": "f1", "value": 900 },
 ]
 
 

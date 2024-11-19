@@ -12,7 +12,7 @@ logger = get_logger()
 def _summary_values(summary_values):
     # Sort by the index columns.
     sorted_values = (
-        summary_values.drop(columns="simulation")
+        summary_values
         .set_index(["batch", "date", "realization"])
         .dropna(axis=1, how="all")
         .sort_index()

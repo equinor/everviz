@@ -11,19 +11,18 @@ from everviz.pages.deltaplot import (
 )
 
 _OBJECTIVES = [
-    {"batch": 0, "realization": 1, "function": "f0", "value": 100, "simulation": 1},
-    {"batch": 0, "realization": 2, "function": "f0", "value": 200, "simulation": 2},
-    {"batch": 0, "realization": 1, "function": "f1", "value": 300, "simulation": 1},
-    {"batch": 0, "realization": 2, "function": "f1", "value": 400, "simulation": 2},
-    {"batch": 2, "realization": 1, "function": "f0", "value": 500, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f0", "value": 600, "simulation": 2},
-    {"batch": 2, "realization": 1, "function": "f1", "value": 800, "simulation": 1},
-    {"batch": 2, "realization": 2, "function": "f1", "value": 900, "simulation": 2},
+    {"batch": 0, "realization": 1, "function": "f0", "value": 100 },
+    {"batch": 0, "realization": 2, "function": "f0", "value": 200 },
+    {"batch": 0, "realization": 1, "function": "f1", "value": 300 },
+    {"batch": 0, "realization": 2, "function": "f1", "value": 400 },
+    {"batch": 2, "realization": 1, "function": "f0", "value": 500 },
+    {"batch": 2, "realization": 2, "function": "f0", "value": 600 },
+    {"batch": 2, "realization": 1, "function": "f1", "value": 800 },
+    {"batch": 2, "realization": 2, "function": "f1", "value": 900 },
 ]
 
 _SUMMARY = {
     "realization": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
-    "simulation": 3 * [1] + 3 * [2] + 3 * [1] + 3 * [2],
     "batch": [0] * 6 + [2] * 6,
     "date": 4
     * [
@@ -93,7 +92,7 @@ def test_delta_plot_layout_with_empty_summary(mocker, tmpdir):
     mock_api.objective_values = _OBJECTIVES
     mock_api.single_objective_values = _SINGLE_OBJECTIVES
     mock_api.summary_values.return_value = pandas.DataFrame(
-        {"realization": [], "simulation": [], "date": [], "batch": []}
+        {"realization": [], "date": [], "batch": []}
     )
     mock_api.output_folder = tmpdir
 

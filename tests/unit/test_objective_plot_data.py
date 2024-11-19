@@ -19,7 +19,6 @@ OBJECTIVES = [
         "realization": 1,
         "function": "f0",
         "value": 100,
-        "simulation": 1,
         "weight": 0.75,
         "norm": 1,
     },
@@ -28,7 +27,6 @@ OBJECTIVES = [
         "realization": 1,
         "function": "f1",
         "value": 200,
-        "simulation": 1,
         "weight": 0.25,
         "norm": 1.5,
     },
@@ -37,7 +35,6 @@ OBJECTIVES = [
         "realization": 2,
         "function": "f0",
         "value": 200,
-        "simulation": 2,
         "weight": 0.75,
         "norm": 1,
     },
@@ -46,7 +43,6 @@ OBJECTIVES = [
         "realization": 2,
         "function": "f1",
         "value": 400,
-        "simulation": 2,
         "weight": 0.25,
         "norm": 1.5,
     },
@@ -55,7 +51,6 @@ OBJECTIVES = [
         "realization": 1,
         "function": "f0",
         "value": 300,
-        "simulation": 1,
         "weight": 0.75,
         "norm": 1,
     },
@@ -64,7 +59,6 @@ OBJECTIVES = [
         "realization": 1,
         "function": "f1",
         "value": 600,
-        "simulation": 1,
         "weight": 0.25,
         "norm": 1.5,
     },
@@ -73,7 +67,6 @@ OBJECTIVES = [
         "realization": 2,
         "function": "f0",
         "value": 400,
-        "simulation": 2,
         "weight": 0.75,
         "norm": 1,
     },
@@ -82,7 +75,6 @@ OBJECTIVES = [
         "realization": 2,
         "function": "f1",
         "value": 800,
-        "simulation": 2,
         "weight": 0.25,
         "norm": 1.5,
     },
@@ -183,7 +175,7 @@ def test_set_up_sources(mocker, monkeypatch, tmpdir):
         mocker.Mock(return_value=pd.DataFrame(OBJECTIVES)),
     )
     total_data = pd.DataFrame(OBJECTIVES).drop(
-        columns=["realization", "function", "simulation"]
+        columns=["realization", "function"]
     )
     monkeypatch.setattr(
         everviz.pages.objectives,
@@ -200,7 +192,7 @@ def test_set_up_sources(mocker, monkeypatch, tmpdir):
 
 def test_total_objective_values_data_frame():
     total_data = pd.DataFrame(OBJECTIVES).drop(
-        columns=["realization", "function", "simulation", "weight", "norm"]
+        columns=["realization", "function", "weight", "norm"]
     )
     total_objective_values = _total_objective_values(total_data)
 
