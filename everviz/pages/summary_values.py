@@ -25,7 +25,7 @@ def _set_up_data_sources(api, keys=None):
     everviz_path = os.path.join(everest_folder, "everviz")
 
     # Make a table which statistics over the realizations.
-    summary_values = api.summary_values(keys=keys)
+    summary_values = api.summary_values(keys=keys).to_pandas()
 
     if summary_values.empty:
         return None

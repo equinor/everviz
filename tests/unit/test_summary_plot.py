@@ -2,6 +2,7 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
+import polars as pl
 from everviz.pages.summary_values import _summary_values, page_layout
 from everviz.plugins.summary_plot.util import calculate_statistics
 
@@ -32,7 +33,7 @@ def test_empty_summary_values(mocker):
     """Test for the case of missing summary values."""
     mock_api = mocker.Mock()
     mock_api.output_folder = "dummy"
-    mock_api.summary_values.return_value = pd.DataFrame()
+    mock_api.summary_values.return_value = pl.DataFrame()
     layout = page_layout(mock_api)
     assert not layout
 

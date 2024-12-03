@@ -22,7 +22,7 @@ def _get_objective_delta_values(api, best_batch):
 
 
 def _get_summary_delta_values(api, best_batch):
-    summary = api.summary_values()
+    summary = api.summary_values().to_pandas()
     if summary.empty:
         return summary
     data = (

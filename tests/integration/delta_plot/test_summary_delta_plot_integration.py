@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import pandas
+import polars as pl
 from everviz.pages.deltaplot import _get_summary_delta_values
 from everviz.plugins.delta_plot.delta_plot import DeltaPlot
 
@@ -23,7 +23,7 @@ _EMPTY_SUMMARY = {"realization": [], "simulation": [], "date": [], "batch": []}
 
 def test_summary_delta_plot_callback(app, dash_duo, mocker, caplog):
     mock_api = mocker.Mock()
-    mock_api.summary_values.return_value = pandas.DataFrame(_SUMMARY)
+    mock_api.summary_values.return_value = pl.DataFrame(_SUMMARY)
 
     mocker.patch(
         "everviz.plugins.delta_plot.delta_plot.get_data",
@@ -60,7 +60,7 @@ def test_summary_delta_plot_callback(app, dash_duo, mocker, caplog):
 
 def test_summary_delta_plot_empty_callback(app, dash_duo, mocker, caplog):
     mock_api = mocker.Mock()
-    mock_api.summary_values.return_value = pandas.DataFrame(_EMPTY_SUMMARY)
+    mock_api.summary_values.return_value = pl.DataFrame(_EMPTY_SUMMARY)
 
     mocker.patch(
         "everviz.plugins.delta_plot.delta_plot.get_data",

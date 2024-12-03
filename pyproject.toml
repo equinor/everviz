@@ -45,7 +45,8 @@ test = [
     "dash[testing]",
     "pillow",
     "pytest-mock",
-    "sphinx"
+    "sphinx",
+    "polars"
 ]
 style = [
     "pre-commit",

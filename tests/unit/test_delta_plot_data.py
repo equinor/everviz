@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-import pandas
+import polars as pl
 from everviz.pages.deltaplot import (
     _get_objective_delta_values,
     _get_summary_delta_values,
@@ -59,7 +59,7 @@ def test_objective_values_data_frame(mocker):
 def test_summary_values_data_frame(mocker):
     """Test for the correct layout and size of the objective values data frame."""
     mock_api = mocker.Mock()
-    mock_api.summary_values.return_value = pandas.DataFrame(_SUMMARY)
+    mock_api.summary_values.return_value = pl.DataFrame(_SUMMARY)
 
     summary_delta_values = _get_summary_delta_values(mock_api, 2)
 
@@ -77,7 +77,7 @@ def test_set_up_sources(mocker, tmpdir):
     mock_api = mocker.Mock()
     mock_api.objective_values = _OBJECTIVES
     mock_api.single_objective_values = _SINGLE_OBJECTIVES
-    mock_api.summary_values.return_value = pandas.DataFrame(_SUMMARY)
+    mock_api.summary_values.return_value = pl.DataFrame(_SUMMARY)
     mock_api.output_folder = tmpdir
 
     os.mkdir(os.path.join(tmpdir, "everviz"))
@@ -96,7 +96,7 @@ def test_delta_plot_layout_with_empty_summary(mocker, tmpdir):
     mock_api = mocker.Mock()
     mock_api.objective_values = _OBJECTIVES
     mock_api.single_objective_values = _SINGLE_OBJECTIVES
-    mock_api.summary_values.return_value = pandas.DataFrame(
+    mock_api.summary_values.return_value = pl.DataFrame(
         {"realization": [], "simulation": [], "date": [], "batch": []}
     )
     mock_api.output_folder = tmpdir
