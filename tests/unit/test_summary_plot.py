@@ -1,9 +1,8 @@
 from datetime import datetime
 
-import pandas as pd
 import numpy as np
-
-from everviz.pages.summary_values import page_layout, _summary_values
+import pandas as pd
+from everviz.pages.summary_values import _summary_values, page_layout
 from everviz.plugins.summary_plot.util import calculate_statistics
 
 __TEST_DATA = {
@@ -70,7 +69,7 @@ def test_summary_statistics_data_frame():
         "max_realization",
     ]
     assert len(summary_statistics) == 2 * 3 * 2  # #batches * #dates * #keys
-    assert set(summary_statistics["summary_key"]) == set(["key1", "key2"])
+    assert set(summary_statistics["summary_key"]) == {"key1", "key2"}
     assert set(summary_statistics["batch"]) == set(__TEST_DATA["batch"])
     assert set(summary_statistics["date"]) == {
         pd.Timestamp(date) for date in __TEST_DATA["date"]

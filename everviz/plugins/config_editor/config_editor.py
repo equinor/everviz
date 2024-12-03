@@ -3,10 +3,11 @@ import io
 import os
 from pathlib import Path
 from uuid import uuid4
+
 import yaml
-from dash import callback_context
+from dash import callback_context, dcc, html
 from dash.dependencies import Input, Output, State
-from dash import html, dcc
+
 from everviz.plugins.plugin_abc import EvervizPluginABC
 
 
@@ -183,7 +184,7 @@ class ConfigEditor(EvervizPluginABC):
         def update_layout(
             cancel_clicks, edit_clicks, reset_clicks, upload_content, value
         ):
-            changed_id = [p["prop_id"] for p in callback_context.triggered][0]
+            changed_id = next(p["prop_id"] for p in callback_context.triggered)
             if edit_clicks and self.btn_edit in changed_id:
                 if self.editing:
                     self.update_everviz_config(value)

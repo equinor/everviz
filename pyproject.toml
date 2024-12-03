@@ -73,7 +73,7 @@ write_to = "everviz/version.py"
 version = {attr = "everviz.version.__version__"}
 
 [tool.ruff]
-src = ["src"]
+src = ["evereviz"]
 line-length = 88
 
 [tool.ruff.lint]
@@ -92,3 +92,12 @@ select = [
 
 [tool.ruff.lint.pylint]
 max-args = 20
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*" = [
+    "RUF001",  # ambiguous-string
+    "RUF003",  # ambiguous-string-comments
+]
+"everviz/everest_hooks.py" = [
+    "SIM115",  # Use a context manager for opening files
+]

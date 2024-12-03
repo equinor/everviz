@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 import pandas
-
 from everviz.pages.deltaplot import (
     _get_objective_delta_values,
     _get_summary_delta_values,
@@ -46,12 +45,15 @@ def test_objective_values_data_frame(mocker):
     objective_delta_values = _get_objective_delta_values(mock_api, 2)
 
     assert set(objective_delta_values.columns) == {"realization", "f0", "f1"}
-    assert len(objective_delta_values) == 2
+    expected_len = 2
+    assert len(objective_delta_values) == expected_len
     assert set(objective_delta_values["realization"]) == {
         obj["realization"] for obj in _OBJECTIVES
     }
-    assert (objective_delta_values["f0"] == 400).all()
-    assert (objective_delta_values["f1"] == 500).all()
+    expected_f0_value = 400
+    expected_f1_value = 500
+    assert (objective_delta_values["f0"] == expected_f0_value).all()
+    assert (objective_delta_values["f1"] == expected_f1_value).all()
 
 
 def test_summary_values_data_frame(mocker):
@@ -62,11 +64,13 @@ def test_summary_values_data_frame(mocker):
     summary_delta_values = _get_summary_delta_values(mock_api, 2)
 
     assert set(summary_delta_values.columns) == {"realization", "date", "key1", "key2"}
-
-    assert len(summary_delta_values) == 6
+    expected_len = 6
+    assert len(summary_delta_values) == expected_len
     assert set(summary_delta_values["realization"]) == set(_SUMMARY["realization"])
-    assert (summary_delta_values["key1"] == 6).all()
-    assert (summary_delta_values["key2"] == 60).all()
+    expected_key1_value = 6
+    expected_key2_value = 60
+    assert (summary_delta_values["key1"] == expected_key1_value).all()
+    assert (summary_delta_values["key2"] == expected_key2_value).all()
 
 
 def test_set_up_sources(mocker, tmpdir):
@@ -102,7 +106,8 @@ def test_delta_plot_layout_with_empty_summary(mocker, tmpdir):
 
     assert "content" in layout
     content = layout["content"]
-    assert len(content) == 3
+    expected_length = 3
+    assert len(content) == expected_length
     assert "Objective functions" in content[0]
     assert "DeltaPlot" in content[1]
     assert "Summary keys: No data" in content[2]

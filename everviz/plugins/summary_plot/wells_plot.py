@@ -1,16 +1,14 @@
 from pathlib import Path
 from uuid import uuid4
 
-from dash import html, dcc
-from dash.dependencies import Output, Input
+from dash import dcc, html
+from dash.dependencies import Input, Output
 
-from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
-
-
+from everviz.plugins.plugin_abc import EvervizPluginABC
+from everviz.plugins.summary_plot import summary_callback
 from everviz.plugins.summary_plot.util import calculate_statistics
 from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
-from everviz.plugins.summary_plot import summary_callback
 from everviz.util import base64encode
 
 _WELL_RATE_KEYS = ["WOPR", "WWIR", "WGPR", "WGIR"]
@@ -176,11 +174,11 @@ class WellsPlot(EvervizPluginABC):
 
             return {
                 "data": traces,
-                "layout": dict(
-                    xaxis={"title": "Date"},
-                    yaxis={"title": "Well rates"},
-                    hovermode="closest",
-                ),
+                "layout": {
+                    "xaxis": {"title": "Date"},
+                    "yaxis": {"title": "Well rates"},
+                    "hovermode": "closest",
+                },
             }
 
 

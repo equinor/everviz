@@ -6,7 +6,7 @@ from everviz.log import get_logger
 WELLS_EXPLANATION = """
 The well plot requires well summary data to be loaded from the forward model.
 Make sure the wells are specified in the Everest config file and exported from
-Eclipse/Flow to *.UNSMRY. To visualize target rates they also need to be added 
+Eclipse/Flow to *.UNSMRY. To visualize target rates they also need to be added
 to the simulator summary data section.
 """
 
