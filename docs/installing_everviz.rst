@@ -1,7 +1,7 @@
 ******************
 Installing Everviz
 ******************
-*Everviz* is a plugin of *Everest*, and therefore *Everest* must be installed in the same Python enviroment before you install *Everviz*. 
+*Everviz* is a plugin of *Everest*, and therefore *Everest* must be installed in the same Python enviroment before you install *Everviz*.
 
 *Everviz* is based on `Webviz <https://github.com/equinor/webviz-config>`_, which must be installed before installing *Everviz*.
 

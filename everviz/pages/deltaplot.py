@@ -1,8 +1,9 @@
 import os
 from collections import namedtuple
-import pandas as pd
-from everviz.log import get_logger
 
+import pandas as pd
+
+from everviz.log import get_logger
 
 DataSources = namedtuple(
     "DataSource", ["objective_delta_values", "summary_delta_values"]

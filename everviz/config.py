@@ -1,18 +1,19 @@
 import os
+
 import yaml
 
 from everviz.log import get_logger
-from everviz.util import get_everviz_folder, DEFAULT_CONFIG
 from everviz.pages import (
-    controls,
     configuration,
+    controls,
     crossplot,
-    summary_values,
-    objectives,
     deltaplot,
-    wells_values,
     gradientplot,
+    objectives,
+    summary_values,
+    wells_values,
 )
+from everviz.util import DEFAULT_CONFIG, get_everviz_folder
 
 logger = get_logger()
 

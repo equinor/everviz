@@ -1,5 +1,5 @@
-import os
 import base64
+import os
 from collections import defaultdict
 
 DEFAULT_CONFIG = "everviz_webviz_config.yml"
@@ -30,11 +30,11 @@ def parse_range(numbers):
     result = set()
     if numbers is not None:
         for number in numbers.split(","):
-            number = number.strip()
-            if number.isdigit():
-                result.add(int(number))
-            elif "-" in number:
-                number_range = number.split("-")
+            striped_number = number.strip()
+            if striped_number.isdigit():
+                result.add(int(striped_number))
+            elif "-" in striped_number:
+                number_range = striped_number.split("-")
                 start = number_range[0]
                 stop = number_range[1]
                 if start.isdigit() and stop.isdigit():

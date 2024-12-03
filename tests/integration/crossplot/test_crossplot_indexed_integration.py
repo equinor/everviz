@@ -1,8 +1,7 @@
-import pandas as pd
-from selenium.webdriver.common.by import By
-
 import everviz
+import pandas as pd
 from everviz.plugins.crossplot.crossplot_indexed import CrossplotIndexed
+from selenium.webdriver.common.by import By
 
 
 def test_crossplot_indexed_callback(app, dash_duo, monkeypatch, mocker, caplog):

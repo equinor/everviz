@@ -1,5 +1,5 @@
-import pandas as pd
 import everviz
+import pandas as pd
 from everviz.plugins.crossplot.crossplot import Crossplot
 
 

@@ -1,15 +1,14 @@
 from uuid import uuid4
 
-from dash import html, dcc
-from dash.dependencies import Output, Input, State
+from dash import dcc, html
+from dash.dependencies import Input, Output, State
 
-from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
-from everviz.util import parse_range, get_placeholder_text, base64encode
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.plugins.summary_plot import summary_callback
-
 from everviz.plugins.summary_plot.util import calculate_statistics
 from everviz.plugins.utils.layout.sidebar_layout import get_sidebar_layout
+from everviz.util import base64encode, get_placeholder_text, parse_range
 
 
 class SummaryPlot(EvervizPluginABC):
@@ -128,8 +127,10 @@ class SummaryPlot(EvervizPluginABC):
                 html.Div(
                     [
                         html.Div(
-                            [get_sidebar_layout(side_bar_config)]
-                            + realization_elements,
+                            [
+                                get_sidebar_layout(side_bar_config),
+                                *realization_elements,
+                            ],
                             style={
                                 "width": "29%",
                                 "display": "inline-block",

@@ -1,7 +1,7 @@
 from functools import partial
 
-import pandas
 import numpy
+import pandas
 
 
 def calculate_statistics(data, keys):

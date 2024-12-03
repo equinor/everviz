@@ -1,12 +1,12 @@
-from uuid import uuid4
 from pathlib import Path
+from uuid import uuid4
 
 import plotly.graph_objs as go
+from dash import dcc, html
+from dash.dependencies import Input, Output
 
-from dash import html, dcc
-from dash.dependencies import Output, Input
-from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.data.load_csv.get_data import get_data
+from everviz.plugins.plugin_abc import EvervizPluginABC
 from everviz.util import base64encode
 
 
@@ -112,8 +112,8 @@ class ControlsPlot(EvervizPluginABC):
                 )
             return {
                 "data": traces,
-                "layout": dict(
-                    xaxis={"title": "Batch", "tickformat": ",d"},
-                    yaxis={"title": "Control Value"},
-                ),
+                "layout": {
+                    "xaxis": {"title": "Batch", "tickformat": ",d"},
+                    "yaxis": {"title": "Control Value"},
+                },
             }
