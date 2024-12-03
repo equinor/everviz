@@ -48,9 +48,7 @@ test = [
     "sphinx"
 ]
 style = [
-    "ruff",
-    "pylint",
-    "black"
+    "pre-commit",
 ]
 
 [project.entry-points."everest"]
@@ -73,3 +71,24 @@ write_to = "everviz/version.py"
 
 [tool.setuptools.dynamic]
 version = {attr = "everviz.version.__version__"}
+
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "W",     # pycodestyle
+    "I",     # isort
+    "B",     # flake-8-bugbear
+    "SIM",   # flake-8-simplify
+    "F",     # pyflakes
+    "PL",    # pylint
+    "NPY",   # numpy specific rules
+    "C4",    # flake8-comprehensions
+    "ASYNC", # flake8-async
+    "RUF",   # ruff specific rules
+]
+
+[tool.ruff.lint.pylint]
+max-args = 20
