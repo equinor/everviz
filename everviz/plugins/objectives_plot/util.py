@@ -12,11 +12,11 @@ def calculate_statistics(data):
         values="value",
         index=index,
         aggfunc=[
-            np.mean,
+            "mean",
             partial(np.quantile, q=0.1),
             partial(np.quantile, q=0.9),
-            np.min,
-            np.max,
+            "min",
+            "max",
         ],
     )
     min_index = data.groupby(index)["value"].idxmin()
