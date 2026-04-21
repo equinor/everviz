@@ -52,6 +52,7 @@ style = [
     "pre-commit",
 ]
 
+
 [project.entry-points."everest"]
 everviz = "everviz.everest_hooks"
 [project.entry-points."webviz_config_plugins"]
