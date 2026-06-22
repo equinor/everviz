@@ -5,6 +5,9 @@
 
 # everviz: web based visualization for everest
 
+> :warning: **The everviz functionality has moved into https://github.com/equinor/ert,
+> this repository is deprecated and is no longer maintained.**
+
 ## What is everviz
 everviz is a visualization plugin for everest based on [dash](https://github.com/plotly/dash)
 and [webviz-config](https://github.com/equinor/webviz-config).
